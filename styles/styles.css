@@ -1,0 +1,19 @@
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 10rem;
+}
+
+button{
+    border: none;
+    padding: 15px 20px;
+    background-color: tomato;
+    cursor: pointer;
+}
