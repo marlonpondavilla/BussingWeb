@@ -1,2 +1,2 @@
-/scripts/firebaseConfig.js
+/src/services/firebaseConfig.js
 *.txt
