@@ -1,0 +1,160 @@
+body {
+    margin: 0;
+    font-family: 'Arial', sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    background: linear-gradient(to bottom right, #b682f5, #8753ed);
+    color: #333;
+}
+
+.container {
+    display: flex;
+    max-width: 1000px;
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0px 10px 30px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+}
+
+.header{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.header button{
+    border: none;
+    color: #000;
+    border: 1px solid #666;
+    padding: 5px 10px;
+    font-weight: bold;
+    font-size: 12px;
+    cursor: pointer;
+}
+
+.login-box {
+    padding: 40px;
+    flex: 1;
+}
+
+h1 {
+    color: #333;
+}
+
+p {
+    font-size: 14px;
+    color: #666;
+    margin: 10px 0;
+}
+
+a {
+    color: #8753ed;
+    text-decoration: none;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+form {
+    margin: 20px 0;
+}
+
+label {
+    font-size: 14px;
+    display: block;
+    margin-bottom: 5px;
+    letter-spacing: 1px;
+}
+
+input {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 15px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 14px;
+}
+
+.forgot-password {
+    font-size: 12px;
+    display: block;
+    text-align: center;
+    margin: 15px 0;
+}
+
+.login-btn {
+    width: 100%;
+    padding: 10px;
+    background: #8753ed;
+    color: white;
+    font-size: 16px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-top: 20px;
+}
+
+.login-btn:hover {
+    background: #6c3bc7;
+}
+
+.or {
+    text-align: center;
+    margin: 10px 0;
+    color: #666;
+    font-size: 14px;
+}
+
+.social-buttons {
+    display: flex;
+    justify-content: space-between;
+}
+
+.social-buttons button {
+    flex: 1;
+    padding: 10px;
+    margin: 0 5px;
+    border: none;
+    border-radius: 5px;
+    font-size: 14px;
+    cursor: pointer;
+}
+
+.google-btn {
+    background: #db4437;
+    color: white;
+}
+
+.facebook-btn {
+    background: #4267B2;
+    color: white;
+}
+
+.admin{
+    display: flex;
+    justify-content: center;
+    margin-top: 1.5rem;
+}
+
+.admin button{
+    padding: 10px;
+    border: none;
+    background-color: #666;
+    color: #fff;
+    cursor: pointer;
+}
+
+.illustration {
+    flex: 1;
+    background: linear-gradient(to bottom right, #f3e9ff, #e8d9ff);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.illustration img {
+    max-width: 90%;
+}

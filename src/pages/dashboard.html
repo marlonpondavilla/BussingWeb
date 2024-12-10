@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../styles/dashboard.css">
+    <title>Bussing</title>
+</head>
+<body>
+    <header>
+        <div class="logo-container">
+             <img src="../assets/img/bussing_logo.png" alt="">
+        </div>
+
+        <div class="nav-links">
+            <ul>
+                <li><a href="" class="highlighted">Home</a></li>
+                <li><a href="">Tickets</a></li>
+                <li><a href="">Location</a></li>
+                <li><a href="">History</a></li>
+            </ul>
+        </div>
+
+        <div class="user-profile">
+            <img src="" alt="" id="user-img">
+            <div class="user-display">
+                <h1><span id="user-name">username</span></h1>
+                <h2 class="user-id" id="user-email">User email</h2>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <h1>Welcome back, User</h1>
+
+        <section class="home-section">
+            <article class="bus-card">
+                <div class="card-header">
+                    <h2>BUS01</h2>
+                    <h3>Bulacan -> Valenzuela</h3>
+                </div>
+                <hr>
+                <div class="card-main">
+                    <img src="../assets/img/bus_front.png" alt="">
+                    <div class="card-info">
+                        <h4>Current bus Location</h4> <br>
+                        <p class="bus-status">Obando, Ubihan st</p>
+                    </div>
+                </div>
+                <hr>
+                <div class="card-maps">
+                    <button>View Maps</button>
+                </div>
+            </article>
+        </section>
+
+    </main>
+
+    <script type="module" src="../components/dashboard.js"></script>
+</body>
+</html>
