@@ -24,6 +24,14 @@ auth.onAuthStateChanged((user) => {
     }
 });
 
+userIMG.addEventListener('click', () => {
+    auth.signOut().then(() => {
+        window.location.href = '../../Public/index.html';
+    }).catch((error) => {
+        console.log(error.message);
+    });
+})
+
 // bus card and data render
 const bussingArticle = document.getElementById('bussing-article');
 let bussingHTML = "";
