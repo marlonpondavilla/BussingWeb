@@ -2,6 +2,7 @@ import { initializeApp } from 'https://www.gstatic.com/firebasejs/9.22.2/firebas
 import { getAuth } from 'https://www.gstatic.com/firebasejs/9.22.2/firebase-auth.js';
 import { firebaseConfig } from '../services/firebaseConfig.js'; 
 import { busData } from '../data/data.js';
+import { showPage } from '../utils/pagination.js';
 
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app); 
@@ -10,6 +11,7 @@ const userName = document.getElementById('user-name');
 const userIMG = document.getElementById('user-img');
 const userEmail = document.getElementById('user-email'); 
 
+// firebase login state
 auth.onAuthStateChanged((user) => {
     if (user) {
         // Display user's credentials
@@ -17,17 +19,19 @@ auth.onAuthStateChanged((user) => {
         userIMG.src = user.photoURL;
         userEmail.textContent = user.email;
     } else {
-        console.log('User is not signed in');
+        console.error('User is not signed in');
         window.location.href = '/index.html';
     }
 });
 
+// bus card and data render
 const bussingArticle = document.getElementById('bussing-article');
 let bussingHTML = "";
 
 busData.forEach((busInfo) => {
     bussingHTML += `
-    <article class="bus-card">
+    <section class="home-section">
+        <article class="bus-card">
         <div class="card-header">
             <h2>BUS0${busInfo.busNumber}</h2>
             <h3>${busInfo.startingPoint} <span><i class="fa-solid fa-arrow-right"></i></span> <span class="bus-arrival">${busInfo.arrivalPoint}</span></h3>
@@ -49,7 +53,22 @@ busData.forEach((busInfo) => {
             <button>View Maps</button>
         </div>
     </article>
+    </section>
     `;
 })
 
 bussingArticle.innerHTML = bussingHTML;
+
+// Header pagination
+const home = document.querySelector('.home');
+const ticket = document.querySelector('.ticket');
+const maps = document.querySelector('.maps');
+const history = document.querySelector('.history');
+
+const homeSection = document.querySelector('.home-section');
+const ticketSection = document.querySelector('.ticket-section');
+const mapsSection = document.querySelector('.maps-section');
+const historySection = document.querySelector('.history-section');
+
+showPage(home, ticket, maps, history, 'highlighted', homeSection, ticketSection, mapsSection, historySection);
+

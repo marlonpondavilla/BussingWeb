@@ -5,6 +5,11 @@
     font-family: sans-serif;
 }
 
+html {
+    overflow-y: scroll;
+}
+
+
 body{
     /* background-color: #F8FAFC; */
     /* background-color: #000; */
@@ -23,7 +28,7 @@ header{
     /* padding: 10px; */
 }
 
-header .nav-links, ul, li, a{
+header .nav-links, ul, li{
     display: flex;
     gap: 20px;
     text-decoration: none;
@@ -31,6 +36,8 @@ header .nav-links, ul, li, a{
     color: #fff;
     font-size: 1.2rem;
     font-weight: 500;
+    cursor: pointer;
+    text-transform: uppercase;
 }
 
 header .nav-links .highlighted{
@@ -38,7 +45,6 @@ header .nav-links .highlighted{
     text-decoration-thickness: 5px;
     text-decoration-color: crimson;
 }
-
 
 header .user-profile{
     font-size: 10px;
@@ -80,14 +86,17 @@ main p{
     margin-top: 10px;
 }
 
-section{
-   margin-top: 5rem;
-   display: flex;
-   gap: 1rem;
-   width: 40rem;
-   flex-wrap: wrap;
+section .home-section{
+    display: flex;
+    margin-top: 2rem;
+    width: 40rem;
+    flex-wrap: wrap;
 }
 
+.ticket-section, .maps-section, .history-section{
+    margin-top: 10px;
+    display: none;
+}
 .bus-card{
     width: 100%;
     background-color: #f7f7f7;
