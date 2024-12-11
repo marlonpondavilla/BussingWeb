@@ -78,3 +78,10 @@ export function showPage(homeTab, ticketTab, mapsTab, historyTab, classList, hom
     });
 
 }
+
+export function showUserSettings(button, section, classList) {
+    button.addEventListener('click', () => {
+        section.classList.toggle(classList);
+        console.log('clisked')
+    })
+}

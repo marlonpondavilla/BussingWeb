@@ -2,7 +2,8 @@ import { initializeApp } from 'https://www.gstatic.com/firebasejs/9.22.2/firebas
 import { getAuth } from 'https://www.gstatic.com/firebasejs/9.22.2/firebase-auth.js';
 import { firebaseConfig } from '../services/firebaseConfig.js'; 
 import { busData } from '../data/data.js';
-import { showPage } from '../utils/pagination.js';
+import { showPage, showUserSettings } from '../utils/pagination.js';
+import { logoutUser } from '../utils/user.js';
 
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app); 
@@ -20,17 +21,16 @@ auth.onAuthStateChanged((user) => {
         userEmail.textContent = user.email;
     } else {
         console.error('User is not signed in');
-        window.location.href = '/index.html';
+        window.location.replace = '/index.html';
     }
 });
 
-userIMG.addEventListener('click', () => {
-    auth.signOut().then(() => {
-        window.location.href = '../../Public/index.html';
-    }).catch((error) => {
-        console.log(error.message);
-    });
-})
+// User settings and logout 
+const logoutButton = document.getElementById('logout-btn');
+const userSettingSection = document.querySelector('.user-profile-section');
+
+showUserSettings(userIMG, userSettingSection, 'active');
+logoutUser(logoutButton, auth);
 
 // bus card and data render
 const bussingArticle = document.getElementById('bussing-article');
