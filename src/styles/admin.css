@@ -1,0 +1,128 @@
+/* CSS */
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background: linear-gradient(135deg, #7f8cff, #51e2f5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+.login-page {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    max-width: 1000px;
+    background: #fff;
+    border-radius: 10px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+    overflow: hidden;
+}
+
+.login-container {
+    display: flex;
+    width: 100%;
+}
+
+.illustration {
+    flex: 1;
+    background: #f8f8f8;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 2rem;
+}
+
+.illustration img {
+    max-width: 100%;
+    height: auto;
+}
+
+.login-form {
+    flex: 1;
+    padding: 10px 1rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.login-form .admin-logo img{
+    width: 200px;
+}
+
+.login-form .admin-logo{
+    display: flex;
+    justify-content: center;
+}
+
+.login-form h1 {
+    font-size: 1.5rem;
+    margin-bottom: 1.5rem;
+    color: #333;
+}
+
+form .go-back{
+    text-decoration: underline;
+    font-size: 14px;
+    color: #333;
+}
+
+form .go-back:hover{
+   opacity: 0.8;
+}
+
+.input-group {
+    position: relative;
+    margin-bottom: 1rem;
+}
+
+.input-group input {
+    width: 80%;
+    padding: 0.75rem;
+    padding-left: 2.5rem;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 1rem;
+}
+
+.input-group .icon {
+    position: absolute;
+    top: 50%;
+    left: 0.75rem;
+    transform: translateY(-50%);
+    color: #888;
+    font-size: 1.2rem;
+}
+
+button {
+    background-color: #6c5ce7;
+    color: #fff;
+    padding: 0.80rem 2rem;
+    margin: 10px 0;
+    border: none;
+    border-radius: 5px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+button:hover {
+    background-color: #4834d4;
+}
+
+footer a{
+    color: #6c5ce7;
+    text-decoration: underline;
+
+}
+
+footer {
+    margin-top: 2rem;
+    text-align: center;
+    font-size: 0.85rem;
+    color: #888;
+}
+
+

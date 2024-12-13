@@ -2,7 +2,7 @@
 export const busData = [
     {
         busNumber: 1,
-        startingPoint: "Bulacan Terminal",
+        startingPoint: "Bulakan Terminal",
         arrivalPoint: "Cubao",
         currentLocation: "NLEX Bulacan",
         departureTime: "4:30",
@@ -10,7 +10,7 @@ export const busData = [
     {
         busNumber: 2,
         startingPoint: "Cubao",
-        arrivalPoint: "Bulacan Terminal",
+        arrivalPoint: "Bulakan Terminal",
         departureTime: "13:00",
         currentLocation: "Mindanao Ave. Quezon City",
     },
@@ -20,5 +20,19 @@ export const busData = [
         arrivalPoint: "PITX Terminal",
         departureTime: "16:30",
         currentLocation: "Roxas Blvd. Manila",
+    },
+    {
+        busNumber: 4,
+        startingPoint: "Bulacan Terminal",
+        arrivalPoint: "Divisoria",
+        departureTime: "8:00",
+        currentLocation: "NLEX Bulacan",
+    },
+    {
+        busNumber: 5,
+        startingPoint: "Divisoria",
+        arrivalPoint: "Bulakan Terminal",
+        departureTime: "14:00",
+        currentLocation: "EDSA Quezon City",
     },
 ]

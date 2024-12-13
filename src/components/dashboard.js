@@ -4,6 +4,7 @@ import { firebaseConfig } from '../services/firebaseConfig.js';
 import { busData } from '../data/data.js';
 import { showPage, showUserSettings } from '../utils/pagination.js';
 import { logoutUser } from '../utils/user.js';
+import { date } from '../utils/date.js';
 
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app); 
@@ -24,6 +25,9 @@ auth.onAuthStateChanged((user) => {
         window.location.replace = '/index.html';
     }
 });
+
+// display current date
+const currentDate = document.querySelector('.current-date').innerHTML = date();
 
 // User settings and logout 
 const logoutButton = document.getElementById('logout-btn');

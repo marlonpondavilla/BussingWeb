@@ -24,7 +24,7 @@ body {
     align-items: center;
 }
 
-.header button{
+.header a{
     border: none;
     color: #000;
     border: 1px solid #666;

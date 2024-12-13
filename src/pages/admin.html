@@ -1,0 +1,43 @@
+<!-- HTML -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Login</title>
+    <link rel="stylesheet" href="../styles/admin.css">
+</head>
+<body>
+    <div class="login-page">
+        <div class="login-container">
+            <div class="illustration">
+                <img src="../assets/img/bus_admin_illustration.png" alt="Illustration of secure login">
+            </div>
+            <div class="login-form">
+                <div class="admin-logo">
+                    <img src="../assets/img/bussing_logo.png" alt="">
+                </div>
+                <h1>Login as a Admin</h1>
+                <form>
+                    <div class="input-group">
+                        <input type="text" placeholder="johndoe@xyz.com" required id="username">
+                        <span class="icon">&#128231;</span>
+                    </div>
+                    <div class="input-group">
+                        <input type="password" placeholder="XXXXXXXX" required id="password">
+                        <span class="icon">&#128274;</span>
+                    </div>
+                    <button type="submit" id="login-btn">LOGIN</button>
+                    <a href="../../public/index.html" class="go-back"><p>Go back to Login page</p></a>
+                </form>
+                <footer>
+                    <a href="#">Forgot your password?</a>
+                    <p>Terms of use. Privacy policy</p>
+                </footer>
+            </div>
+        </div>
+    </div>
+
+    <script src="../components/admin.js"></script>
+</body>
+</html>

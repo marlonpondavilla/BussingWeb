@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bussing Admin</title>
+    <!-- FONTAWESOME API -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.1/css/all.min.css" integrity="sha512-5Hs3dF2AEPkpNAR7UiOHba+lRSJNeM2ECkwxUIxC1Q/FLycGTbNapWXB4tP889k5T5Ju8fs4b1P5z/iB4nMfSQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="../styles/adminDashboard.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <div class="dashboard">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <p>Admin Dashboard</p>
+            </div>
+            <nav>
+                <ul>
+                    <li><a href="#" class="active">Dashboard</a></li>
+                    <li><a href="#">Ticket Inventory</a></li>
+                    <li><a href="#">Bus Operations</a></li>
+                    <li><a href="#">Customer Support</a></li>
+                    <li id="logout-btn"><a href="#">Logout <i class="fa-solid fa-right-from-bracket"></i></a></li>
+                </ul>
+            </nav>
+            <footer class="sidebar-logo">
+                <img src="../assets/img/bussing_logo.png" alt="bussing logo">
+            </footer>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="content">
+            <header class="content-header">
+                <h1>Bussing Dashboard</h1>
+                <p>Last 30 days</p>
+            </header>
+
+            <section class="stats">
+                <div class="stat">
+                    <h3>Total Tickets Sold</h3>
+                    <p>15,300 <span class="increase">+10%</span></p>
+                </div>
+                <div class="stat">
+                    <h3>Active Buses</h3>
+                    <p>5 <span class="decrease">-0.2%</span></p>
+                </div>
+                <div class="stat">
+                    <h3>Total Routes</h3>
+                    <p>45 <span class="increase">+2%</span></p>
+                </div>
+                <div class="stat">
+                    <h3>Customer Complaints</h3>
+                    <p>35 <span class="stable">0%</span></p>
+                </div>
+            </section>
+
+            <section class="charts">
+                <canvas id="chart1"></canvas>
+                <canvas id="chart2"></canvas>
+                <canvas id="chart3"></canvas>
+                <canvas id="chart4"></canvas>
+            </section>
+        </main>
+    </div>
+
+    <script src="../components/adminDashboard.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</body>
+</html>
