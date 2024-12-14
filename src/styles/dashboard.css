@@ -145,6 +145,20 @@ section .home-section{
     flex-wrap: wrap;
 }
 
+section .empty-state-container{
+    display: block;
+    margin-top: 2rem;
+    height: 20rem;
+}
+
+section .empty-state-container img{
+    height: 100%;
+}
+
+section .empty-state-container h1{
+    text-align: center;
+}
+
 .ticket-section, .maps-section, .history-section{
     margin-top: 10px;
     display: none;

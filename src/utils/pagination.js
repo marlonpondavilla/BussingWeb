@@ -80,8 +80,31 @@ export function showPage(homeTab, ticketTab, mapsTab, historyTab, classList, hom
 }
 
 export function showUserSettings(button, section, classList) {
-    button.addEventListener('click', () => {
-        section.classList.toggle(classList);
-        console.log('clisked')
-    })
+    let timeout;
+
+    button.addEventListener('mouseenter', () => {
+        clearTimeout(timeout); 
+        section.classList.add(classList);
+        console.log('button hovered');
+    });
+
+    button.addEventListener('mouseleave', () => {
+        timeout = setTimeout(() => {
+            section.classList.remove(classList); 
+        }, 100); 
+    });
+
+    section.addEventListener('mouseenter', () => {
+        clearTimeout(timeout); 
+        section.classList.add(classList); 
+        console.log('section hovered');
+    });
+
+    section.addEventListener('mouseleave', () => {
+        timeout = setTimeout(() => {
+            section.classList.remove(classList); 
+            console.log('section mouseout');
+        }, 100);
+    });
 }
+

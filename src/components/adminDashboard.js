@@ -3,7 +3,7 @@ const logoutButton = document.getElementById('logout-btn');
 
 logoutButton.addEventListener('click', () =>{
     alert('You have successfully logged out');
-    window.location.replace('../../public/index.html');
+    window.location.replace('../../index.html');
 }) ;
 
 // Tickets sold and unsold chart

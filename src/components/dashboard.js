@@ -22,7 +22,7 @@ auth.onAuthStateChanged((user) => {
         userEmail.textContent = user.email;
     } else {
         console.error('User is not signed in');
-        window.location.replace = '/index.html';
+        window.location.replace = '../../index.html';
     }
 });
 
