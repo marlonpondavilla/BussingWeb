@@ -7,24 +7,23 @@ import { logoutUser } from '../utils/user.js';
 import { date } from '../utils/date.js';
 
 const app = initializeApp(firebaseConfig);
-const auth = getAuth(app); 
+const auth = getAuth(app);  
 
-const userName = document.getElementById('user-name');
-const userIMG = document.getElementById('user-img');
-const userEmail = document.getElementById('user-email'); 
+// fetching all data stored in localstorage
+window.onload = () => {
+    const userName = localStorage.getItem('userName');
+    const userEmail = localStorage.getItem('userEmail');
+    const userPhoto = localStorage.getItem('userPhoto');
 
-// firebase login state
-auth.onAuthStateChanged((user) => {
-    if (user) {
-        // Display user's credentials
-        userName.textContent = `Hello, ${user.displayName}`;
-        userIMG.src = user.photoURL;
-        userEmail.textContent = user.email;
-    } else {
-        console.error('User is not signed in');
-        window.location.replace = '../../index.html';
+    // Update the dashboard with user details
+    if (userName || userEmail || userPhoto) {
+        document.getElementById('user-name').textContent = userName;
+        document.getElementById('user-email').textContent = userEmail;
+        document.getElementById('user-img').src = userPhoto || user_png;
+    } else{
+        alert("there is no user data");
     }
-});
+}
 
 // display current date
 const currentDate = document.querySelector('.current-date').innerHTML = date();
@@ -32,6 +31,7 @@ const currentDate = document.querySelector('.current-date').innerHTML = date();
 // User settings and logout 
 const logoutButton = document.getElementById('logout-btn');
 const userSettingSection = document.querySelector('.user-profile-section');
+const userIMG = document.getElementById('user-img');
 
 showUserSettings(userIMG, userSettingSection, 'active');
 logoutUser(logoutButton, auth);
