@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../dist/output.css">
+    <title>Bussing Website</title>
+</head>
+<body class="bg-purple-300 flex justify-center items-center h-screen">
+    <div class="container w-4/5 md:w-2/3 lg:w-1/2 flex flex-col md:flex-row justify-between items-center gap-8 bg-slate-50 p-6 rounded-lg shadow-lg">
+        <!-- Login Box -->
+        <div class="login-box w-full md:w-1/2">
+            <div class="header flex items-center justify-between mb-4">
+                <h1 class="font-bold text-3xl text-black">Bussing</h1>
+                <a href="./pages/mainDashboard.html" class="text-slate-800 text-sm underline rounded-sm font-semibold">Admin?</a>
+            </div>
+            <p class="mb-4 text-gray-600">Don't have an account yet? 
+                <a href="./pages/signup.html" target="_blank" class="text-purple-500 hover:underline">Sign Up</a>
+            </p>
+            <form action="" method="post" class="flex flex-col space-y-4">
+                <div>
+                    <label for="username" class="block text-gray-700 font-medium">Username</label>
+                    <input 
+                        type="text" 
+                        id="username" 
+                        name="username" 
+                        placeholder="Enter username" 
+                        required 
+                        class="w-full px-4 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-purple-300"
+                    >
+                </div>
+                <div>
+                    <label for="password" class="block text-gray-700 font-medium">Password</label>
+                    <input 
+                        type="password" 
+                        id="password" 
+                        name="password" 
+                        placeholder="Enter 6 characters or more" 
+                        required 
+                        class="w-full px-4 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-purple-300"
+                    >
+                </div>
+                <button 
+                    type="submit" 
+                    id="login-btn" 
+                    class="login-btn w-full bg-purple-500 text-white py-2 rounded hover:bg-purple-600 transition"
+                >
+                    LOGIN
+                </button>
+                <a href="#" class="forgot-password text-sm text-blue-500 hover:underline mt-2">Forgot Password?</a>
+            </form>
+
+            <hr class="my-6 border-gray-300">
+            <p class="text-center text-gray-600 mb-4">or login with</p>
+            <a href="./pages/mainDashboard.html">LOGIN</a>
+            <div class="social-buttons flex justify-center space-x-4">
+                <button 
+                    id="google-login-btn" 
+                    class="google-btn text-white border bg-red-600 border-gray-300 py-3 px-6 rounded shadow hover:bg-red-500 transition"
+                >
+                    Google
+                </button>
+                <button 
+                    class="facebook-btn bg-blue-600 text-white px-6 py-3 rounded hover:bg-blue-500 transition"
+                >
+                    Facebook
+                </button>
+            </div>
+        </div>
+
+        <!-- Illustration -->
+        <div class="illustration w-full md:w-1/2">
+            <img 
+                src="./assets/img/bus_illustration.jpg" 
+                alt="Login Illustration" 
+                class="w-full h-60 md:h-96 object-cover rounded bg-purple-200"
+            >
+        </div>
+    </div>
+</body>
+</html>

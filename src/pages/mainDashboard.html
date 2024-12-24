@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../../dist/output.css">
+    <title>Bussing Dashboard</title>
+</head>
+<body class="bg-gray-100 text-gray-800">
+    <!-- Header -->
+    <header class="bg-purple-500 text-white p-4 flex justify-around items-center shadow-lg">
+        <!-- Logo -->
+        <div class="logo-container flex items-center gap-4">
+            <img src="../assets/img/bussing_logo.png" alt="Bussing Logo" class="w-12 h-12">
+            <h1 class="text-xl font-bold">Bussing</h1>
+        </div>
+
+        <!-- Navigation Links -->
+        <nav class="nav-links">
+            <ul class="flex gap-6 text-lg">
+                <li class="home highlighted cursor-pointer hover:text-gray-300">Home</li>
+                <li class="ticket cursor-pointer hover:text-gray-300">Ticket</li>
+                <li class="maps cursor-pointer hover:text-gray-300">Maps</li>
+                <li class="history cursor-pointer hover:text-gray-300">History</li>
+            </ul>
+        </nav>
+
+        <!-- User Profile -->
+        <div class="user-profile flex items-center gap-4">
+            <div class="user-info flex items-center gap-2">
+                <img src="../assets/img/default_user.png" alt="User Profile Picture" id="user-img" class="w-10 h-10 rounded-full">
+                <div class="user-display">
+                    <h1 class="text-sm font-semibold"><span id="user-name">Username</span></h1>
+                    <h2 class="text-xs text-gray-300" id="user-email">user@example.com</h2>
+                </div>
+            </div>
+
+            <!-- User Dropdown -->
+            <div class="user-profile-section hidden bg-white text-gray-800 rounded shadow-md p-4">
+                <ul class="flex flex-col gap-2 text-sm">
+                    <li class="cursor-pointer flex justify-between items-center hover:text-purple-500">
+                        Update Account <i class="fa-solid fa-pen"></i>
+                    </li>
+                    <li class="cursor-pointer flex justify-between items-center hover:text-purple-500">
+                        View Buses <i class="fa-solid fa-bus"></i>
+                    </li>
+                    <li class="cursor-pointer flex justify-between items-center hover:text-purple-500">
+                        Services <i class="fa-solid fa-envelope"></i>
+                    </li>
+                    <li id="logout-btn" class="cursor-pointer flex justify-between items-center text-red-500 hover:text-red-700">
+                        Logout <i class="fa-solid fa-right-from-bracket"></i>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="p-6">
+        <h1 class="text-2xl font-bold mb-4 text-center">Bussing Dashboard</h1>
+        <p class="mb-6 text-center">Today's date: <span class="current-date font-semibold">YYYY/MM/DD</span></p>
+
+        <!-- Home Section -->
+        <section class="home-section" id="bussing-article">
+            <!-- JavaScript-generated content will go here -->
+        </section>
+
+        <!-- Ticket Section -->
+        <section class="ticket-section ">
+            <div class="empty-state-container flex flex-col items-center gap-4">
+                <img src="../assets/img/empty_state.png" alt="Empty State" class="w-48">
+                <h1 class="text-xl font-bold">Ticket Section</h1>
+            </div>
+        </section>
+
+        <!-- Maps Section -->
+        <section class="maps-section">
+            <div class="empty-state-container flex flex-col items-center gap-4">
+                <img src="../assets/img/empty_state.png" alt="Empty State" class="w-48">
+                <h1 class="text-xl font-bold">Maps Section</h1>
+            </div>
+        </section>
+
+        <!-- History Section -->
+        <section class="history-section">
+            <div class="empty-state-container flex flex-col items-center gap-4">
+                <img src="../assets/img/empty_state.png" alt="Empty State" class="w-48">
+                <h1 class="text-xl font-bold">History Section</h1>
+            </div>
+        </section>
+    </main>
+</body>
+</html>
