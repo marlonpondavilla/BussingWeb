@@ -40,7 +40,8 @@ loginBtn.addEventListener('click', (e) => {
         localStorage.setItem('userName', 'Hello, User');
         localStorage.setItem('userEmail', 'user@example.com');
         localStorage.setItem('userPhoto', 'https://t3.ftcdn.net/jpg/03/94/89/90/360_F_394899054_4TMgw6eiMYUfozaZU3Kgr5e0LdH4ZrsU.jpg'); 
-        window.location.href = '/src/pages/dashboard.html';
+        alert('You are now logged in');
+        window.location.href = './pages/mainDashboard.html';
     } else if(username === ''|| password === '') {
         alert('All fields are required');
 
