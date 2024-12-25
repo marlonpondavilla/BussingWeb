@@ -42,30 +42,50 @@ let bussingHTML = "";
 
 busData.forEach((busInfo) => {
     bussingHTML += `
-    <section class="home-section">
-        <article class="bus-card">
-        <div class="card-header">
-            <h2>BUS0${busInfo.busNumber}</h2>
-            <h3>${busInfo.startingPoint} <span><i class="fa-solid fa-arrow-right"></i></span> <span class="bus-arrival">${busInfo.arrivalPoint}</span></h3>
+       <article class="bus-card w-full md:w-4/5 lg:w-1/2 bg-white rounded-lg shadow-lg p-6 mx-auto">
+    <!-- Card Header -->
+    <div class="card-header flex justify-between items-center mb-6">
+        <h2 class="text-xl font-semibold text-gray-900">BUS0${busInfo.busNumber}</h2>
+        <h3 class="text-lg">
+            <span class="text-gray-700">${busInfo.startingPoint}</span>
+            <span><i class="fa-solid fa-arrow-right text-yellow-500"></i></span> 
+            <span class="bus-arrival text-red-600 font-semibold">${busInfo.arrivalPoint}</span>
+        </h3>
+    </div>
+
+    <!-- Divider -->
+    <hr class="border-gray-300 mb-4">
+
+    <!-- Card Main Section -->
+    <div class="card-main flex items-center justify-between mt-4 space-x-4">
+        <!-- Bus Image -->
+        <img src="../assets/img/bus_front.png" alt="Bus Front" class="w-24 h-24 object-cover rounded-lg border-2 border-gray-300">
+
+        <!-- Bus Info -->
+        <div class="card-info flex-1">
+            <h4 class="font-medium text-gray-700">Current bus Location:</h4>
+            <p class="bus-status text-gray-800">${busInfo.currentLocation}</p>
         </div>
-        <hr>
-        <div class="card-main">
-            <img src="../assets/img/bus_front.png" alt="">
-            <div class="card-info">
-                <h4>Current bus Location:</h4> <br>
-                <p class="bus-status">${busInfo.currentLocation}</p>
-            </div>
-            <div class="card-time">
-                <h5>Departure Time:</h5>
-                <p class="">${busInfo.departureTime}</p>
-            </div>
+
+        <!-- Departure Time -->
+        <div class="card-time text-right">
+            <h5 class="font-medium text-gray-700">Departure Time:</h5>
+            <p class="text-gray-800">${busInfo.departureTime}</p>
         </div>
-        <hr>
-        <div class="card-maps">
-            <button>${busInfo.status}</button>
-        </div>
-    </article>
-    </section>
+    </div>
+
+    <!-- Divider -->
+    <hr class="border-gray-300 my-4">
+
+    <!-- Status Section -->
+    <div class="card-maps w-full flex justify-between items-center bg-slate-800 p-4 rounded-lg">
+        <h6 class="text-white font-semibold">Status:</h6>
+        <button class="px-6 py-2 text-white rounded-md bg-purple-600 hover:bg-purple-500 font-semibold transition duration-200">
+            ${busInfo.status}
+        </button>
+    </div>
+</article>
+
     `;
 })
 

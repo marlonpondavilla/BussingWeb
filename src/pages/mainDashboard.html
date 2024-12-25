@@ -3,6 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- font awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"/>
     <link rel="stylesheet" href="../../dist/output.css">
     <title>Bussing Dashboard</title>
 </head>
@@ -16,7 +18,7 @@
         </div>
 
         <!-- Navigation Links -->
-        <nav class="nav-links">
+        <nav class="nav-links hidden md:block">
             <ul class="flex gap-6 text-lg">
                 <li class="home highlighted cursor-pointer hover:text-gray-300">Home</li>
                 <li class="ticket cursor-pointer hover:text-gray-300">Ticket</li>
@@ -27,12 +29,16 @@
 
         <!-- User Profile -->
         <div class="user-profile flex items-center gap-4">
-            <div class="user-info flex items-center gap-2">
-                <img src="../assets/img/default_user.png" alt="User Profile Picture" id="user-img" class="w-10 h-10 rounded-full">
+            <div class="user-info hidden items-center gap-2 sm:flex">
+                <img src="../assets/img/user.png" alt="User Profile Picture" id="user-img" class="w-10 h-10 rounded-full">
                 <div class="user-display">
                     <h1 class="text-sm font-semibold"><span id="user-name">Username</span></h1>
                     <h2 class="text-xs text-gray-300" id="user-email">user@example.com</h2>
                 </div>
+            </div>
+
+            <div class="user-menu">
+                <span><i class="block md:hidden fa-solid fa-bars text-3xl"></i></span>
             </div>
 
             <!-- User Dropdown -->
@@ -61,8 +67,9 @@
         <p class="mb-6 text-center">Today's date: <span class="current-date font-semibold">YYYY/MM/DD</span></p>
 
         <!-- Home Section -->
-        <section class="home-section" id="bussing-article">
+        <section class="home-section flex flex-col justify-center items-center gap-8" id="bussing-article">
             <!-- JavaScript-generated content will go here -->
+             
         </section>
 
         <!-- Ticket Section -->
@@ -89,5 +96,7 @@
             </div>
         </section>
     </main>
+
+    <script type="module" src="../components/dashboard.js"></script>
 </body>
 </html>
