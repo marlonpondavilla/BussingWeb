@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../../dist/output.css">
+    <title>Document</title>
+</head>
+<body class="bg-gray-100 font-sans">
+    <div class="flex h-screen">
+        <!-- Sidebar -->
+        <aside class="w-64 bg-purple-500 text-white p-6 flex flex-col justify-between">
+            <div>
+                <p class="text-xl font-semibold mb-6">Admin Dashboard</p>
+                <nav>
+                    <ul>
+                        <li>
+                            <a href="#" class="block py-2 px-4 text-lg hover:bg-purple-700 rounded transition-all focus:outline-none focus:ring-2 focus:ring-purple-600 focus:ring-opacity-50">
+                                <i class="fa-solid fa-tachometer-alt mr-2"></i> Dashboard
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#" class="block py-2 px-4 text-lg hover:bg-purple-700 rounded transition-all focus:outline-none focus:ring-2 focus:ring-purple-600 focus:ring-opacity-50">
+                                <i class="fa-solid fa-ticket-alt mr-2"></i> Ticket Inventory
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#" class="block py-2 px-4 text-lg hover:bg-purple-700 rounded transition-all focus:outline-none focus:ring-2 focus:ring-purple-600 focus:ring-opacity-50">
+                                <i class="fa-solid fa-bus mr-2"></i> Bus Operations
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#" class="block py-2 px-4 text-lg hover:bg-purple-700 rounded transition-all focus:outline-none focus:ring-2 focus:ring-purple-600 focus:ring-opacity-50">
+                                <i class="fa-solid fa-headset mr-2"></i> Customer Support
+                            </a>
+                        </li>
+                        <li id="logout-btn">
+                            <a href="#" class="block py-2 px-4 text-lg hover:bg-red-700 rounded transition-all focus:outline-none focus:ring-2 focus:ring-red-600 focus:ring-opacity-50">
+                                <i class="fa-solid fa-right-from-bracket mr-2"></i> Logout
+                            </a>
+                        </li>
+                    </ul>
+                </nav>
+            </div>
+            <footer class="mt-auto">
+                <img src="../assets/img/bussing_logo.png" alt="Bussing Logo" class="w-32 mx-auto">
+            </footer>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="flex-1 p-8">
+            <header class="mb-8">
+                <h1 class="text-3xl font-semibold">Bussing Dashboard</h1>
+                <p class="text-gray-600">Last 30 days</p>
+            </header>
+
+            <section class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+                <!-- Stats Card 1 -->
+                <div class="bg-white p-6 rounded-lg shadow-md">
+                    <h3 class="text-xl font-semibold mb-2">Total Tickets Sold</h3>
+                    <p class="text-3xl font-bold">15,300 <span class="text-green-500">+10%</span></p>
+                </div>
+
+                <!-- Stats Card 2 -->
+                <div class="bg-white p-6 rounded-lg shadow-md">
+                    <h3 class="text-xl font-semibold mb-2">Active Buses</h3>
+                    <p class="text-3xl font-bold">5 <span class="text-red-500">-0.2%</span></p>
+                </div>
+
+                <!-- Stats Card 3 -->
+                <div class="bg-white p-6 rounded-lg shadow-md">
+                    <h3 class="text-xl font-semibold mb-2">Total Routes</h3>
+                    <p class="text-3xl font-bold">45 <span class="text-green-500">+2%</span></p>
+                </div>
+
+                <!-- Stats Card 4 -->
+                <div class="bg-white p-6 rounded-lg shadow-md">
+                    <h3 class="text-xl font-semibold mb-2">Customer Complaints</h3>
+                    <p class="text-3xl font-bold">35 <span class="text-gray-500">0%</span></p>
+                </div>
+            </section>
+
+            <section class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                <!-- Chart 1 -->
+                <div class="bg-white p-6 rounded-lg shadow-md">
+                    <canvas id="chart1"></canvas>
+                </div>
+
+                <!-- Chart 2 -->
+                <div class="bg-white p-6 rounded-lg shadow-md">
+                    <canvas id="chart2"></canvas>
+                </div>
+
+                <!-- Chart 3 -->
+                <div class="bg-white p-6 rounded-lg shadow-md">
+                    <canvas id="chart3"></canvas>
+                </div>
+
+                <!-- Chart 4 -->
+                <div class="bg-white p-6 rounded-lg shadow-md">
+                    <canvas id="chart4"></canvas>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <script src="../components/adminDashboard.js" defer></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+</body>
+</html>

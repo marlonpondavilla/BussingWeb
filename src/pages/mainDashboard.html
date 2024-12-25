@@ -3,6 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"/>
     <link rel="stylesheet" href="../../dist/output.css">
     <title>Bussing Dashboard</title>
 </head>
@@ -16,9 +18,9 @@
         </div>
 
         <!-- Navigation Links -->
-        <nav class="nav-links">
+        <nav class="nav-links hidden md:block">
             <ul class="flex gap-6 text-lg">
-                <li class="home highlighted cursor-pointer hover:text-gray-300">Home</li>
+                <li class="home cursor-pointer hover:text-gray-300 underline text-black font-semibold border-b-4">Home</li>
                 <li class="ticket cursor-pointer hover:text-gray-300">Ticket</li>
                 <li class="maps cursor-pointer hover:text-gray-300">Maps</li>
                 <li class="history cursor-pointer hover:text-gray-300">History</li>
@@ -26,28 +28,32 @@
         </nav>
 
         <!-- User Profile -->
-        <div class="user-profile flex items-center gap-4">
-            <div class="user-info flex items-center gap-2">
-                <img src="../assets/img/default_user.png" alt="User Profile Picture" id="user-img" class="w-10 h-10 rounded-full">
+        <div class="user-profile relative flex items-center gap-4">
+            <div class="user-info hidden items-center gap-2 sm:flex">
+                <img src="../assets/img/user.png" alt="User Profile Picture" id="user-img" class="w-10 h-10 rounded-full">
                 <div class="user-display">
                     <h1 class="text-sm font-semibold"><span id="user-name">Username</span></h1>
                     <h2 class="text-xs text-gray-300" id="user-email">user@example.com</h2>
                 </div>
             </div>
 
+            <div class="user-menu">
+                <span><i class="block md:hidden fa-solid fa-bars text-3xl"></i></span>
+            </div>
+
             <!-- User Dropdown -->
-            <div class="user-profile-section hidden bg-white text-gray-800 rounded shadow-md p-4">
-                <ul class="flex flex-col gap-2 text-sm">
-                    <li class="cursor-pointer flex justify-between items-center hover:text-purple-500">
+            <div class="user-profile-section hidden absolute bg-white text-gray-800 rounded shadow-md p-4 mt-2 w-48 top-full z-10">
+                <ul class="flex flex-col gap-4 text-sm">
+                    <li class="cursor-pointer font-semibold flex justify-between items-center hover:text-purple-500">
                         Update Account <i class="fa-solid fa-pen"></i>
                     </li>
-                    <li class="cursor-pointer flex justify-between items-center hover:text-purple-500">
+                    <li class="cursor-pointer font-semibold flex justify-between items-center hover:text-purple-500">
                         View Buses <i class="fa-solid fa-bus"></i>
                     </li>
-                    <li class="cursor-pointer flex justify-between items-center hover:text-purple-500">
+                    <li class="cursor-pointer font-semibold flex justify-between items-center hover:text-purple-500">
                         Services <i class="fa-solid fa-envelope"></i>
                     </li>
-                    <li id="logout-btn" class="cursor-pointer flex justify-between items-center text-red-500 hover:text-red-700">
+                    <li id="logout-btn" class="cursor-pointer flex justify-between items-center font-semibold hover:text-red-700">
                         Logout <i class="fa-solid fa-right-from-bracket"></i>
                     </li>
                 </ul>
@@ -61,12 +67,12 @@
         <p class="mb-6 text-center">Today's date: <span class="current-date font-semibold">YYYY/MM/DD</span></p>
 
         <!-- Home Section -->
-        <section class="home-section" id="bussing-article">
+        <section class="home-section flex flex-col justify-center items-center gap-8" id="bussing-article">
             <!-- JavaScript-generated content will go here -->
         </section>
 
         <!-- Ticket Section -->
-        <section class="ticket-section ">
+        <section class="ticket-section hidden">
             <div class="empty-state-container flex flex-col items-center gap-4">
                 <img src="../assets/img/empty_state.png" alt="Empty State" class="w-48">
                 <h1 class="text-xl font-bold">Ticket Section</h1>
@@ -74,7 +80,7 @@
         </section>
 
         <!-- Maps Section -->
-        <section class="maps-section">
+        <section class="maps-section hidden">
             <div class="empty-state-container flex flex-col items-center gap-4">
                 <img src="../assets/img/empty_state.png" alt="Empty State" class="w-48">
                 <h1 class="text-xl font-bold">Maps Section</h1>
@@ -82,12 +88,14 @@
         </section>
 
         <!-- History Section -->
-        <section class="history-section">
+        <section class="history-section hidden">
             <div class="empty-state-container flex flex-col items-center gap-4">
                 <img src="../assets/img/empty_state.png" alt="Empty State" class="w-48">
                 <h1 class="text-xl font-bold">History Section</h1>
             </div>
         </section>
     </main>
+
+    <script type="module" src="../components/dashboard.js"></script>
 </body>
 </html>

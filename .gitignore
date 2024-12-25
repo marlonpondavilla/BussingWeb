@@ -1,3 +1,16 @@
-node_modules
-services
-dist
+# Node modules
+node_modules/
+
+# Services folder (if necessary to ignore)
+services/
+
+# Log files
+*.log
+
+# Environment variables (if present)
+.env
+
+# Build output
+dist/
+build/
+
