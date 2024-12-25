@@ -55,29 +55,37 @@ export function showPage(homeTab, ticketTab, mapsTab, historyTab, activeClass, h
     });
 }
 
-
-export function showUserSettings(button, section, activeClass) {
+// user dropdown settings
+export function showUserSettings(button, section) {
     let timeout;
 
+    // Show the section when the mouse enters the button
     button.addEventListener('mouseenter', () => {
-        clearTimeout(timeout);
-        section.classList.add(activeClass);
+        clearTimeout(timeout); // Clear any previous timeouts
+        section.classList.remove('hidden');  // Ensure it's visible
+        section.classList.add('block');      // Add the block class to display it
     });
 
+    // Hide the section when the mouse leaves the button
     button.addEventListener('mouseleave', () => {
         timeout = setTimeout(() => {
-            section.classList.remove(activeClass);
-        }, 100);
+            section.classList.remove('block'); // Remove the block class
+            section.classList.add('hidden');   // Add the hidden class to hide the section
+        }, 100); // Delay before hiding (in ms)
     });
 
+    // If the section itself is hovered, keep it visible
     section.addEventListener('mouseenter', () => {
-        clearTimeout(timeout);
-        section.classList.add(activeClass);
+        clearTimeout(timeout);  // Clear any timeouts so it stays visible
+        section.classList.remove('hidden');  // Ensure it's visible
+        section.classList.add('block');      // Keep it visible
     });
 
+    // Hide the section again after the mouse leaves the section
     section.addEventListener('mouseleave', () => {
         timeout = setTimeout(() => {
-            section.classList.remove(activeClass);
-        }, 100);
+            section.classList.remove('block'); // Remove the block class
+            section.classList.add('hidden');   // Add the hidden class
+        }, 100); // Delay before hiding
     });
 }

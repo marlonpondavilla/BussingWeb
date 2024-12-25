@@ -33,7 +33,7 @@ const logoutButton = document.getElementById('logout-btn');
 const userSettingSection = document.querySelector('.user-profile-section');
 const userIMG = document.getElementById('user-img');
 
-showUserSettings(userIMG, userSettingSection, 'active');
+showUserSettings(userIMG, userSettingSection);
 logoutUser(logoutButton, auth);
 
 // Bus data rendering
