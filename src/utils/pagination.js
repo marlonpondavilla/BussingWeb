@@ -61,31 +61,31 @@ export function showUserSettings(button, section) {
 
     // Show the section when the mouse enters the button
     button.addEventListener('mouseenter', () => {
-        clearTimeout(timeout); // Clear any previous timeouts
-        section.classList.remove('hidden');  // Ensure it's visible
-        section.classList.add('block');      // Add the block class to display it
+        clearTimeout(timeout); 
+        section.classList.remove('hidden');  
+        section.classList.add('block');      
     });
 
     // Hide the section when the mouse leaves the button
     button.addEventListener('mouseleave', () => {
         timeout = setTimeout(() => {
-            section.classList.remove('block'); // Remove the block class
-            section.classList.add('hidden');   // Add the hidden class to hide the section
-        }, 100); // Delay before hiding (in ms)
+            section.classList.remove('block'); 
+            section.classList.add('hidden');   
+        }, 100); 
     });
 
     // If the section itself is hovered, keep it visible
     section.addEventListener('mouseenter', () => {
-        clearTimeout(timeout);  // Clear any timeouts so it stays visible
-        section.classList.remove('hidden');  // Ensure it's visible
-        section.classList.add('block');      // Keep it visible
+        clearTimeout(timeout);  
+        section.classList.remove('hidden');  
+        section.classList.add('block');      
     });
 
     // Hide the section again after the mouse leaves the section
     section.addEventListener('mouseleave', () => {
         timeout = setTimeout(() => {
-            section.classList.remove('block'); // Remove the block class
-            section.classList.add('hidden');   // Add the hidden class
-        }, 100); // Delay before hiding
+            section.classList.remove('block'); 
+            section.classList.add('hidden');   
+        }, 100); 
     });
 }
