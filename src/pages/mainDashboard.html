@@ -3,12 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <!-- font awesome -->
+    <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"/>
     <link rel="stylesheet" href="../../dist/output.css">
     <title>Bussing Dashboard</title>
 </head>
-<body class="bg-gray-100 text-gray-800">
+<body class="bg-gray-100 text-gray-800 overflow-hidden">
     <!-- Header -->
     <header class="bg-purple-500 text-white p-4 flex justify-around items-center shadow-lg">
         <!-- Logo -->
@@ -20,7 +20,7 @@
         <!-- Navigation Links -->
         <nav class="nav-links hidden md:block">
             <ul class="flex gap-6 text-lg">
-                <li class="home highlighted cursor-pointer hover:text-gray-300">Home</li>
+                <li class="home cursor-pointer hover:text-gray-300 underline text-black font-semibold border-b-4">Home</li>
                 <li class="ticket cursor-pointer hover:text-gray-300">Ticket</li>
                 <li class="maps cursor-pointer hover:text-gray-300">Maps</li>
                 <li class="history cursor-pointer hover:text-gray-300">History</li>
@@ -69,11 +69,10 @@
         <!-- Home Section -->
         <section class="home-section flex flex-col justify-center items-center gap-8" id="bussing-article">
             <!-- JavaScript-generated content will go here -->
-             
         </section>
 
         <!-- Ticket Section -->
-        <section class="ticket-section ">
+        <section class="ticket-section hidden">
             <div class="empty-state-container flex flex-col items-center gap-4">
                 <img src="../assets/img/empty_state.png" alt="Empty State" class="w-48">
                 <h1 class="text-xl font-bold">Ticket Section</h1>
@@ -81,7 +80,7 @@
         </section>
 
         <!-- Maps Section -->
-        <section class="maps-section">
+        <section class="maps-section hidden">
             <div class="empty-state-container flex flex-col items-center gap-4">
                 <img src="../assets/img/empty_state.png" alt="Empty State" class="w-48">
                 <h1 class="text-xl font-bold">Maps Section</h1>
@@ -89,7 +88,7 @@
         </section>
 
         <!-- History Section -->
-        <section class="history-section">
+        <section class="history-section hidden">
             <div class="empty-state-container flex flex-col items-center gap-4">
                 <img src="../assets/img/empty_state.png" alt="Empty State" class="w-48">
                 <h1 class="text-xl font-bold">History Section</h1>

@@ -1,110 +1,83 @@
+export function showPage(homeTab, ticketTab, mapsTab, historyTab, activeClass, homeSection, ticketSection, mapsSection, historySection) {
 
-export function showPage(homeTab, ticketTab, mapsTab, historyTab, classList, homeSection, ticketSection, mapsSection, historySection) {
-    homeTab.addEventListener('click', () =>{
-        homeTab.classList.add(classList);
-        homeSection.style.display = 'block';
+    homeSection.classList.remove('hidden');
+    ticketSection.classList.add('hidden');
+    mapsSection.classList.add('hidden');
+    historySection.classList.add('hidden');
 
-        ticketSection.style.display = 'none';
-        mapsSection.style.display = 'none';
-        historySection.style.display = 'none';
+    function toggleTab(tab, section) {
+        console.log('Tab clicked:', tab);
+        console.log('Section to show:', section);
 
-        if(ticketTab.classList.contains(classList)){
-            ticketTab.classList.remove(classList);
-        }
-        if(mapsTab.classList.contains(classList)){
-            mapsTab.classList.remove(classList);
-        }
-        if(historyTab.classList.contains(classList)){
-            historyTab.classList.remove(classList);
-        }
+        // Add the active class to the selected tab
+        tab.classList.add(activeClass);
+
+        // Show the corresponding section
+        section.classList.remove('hidden');
+        section.classList.add('block');
+
+        // Hide all other sections
+        [homeSection, ticketSection, mapsSection, historySection].forEach((sec) => {
+            if (sec !== section) {
+                sec.classList.add('hidden');
+                sec.classList.remove('block');
+            }
+        });
+
+        // Remove active class and styles from other tabs
+        [homeTab, ticketTab, mapsTab, historyTab].forEach(t => {
+            if (t !== tab) {
+                t.classList.remove(activeClass);
+                t.classList.remove('underline', 'text-black', 'font-semibold', 'border-b-4'); 
+            }
+        });
+    }
+
+    // Event listeners for tab clicks
+    homeTab.addEventListener('click', () => {
+        toggleTab(homeTab, homeSection);
+        homeTab.classList.add('underline', 'text-black', 'font-semibold', 'border-b-4');
     });
 
-    ticketTab.addEventListener('click', () =>{
-        ticketTab.classList.add(classList);
-        ticketSection.style.display = 'block';
-
-        homeSection.style.display = 'none';
-        mapsSection.style.display = 'none';
-        historySection.style.display = 'none';
-
-        if(homeTab.classList.contains(classList)){
-            homeTab.classList.remove(classList);
-        }
-        if(mapsTab.classList.contains(classList)){
-            mapsTab.classList.remove(classList);
-        }
-        if(historyTab.classList.contains(classList)){
-            historyTab.classList.remove(classList);
-        }
+    ticketTab.addEventListener('click', () => {
+        toggleTab(ticketTab, ticketSection);
+        ticketTab.classList.add('underline', 'text-black', 'font-semibold', 'border-b-4');
     });
 
-    mapsTab.addEventListener('click', () =>{
-        mapsTab.classList.add(classList);
-        mapsSection.style.display = 'block';
-
-        homeSection.style.display = 'none';
-        ticketSection.style.display = 'none';
-        historySection.style.display = 'none';
-        
-
-        if(homeTab.classList.contains(classList)){
-            homeTab.classList.remove(classList);
-        }
-        if(ticketTab.classList.contains(classList)){
-            ticketTab.classList.remove(classList);
-        }
-        if(historyTab.classList.contains(classList)){
-            historyTab.classList.remove(classList);
-        }
+    mapsTab.addEventListener('click', () => {
+        toggleTab(mapsTab, mapsSection);
+        mapsTab.classList.add('underline', 'text-black', 'font-semibold', 'border-b-4');
     });
 
-    historyTab.addEventListener('click', () =>{
-        historyTab.classList.add(classList);
-        historySection.style.display = 'block';
-
-        homeSection.style.display = 'none';
-        ticketSection.style.display = 'none';
-        mapsSection.style.display = 'none';
-
-        if(homeTab.classList.contains(classList)){
-            homeTab.classList.remove(classList);
-        }
-        if(ticketTab.classList.contains(classList)){
-            ticketTab.classList.remove(classList);
-        }
-        if(mapsTab.classList.contains(classList)){
-            mapsTab.classList.remove(classList);
-        }
+    historyTab.addEventListener('click', () => {
+        toggleTab(historyTab, historySection);
+        historyTab.classList.add('underline', 'text-black', 'font-semibold', 'border-b-4');
     });
-
 }
 
-export function showUserSettings(button, section, classList) {
+
+export function showUserSettings(button, section, activeClass) {
     let timeout;
 
     button.addEventListener('mouseenter', () => {
-        clearTimeout(timeout); 
-        section.classList.add(classList);
-        console.log('button hovered');
+        clearTimeout(timeout);
+        section.classList.add(activeClass);
     });
 
     button.addEventListener('mouseleave', () => {
         timeout = setTimeout(() => {
-            section.classList.remove(classList); 
-        }, 100); 
+            section.classList.remove(activeClass);
+        }, 100);
     });
 
     section.addEventListener('mouseenter', () => {
-        clearTimeout(timeout); 
-        section.classList.add(classList); 
-        console.log('section hovered');
+        clearTimeout(timeout);
+        section.classList.add(activeClass);
     });
 
     section.addEventListener('mouseleave', () => {
         timeout = setTimeout(() => {
-            section.classList.remove(classList); 
-            console.log('section mouseout');
+            section.classList.remove(activeClass);
         }, 100);
     });
 }
-
