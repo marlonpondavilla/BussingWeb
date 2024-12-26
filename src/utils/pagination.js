@@ -1,8 +1,8 @@
-export function showPage(homeTab, ticketTab, mapsTab, historyTab, activeClass, homeSection, ticketSection, mapsSection, historySection) {
+export function showPage(homeTab, ticketTab, scheduleTab, historyTab, activeClass, homeSection, ticketSection, scheduleSection, historySection) {
 
     homeSection.classList.remove('hidden');
     ticketSection.classList.add('hidden');
-    mapsSection.classList.add('hidden');
+    scheduleSection.classList.add('hidden');
     historySection.classList.add('hidden');
 
     function toggleTab(tab, section) {
@@ -17,7 +17,7 @@ export function showPage(homeTab, ticketTab, mapsTab, historyTab, activeClass, h
         section.classList.add('block');
 
         // Hide all other sections
-        [homeSection, ticketSection, mapsSection, historySection].forEach((sec) => {
+        [homeSection, ticketSection, scheduleSection, historySection].forEach((sec) => {
             if (sec !== section) {
                 sec.classList.add('hidden');
                 sec.classList.remove('block');
@@ -25,10 +25,10 @@ export function showPage(homeTab, ticketTab, mapsTab, historyTab, activeClass, h
         });
 
         // Remove active class and styles from other tabs
-        [homeTab, ticketTab, mapsTab, historyTab].forEach(t => {
+        [homeTab, ticketTab, scheduleTab, historyTab].forEach(t => {
             if (t !== tab) {
                 t.classList.remove(activeClass);
-                t.classList.remove('underline', 'text-black', 'font-semibold', 'border-b-4'); 
+                t.classList.remove('text-black', 'font-semibold', 'border-b-4'); 
             }
         });
     }
@@ -36,22 +36,22 @@ export function showPage(homeTab, ticketTab, mapsTab, historyTab, activeClass, h
     // Event listeners for tab clicks
     homeTab.addEventListener('click', () => {
         toggleTab(homeTab, homeSection);
-        homeTab.classList.add('underline', 'text-black', 'font-semibold', 'border-b-4');
+        homeTab.classList.add('text-black', 'font-semibold', 'border-b-4');
     });
 
     ticketTab.addEventListener('click', () => {
         toggleTab(ticketTab, ticketSection);
-        ticketTab.classList.add('underline', 'text-black', 'font-semibold', 'border-b-4');
+        ticketTab.classList.add('text-black', 'font-semibold', 'border-b-4');
     });
 
-    mapsTab.addEventListener('click', () => {
-        toggleTab(mapsTab, mapsSection);
-        mapsTab.classList.add('underline', 'text-black', 'font-semibold', 'border-b-4');
+    scheduleTab.addEventListener('click', () => {
+        toggleTab(scheduleTab, scheduleSection);
+        scheduleTab.classList.add('text-black', 'font-semibold', 'border-b-4');
     });
 
     historyTab.addEventListener('click', () => {
         toggleTab(historyTab, historySection);
-        historyTab.classList.add('underline', 'text-black', 'font-semibold', 'border-b-4');
+        historyTab.classList.add('text-black', 'font-semibold', 'border-b-4');
     });
 }
 

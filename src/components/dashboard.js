@@ -78,12 +78,12 @@ bussingArticle.innerHTML = bussingHTML;
 
 const homeTab = document.querySelector('.home');
 const ticketTab = document.querySelector('.ticket');
-const mapsTab = document.querySelector('.maps');
+const scheduleTab = document.querySelector('.schedule');
 const historyTab = document.querySelector('.history');
 
 const homeSection = document.querySelector('.home-section');
 const ticketSection = document.querySelector('.ticket-section');
-const mapsSection = document.querySelector('.maps-section');
+const scheduleSection = document.querySelector('.schedule-section');
 const historySection = document.querySelector('.history-section');
 
-showPage(homeTab, ticketTab, mapsTab, historyTab, 'highlighted', homeSection, ticketSection, mapsSection, historySection);
+showPage(homeTab, ticketTab, scheduleTab, historyTab, 'highlighted', homeSection, ticketSection, scheduleSection, historySection);
