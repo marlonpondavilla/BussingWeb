@@ -1,5 +1,5 @@
 import { initializeApp } from 'https://www.gstatic.com/firebasejs/9.22.2/firebase-app.js';
-import { getAuth, createUserWithEmailAndPassword, sendEmailVerification } from 'https://www.gstatic.com/firebasejs/9.22.2/firebase-auth.js';
+import { getAuth, createUserWithEmailAndPassword, sendEmailVerification, updateProfile } from 'https://www.gstatic.com/firebasejs/9.22.2/firebase-auth.js';
 import { getFirestore, collection, addDoc } from 'https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore.js';
 import { firebaseConfig } from '../services/firebaseConfig.js';
 
@@ -60,13 +60,15 @@ submitBtn.addEventListener('click', async (e) => {
   try {
     // Create user with email and password using Firebase Auth
     const userCredential = await createUserWithEmailAndPassword(auth, userData.email, userData.password);
-    alert('User signed up successfully. Please verify your email.');
+    alert('User signed up successfully');
 
     const user = userCredential.user; // Get the authenticated user object
 
-    // Send email verification to the user
-    await sendEmailVerification(user);
-    alert('A verification email has been sent to your email address. Please verify your email.');
+    // Set display name for the user (first name and last name)
+    await updateProfile(user, {
+      displayName: `${userData.firstName} ${userData.lastName}`, // Combine first and last name
+    });
+
 
     // Prepare data to be stored in Firestore
     const signedUpUserToFirestore = {
@@ -76,14 +78,12 @@ submitBtn.addEventListener('click', async (e) => {
       lastName: userData.lastName,
       marketing: userData.marketing,
       terms: userData.terms,
+      timeCreated: new Date(),
     };
 
     // Insert the user data into Firestore
     await addSignedUpUserToFirestore(signedUpUserToFirestore);
     alert('User added to Firestore');
-
-    // Optionally redirect after successful signup
-    // window.location.href = '../index.html';  // Or any page you want to redirect after signup
 
   } catch (e) {
     console.error('Error signing up user: ', e);

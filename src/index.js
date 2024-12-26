@@ -62,13 +62,3 @@ loginBtn.addEventListener('click', async (e) => {
     }
 });
 
-// Listen for authentication state changes
-onAuthStateChanged(auth, (user) => {
-    if (user !== null) {
-        console.log('User is logged in');
-        // Redirect to dashboard
-        window.location.href = './pages/mainDashboard.html';
-    } else {
-        console.log('No user');
-    }
-});
