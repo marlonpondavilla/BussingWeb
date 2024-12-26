@@ -15,19 +15,20 @@
 
             <label for="first-name" class="input-label font-medium text-black">First Name</label>
             <input type="text" id="first-name" name="first-name" placeholder="Your First Name" 
-                   class="p-2 rounded border border-gray-600 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500" required>
+                   class="p-2 text-black rounded border border-gray-600 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+                   required>
 
             <label for="last-name" class="input-label font-medium text-black">Last Name</label>
             <input type="text" id="last-name" name="last-name" placeholder="Your Last Name" 
-                   class="p-2 rounded border border-gray-600 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500" required>
+                   class="p-2 text-black rounded border border-gray-600 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500" required>
 
             <label for="email" class="input-label font-medium text-black">Email</label>
             <input type="email" id="email" name="email" placeholder="Your Email Address" 
-                   class="p-2 rounded border border-gray-600 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500" required>
+                   class="p-2 text-black rounded border border-gray-600 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500" required>
 
             <label for="password" class="input-label font-medium text-black">Password</label>
             <input type="password" id="password" name="password" placeholder="********" 
-                   class="p-2 rounded border border-gray-600 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500" required>
+                   class="p-2 text-black rounded border border-gray-600 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500" required>
 
             <div class="checkbox-group flex items-center gap-2 mt-4">
                 <input type="checkbox" id="marketing" name="marketing" 
@@ -44,7 +45,8 @@
             </div>
 
             <button type="submit" 
-                    class="bg-blue-500 text-white p-2 rounded hover:bg-blue-600 transition w-full">
+                    class="bg-blue-500 text-white p-2 rounded hover:bg-blue-600 transition w-full"
+                    id="signup-btn">
                 Sign up
             </button>
 
@@ -54,5 +56,6 @@
             </p>
         </form>
     </div>
+    <script type="module" src="../components/signup.js"></script>
 </body>
 </html>

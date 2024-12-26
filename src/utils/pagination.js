@@ -6,9 +6,6 @@ export function showPage(homeTab, ticketTab, scheduleTab, historyTab, activeClas
     historySection.classList.add('hidden');
 
     function toggleTab(tab, section) {
-        console.log('Tab clicked:', tab);
-        console.log('Section to show:', section);
-
         // Add the active class to the selected tab
         tab.classList.add(activeClass);
 

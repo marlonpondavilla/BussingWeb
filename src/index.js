@@ -1,8 +1,7 @@
 import { initializeApp } from 'https://www.gstatic.com/firebasejs/9.22.2/firebase-app.js';
 import { getAnalytics } from 'https://www.gstatic.com/firebasejs/9.22.2/firebase-analytics.js';
-import { getAuth, signInWithPopup, GoogleAuthProvider, onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/9.22.2/firebase-auth.js';
+import { getAuth, signInWithPopup, GoogleAuthProvider, onAuthStateChanged, signInWithEmailAndPassword } from 'https://www.gstatic.com/firebasejs/9.22.2/firebase-auth.js';
 import { firebaseConfig } from '../src/services/firebaseConfig.js';
-import { addUserToFirestore } from './firebase/db.js';
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
@@ -30,49 +29,45 @@ googleBtn.addEventListener('click', () => {
 });
 
 // Login (username and password)
-loginBtn.addEventListener('click', (e) => {
-    e.preventDefault();
-    const username = document.getElementById('username').value;
-    const password = document.getElementById('password').value;
+const username = document.getElementById('username');
+const password = document.getElementById('password');
 
-    if (username === 'user' && password === 'user') {
-        // Store hardcoded data in localStorage
-        localStorage.setItem('userName', 'Hello, User');
-        localStorage.setItem('userEmail', 'user@example.com');
-        localStorage.setItem('userPhoto', 'https://t3.ftcdn.net/jpg/03/94/89/90/360_F_394899054_4TMgw6eiMYUfozaZU3Kgr5e0LdH4ZrsU.jpg');
+loginBtn.addEventListener('click', async (e) => {
+    e.preventDefault();
+
+    const enteredUsername = username.value;
+    const enteredPassword = password.value;
+
+    if (enteredUsername === '' || enteredPassword === '') {
+        alert('All fields are required');
+        return;
+    }
+
+    // Attempt to log in with Firebase Authentication
+    try {
+        // Sign in with email and password using Firebase Authentication
+        const userCredential = await signInWithEmailAndPassword(auth, enteredUsername, enteredPassword);
+        const user = userCredential.user;
+
+        // Store user data in localStorage
+        localStorage.setItem('userName', user.displayName || 'Hello, User');
+        localStorage.setItem('userEmail', user.email);
+        localStorage.setItem('userPhoto', user.photoURL || 'https://t3.ftcdn.net/jpg/03/94/89/90/360_F_394899054_4TMgw6eiMYUfozaZU3Kgr5e0LdH4ZrsU.jpg');
+
         alert('You are now logged in');
         window.location.href = './pages/mainDashboard.html';
-    } else if(username === '' || password === '') {
-        alert('All fields are required');
-    } else {
+    } catch (error) {
+        console.error('Error during sign-in: ', error.message);
         alert('Incorrect username or password');
     }
 });
 
-// Listen for authentication state changes and insert data into Firestore
-onAuthStateChanged(auth, async (user) => {
+// Listen for authentication state changes
+onAuthStateChanged(auth, (user) => {
     if (user !== null) {
         console.log('User is logged in');
-
-        // Prepare user data to insert into Firestore
-        const userData = {
-            uid: user.uid,
-            name: user.displayName || 'Anonymous',
-            email: user.email,
-            photoURL: user.photoURL,
-            createdAt: new Date(),
-        };
-
-        try{
-            // Insert the user data into Firestore
-            await addUserToFirestore(userData);
-
-            window.location.href = './pages/mainDashboard.html';
-        } catch(e){
-            console.error('Error adding user data to Firestore: ', e);
-            alert('There was an error while saving user data.');
-        }
-
+        // Redirect to dashboard
+        window.location.href = './pages/mainDashboard.html';
     } else {
         console.log('No user');
     }
