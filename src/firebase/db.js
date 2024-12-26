@@ -17,21 +17,3 @@ export async function addUserToFirestore(userData) {
         console.error('Error adding document: ', e);
     }
 }
-
-// Example of user data
-const newUser = {
-    name: 'John Doe',
-    email: 'johndoe@example.com',
-    createdAt: new Date(),
-};
-
-// Insert user data into Firestore
-// addUserToFirestore(newUser);
-
-onAuthStateChanged(auth, (user) => {
-    if (user !== null) {
-        console.log('User is logged in');
-    } else {
-        console.log('No user');
-    }
-});

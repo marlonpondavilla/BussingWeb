@@ -50,7 +50,7 @@ loginBtn.addEventListener('click', (e) => {
 });
 
 // Listen for authentication state changes and insert data into Firestore
-onAuthStateChanged(auth, (user) => {
+onAuthStateChanged(auth, async (user) => {
     if (user !== null) {
         console.log('User is logged in');
 
@@ -63,10 +63,15 @@ onAuthStateChanged(auth, (user) => {
             createdAt: new Date(),
         };
 
-        // Insert the user data into Firestore
-        addUserToFirestore(userData);
+        try{
+            // Insert the user data into Firestore
+            await addUserToFirestore(userData);
 
-        // window.location.href = './pages/mainDashboard.html';
+            window.location.href = './pages/mainDashboard.html';
+        } catch(e){
+            console.error('Error adding user data to Firestore: ', e);
+            alert('There was an error while saving user data.');
+        }
 
     } else {
         console.log('No user');
