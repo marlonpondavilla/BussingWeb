@@ -21,6 +21,8 @@ googleBtn.addEventListener('click', () => {
             localStorage.setItem('userName', user.displayName);
             localStorage.setItem('userEmail', user.email);
             localStorage.setItem('userPhoto', user.photoURL);
+
+            console.log(user.uid)
             window.location.href = './pages/mainDashboard.html';
         })
         .catch((error) => {

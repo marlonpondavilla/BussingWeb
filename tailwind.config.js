@@ -5,6 +5,7 @@ module.exports = {
     extend: {
       colors: {
         'custom-highlighted': '#F3F4F6',
+        'custom-purple-light': '#9B51E0',
       }
     },
   },

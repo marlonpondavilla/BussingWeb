@@ -7,7 +7,7 @@
     <title>Bussing Website</title>
 </head>
 <body class="bg-purple-300 flex justify-center items-center h-screen">
-    <div class="container w-4/5 md:w-2/3 lg:w-1/2 flex flex-col md:flex-row justify-between items-center gap-8 bg-slate-50 p-6 rounded-lg shadow-lg">
+    <div class="container w-full mx-8 md:w-2/3 lg:w-1/2 flex flex-col md:flex-row justify-between items-center gap-8 bg-slate-50 p-6 rounded-lg shadow-lg">
         <!-- Login Box -->
         <div class="login-box w-full md:w-1/2">
             <div class="header flex items-center justify-between mb-4">
@@ -51,20 +51,14 @@
             </form>
 
             <hr class="my-6 border-gray-300">
-            <p class="text-center text-gray-600 mb-4">or login with</p>
-            <div class="social-buttons flex justify-center space-x-4">
-                <button 
-                    id="google-login-btn" 
-                    class="google-btn text-white border bg-red-600 border-gray-300 py-3 px-6 rounded shadow hover:bg-red-500 transition"
-                >
-                    Google
+            <div class="google-container flex flex-col justify-center items-center">
+                <p class="mb-4 font-semibold text-base text-gray-600">or</p> <!-- Added color and adjusted margin -->
+                
+                <button class="flex items-center justify-center px-4 py-2 bg-white rounded-lg shadow-md cursor-pointer hover:bg-gray-100 transition duration-300" id="google-login-btn">
+                  <img src="./assets/img/google_logo.png" alt="Google Icon" class="w-20 h-auto mr-3">
+                  <span class="text-gray-800 font-medium">Continue with Google</span>
                 </button>
-                <button 
-                    class="facebook-btn bg-blue-600 text-white px-6 py-3 rounded hover:bg-blue-500 transition"
-                >
-                    Facebook
-                </button>
-            </div>
+              </div>                       
         </div>
 
         <!-- Illustration -->
