@@ -114,8 +114,21 @@ submitBtn.addEventListener('click', async (e) => {
     await addSignedUpUserToFirestore(signedUpUserToFirestore);
     removeInputValues();
 
-  } catch (e) {
-    console.error('Error signing up user: ', e);
-    alert('Error signing up user: ' + e.message);
+  } catch (error) {
+    // check email existence
+    if(error.code === 'auth/email-already-in-use'){
+      errEmail.classList.remove('hidden');
+      errEmail.textContent = 'Email already exist in our system';
+      email.classList.add('border-red-500');
+    }
+    console.error('Error signing up user: ', error);
+  }
+});
+
+// Clear the email error message when the email input is changed
+email.addEventListener('input', () => {
+  if (errEmail.classList.contains('hidden') === false) {
+    errEmail.classList.add('hidden');
+    email.classList.remove('border-red-500');
   }
 });
