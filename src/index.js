@@ -2,6 +2,7 @@ import { initializeApp } from 'https://www.gstatic.com/firebasejs/9.22.2/firebas
 import { getAnalytics } from 'https://www.gstatic.com/firebasejs/9.22.2/firebase-analytics.js';
 import { getAuth, signInWithPopup, GoogleAuthProvider, onAuthStateChanged, signInWithEmailAndPassword } from 'https://www.gstatic.com/firebasejs/9.22.2/firebase-auth.js';
 import { firebaseConfig } from '../src/services/firebaseConfig.js';
+import { addUserToFirestore } from './firebase/db.js';
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
@@ -13,20 +14,39 @@ const googleProvider = new GoogleAuthProvider();
 const googleBtn = document.getElementById('google-login-btn');
 const loginBtn = document.getElementById('login-btn');
 
-googleBtn.addEventListener('click', () => {
-    signInWithPopup(auth, googleProvider)
-        .then((result) => {
-            const user = result.user;
-            // Store user information in localStorage or session storage
-            localStorage.setItem('userName', user.displayName);
-            localStorage.setItem('userEmail', user.email);
-            localStorage.setItem('userPhoto', user.photoURL);
-        })
-        .catch((error) => {
-            console.error('Error during sign-in: ', error.message);
-            alert('Error: ' + error.message);
-        });
+googleBtn.addEventListener('click', async () => {
+    try {
+        const result = await signInWithPopup(auth, googleProvider);
+        const user = result.user;
+        
+        // Store user information in localStorage
+        localStorage.setItem('userName', user.displayName);
+        localStorage.setItem('userEmail', user.email);
+        localStorage.setItem('userPhoto', user.photoURL);
+
+        const userDataObject = {
+            uid: user.uid,
+            name: user.displayName,
+            email: user.email,
+            photoURL: user.photoURL,
+            createdAt: new Date()
+        };
+
+        // Log userDataObject for debugging
+        console.log(userDataObject);
+
+        // Add user to Firestore
+        await addUserToFirestore(userDataObject); 
+
+        // Redirect to the main dashboard after the user is added
+        // window.location.href = './pages/mainDashboard.html';
+    } catch (error) {
+        console.error('Error during sign-in: ', error.message);
+        alert('Error: ' + error.message);
+    }
 });
+
+
 
 // Login (username and password)
 const username = document.getElementById('username');
@@ -49,7 +69,6 @@ loginBtn.addEventListener('click', async (e) => {
         errMsg.classList.add('hidden');
     }
 
-    // Attempt to log in with Firebase Authentication
     try {
         // Sign in with email and password using Firebase Authentication
         const userCredential = await signInWithEmailAndPassword(auth, enteredUsername, enteredPassword);
