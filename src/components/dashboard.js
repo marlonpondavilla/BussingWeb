@@ -55,8 +55,20 @@ busData.forEach((busInfo) => {
             <div class="card-main flex items-center justify-between mt-4 space-x-4">
                 <img src="../assets/img/bus_front.png" alt="Bus Front" class="w-24 h-24 object-cover rounded-lg border-2 border-gray-300">
                 <div class="card-info flex-1">
-                    <h4 class="font-medium text-gray-700">Current bus Location:</h4>
-                    <p class="bus-status text-gray-800">${busInfo.currentLocation}</p>
+                    <h4 class="font-medium text-gray-700">Bus Information:</h4>
+                    <details class="bg-white p-4 rounded-lg shadow-md hover:shadow-lg transition-shadow duration-300">
+                        <summary class="text-base font-semibold cursor-pointer text-blue-600 hover:text-blue-800">
+                            View Now
+                        </summary>
+                        <div class="mt-4 space-y-2">
+                            <p class="text-gray-700">Bus Plate Number: <span class="font-medium text-gray-900">${busInfo.busInformation.busPlateNumber}</span></p>
+                            <p class="text-gray-700">Bus Model: <span class="font-medium text-gray-900">${busInfo.busInformation.busModel}</span></p>
+                            <p class="text-gray-700">Bus Capacity: <span class="font-medium text-gray-900">${busInfo.busInformation.busCapacity}</span></p>
+                            <p class="text-gray-700">Bus Driver: <span class="font-medium text-gray-900">${busInfo.busInformation.busDriver}</span></p>
+                            <p class="text-gray-700">Bus Conductor: <span class="font-medium text-gray-900">${busInfo.busInformation.busConductor}</span></p>
+                        </div>
+                    </details>
+
                 </div>
                 <div class="card-time text-right">
                     <h5 class="font-medium text-gray-700">Departure Time:</h5>
