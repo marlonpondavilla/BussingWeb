@@ -79,7 +79,7 @@
                 <!-- From Location -->
                 <div class="mb-6">
                     <label for="from" class="block text-sm font-medium text-gray-600 mb-2">From</label>
-                    <select id="from" name="from" class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500" onchange="updatePrice()">
+                    <select id="from" name="from" class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500">
                         <option value="" disabled selected>Select a location</option>
                         <option value="Cubao">Cubao Terminal</option>
                         <option value="Bulakan">Bulakan Terminal</option>
@@ -92,7 +92,7 @@
                 <!-- To Location -->
                 <div class="mb-6">
                     <label for="to" class="block text-sm font-medium text-gray-600 mb-2">To</label>
-                    <select id="to" name="to" class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500" onchange="updatePrice()">
+                    <select id="to" name="to" class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500">
                         <option value="" disabled selected>Select a destination</option>
                         <option value="Cubao">Cubao Terminal</option>
                         <option value="Bulakan">Bulakan Terminal</option>
@@ -117,12 +117,12 @@
 
                 <!-- Price Display -->
                 <div class="mb-6">
-                    <p id="price" class="text-xl font-semibold text-gray-700">Ticket Price: ₱<span class="font-semibold text-xl">120</span></p>
+                    <p class="text-xl font-semibold text-gray-700">Ticket Price: ₱<span class="font-semibold text-xl" id="price">0</span></p>
                 </div>
         
                 <!-- Generate Ticket Button -->
                 <div class="flex justify-center">
-                    <button type="button" class="px-6 py-2 bg-blue-500 text-white font-semibold rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-400" onclick="alert('Ticket generated!')">
+                    <button type="button" class="px-6 py-2 bg-blue-500 text-white font-semibold rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-400" id="ticket-btn">
                         Generate Ticket
                     </button>
                 </div>

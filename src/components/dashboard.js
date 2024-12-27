@@ -5,6 +5,7 @@ import { busData } from '../data/data.js';
 import { showPage, showUserSettings } from '../utils/pagination.js';
 import { logoutUser } from '../utils/user.js';
 import { date } from '../utils/date.js';
+import { generateTicket, updatePrice } from '../utils/ticket.js';
 
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
@@ -86,6 +87,7 @@ busData.forEach((busInfo) => {
     `;
 });
 
+// Header navigation
 bussingArticle.innerHTML = bussingHTML;
 
 const homeTab = document.querySelector('.home');
@@ -99,3 +101,46 @@ const scheduleSection = document.querySelector('.schedule-section');
 const historySection = document.querySelector('.history-section');
 
 showPage(homeTab, ticketTab, scheduleTab, historyTab, 'highlighted', homeSection, ticketSection, scheduleSection, historySection);
+
+// Ticket generation
+const ticketBtn = document.getElementById('ticket-btn');
+const from = document.getElementById('from');
+const to = document.getElementById('to');
+const discount = document.getElementById('discount');
+const price = document.getElementById('price');
+
+from.addEventListener('change', () => {
+    updatePrice(from.value, to.value, discount.value, price);
+});
+to.addEventListener('change', () => {
+    updatePrice(from.value, to.value, discount.value, price);
+});
+discount.addEventListener('change', () => {
+    updatePrice(from.value, to.value, discount.value, price);
+});
+
+ticketBtn.addEventListener('click', () => {
+    alert(`Ticket from ${from.value} to ${to.value} with a ${discount.value}% discount costs $${price.innerHTML}`);
+    
+});
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
