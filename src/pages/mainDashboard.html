@@ -73,49 +73,62 @@
 
         <!-- Ticket Section -->
         <section class="ticket-section hidden">
-            <div class="w-1/2 md:w-1/2 lg:w-1/4 mx-auto bg-white p-6 rounded-lg shadow-lg">
-                <h2 class="text-2xl font-semibold text-center text-gray-700 mb-6">Generate Your Ticket</h2>
-            
-                <form>
-                  <!-- From Location -->
-                  <div class="mb-4">
-                    <label for="from" class="block text-sm font-medium text-gray-600 mb-4">From</label>
-                    <select id="from" name="from" class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md" onchange="updatePrice()">
-                      <option value="" disabled selected>Select a location</option>
-                      <option value="Cubao">Cubao Terminal</option>
-                      <option value="Cubao">Bulakan Terminal</option>
-                      <option value="Divisoria">Divisoria</option>
-                      <option value="Santolan">Santolan</option>
-                      <option value="Ermita">Ermita</option>
+          <div class="w-1/2 md:w-1/2 lg:w-1/4 mx-auto bg-white p-6 rounded-lg shadow-lg">
+            <h2 class="text-2xl font-semibold text-center text-gray-700 mb-6">Generate Your Ticket</h2>
+            <form>
+                <!-- From Location -->
+                <div class="mb-6">
+                    <label for="from" class="block text-sm font-medium text-gray-600 mb-2">From</label>
+                    <select id="from" name="from" class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500" onchange="updatePrice()">
+                        <option value="" disabled selected>Select a location</option>
+                        <option value="Cubao">Cubao Terminal</option>
+                        <option value="Bulakan">Bulakan Terminal</option>
+                        <option value="Divisoria">Divisoria</option>
+                        <option value="Santolan">Santolan</option>
+                        <option value="Ermita">Ermita</option>
                     </select>
-                  </div>
-            
-                  <!-- To Location -->
-                  <div class="mb-4">
-                    <label for="to" class="block text-sm font-medium text-gray-600 mb-4">To</label>
-                    <select id="to" name="to" class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md" onchange="updatePrice()">
-                      <option value="" disabled selected>Select a destination</option>
-                      <option value="Cubao">Cubao Terminal</option>
-                      <option value="Cubao">Bulakan Terminal</option>
-                      <option value="Divisoria">Divisoria</option>
-                      <option value="Santolan">Santolan</option>
-                      <option value="Ermita">Ermita</option>
+                </div>
+        
+                <!-- To Location -->
+                <div class="mb-6">
+                    <label for="to" class="block text-sm font-medium text-gray-600 mb-2">To</label>
+                    <select id="to" name="to" class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500" onchange="updatePrice()">
+                        <option value="" disabled selected>Select a destination</option>
+                        <option value="Cubao">Cubao Terminal</option>
+                        <option value="Bulakan">Bulakan Terminal</option>
+                        <option value="Divisoria">Divisoria</option>
+                        <option value="Santolan">Santolan</option>
+                        <option value="Ermita">Ermita</option>
                     </select>
-                  </div>
-            
-                  <!-- Price Display -->
-                  <div class="mb-4">
+                </div>
+        
+                <!-- Discount Selection (Dropdown) -->
+                <div class="mb-6">
+                    <label for="discount" class="block text-sm font-medium text-gray-600 mb-2">Discount</label>
+                    <select id="discount" name="discount" class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500">
+                        <option value="" disabled selected>Select a discount</option>
+                        <option value="none" selected>None</option>
+                        <option value="student">Student</option>
+                        <option value="senior">Senior</option>
+                        <option value="pwd">PWD (Persons with Disabilities)</option>
+                    </select>
+                    <p class="my-2 mx-5 text-red-400 text-sm">Note: Your ticket will not be scanned if the selected discount does not apply.</p>
+                </div>
+
+                <!-- Price Display -->
+                <div class="mb-6">
                     <p id="price" class="text-xl font-semibold text-gray-700">Ticket Price: ₱<span class="font-semibold text-xl">120</span></p>
-                  </div>
-            
-                  <!-- Generate Ticket Button -->
-                  <div class="flex justify-center">
-                    <button type="button" class="px-6 py-2 bg-blue-500 text-white font-semibold rounded-md hover:bg-blue-600" onclick="alert('Ticket generated!')">
-                      Generate Ticket
+                </div>
+        
+                <!-- Generate Ticket Button -->
+                <div class="flex justify-center">
+                    <button type="button" class="px-6 py-2 bg-blue-500 text-white font-semibold rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-400" onclick="alert('Ticket generated!')">
+                        Generate Ticket
                     </button>
-                  </div>
-                </form>
-              </div>
+                </div>
+            </form>
+        </div>
+        
         </section>
 
         <!-- Schedule Section -->
