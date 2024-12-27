@@ -31,6 +31,7 @@ googleBtn.addEventListener('click', () => {
 // Login (username and password)
 const username = document.getElementById('username');
 const password = document.getElementById('password');
+const errMsg = document.getElementById('error-message');
 
 loginBtn.addEventListener('click', async (e) => {
     e.preventDefault();
@@ -38,9 +39,14 @@ loginBtn.addEventListener('click', async (e) => {
     const enteredUsername = username.value;
     const enteredPassword = password.value;
 
+    // Validate input fields
     if (enteredUsername === '' || enteredPassword === '') {
-        alert('All fields are required');
+        errMsg.classList.remove('hidden');
         return;
+    } else{
+        username.classList.remove('border-red-500');
+        password.classList.remove('border-red-500');
+        errMsg.classList.add('hidden');
     }
 
     // Attempt to log in with Firebase Authentication
@@ -54,11 +60,22 @@ loginBtn.addEventListener('click', async (e) => {
         localStorage.setItem('userEmail', user.email);
         localStorage.setItem('userPhoto', user.photoURL || 'https://t3.ftcdn.net/jpg/03/94/89/90/360_F_394899054_4TMgw6eiMYUfozaZU3Kgr5e0LdH4ZrsU.jpg');
 
+        // Redirect to the main dashboard
         alert('You are now logged in');
         window.location.href = './pages/mainDashboard.html';
     } catch (error) {
-        console.error('Error during sign-in: ', error.message);
-        alert('Incorrect username or password');
+        // Handle Firebase authentication errors
+        if(error.code === 'auth/invalid-email') {
+            errMsg.classList.remove('hidden');
+            username.classList.add('border-red-500');
+            errMsg.textContent = 'Invalid email address*';
+        } else if(error.code === 'auth/invalid-login-credentials'){
+            errMsg.classList.remove('hidden');
+            username.classList.add('border-red-500');
+            password.classList.add('border-red-500');
+            errMsg.textContent = 'Invalid username or password*';
+        }
+        console.error(error)
     }
 });
 

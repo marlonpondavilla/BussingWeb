@@ -19,12 +19,13 @@
             </p>
             <form action="" method="post" class="flex flex-col space-y-4">
                 <div>
+                    <p class="text-red-500 text-center hidden" id="error-message">All fields are required*</p>
                     <label for="username" class="block text-gray-700 font-medium">Username</label>
                     <input 
                         type="text" 
                         id="username" 
                         name="username" 
-                        placeholder="Enter username" 
+                        placeholder="Enter username or email" 
                         required 
                         class="w-full px-4 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-purple-300"
                     >
