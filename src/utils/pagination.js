@@ -86,3 +86,52 @@ export function showUserSettings(button, section) {
         }, 100); 
     });
 }
+
+export function toggleAdminNav(dashboarBtn, ticketInventoryButton, busOperationsButton, customerSupportButton, dashboardSection, ticketInventorySection, busOperationsSection, customerSupportSection){
+    dashboarBtn.classList.add('text-black', 'font-semibold', 'border-b-4');
+    dashboardSection.classList.remove('hidden');
+    ticketInventorySection.classList.add('hidden');
+    busOperationsSection.classList.add('hidden');
+    customerSupportSection.classList.add('hidden');
+
+    function toggleTab(tab, section) {
+        // Show the corresponding section
+        section.classList.remove('hidden');
+        section.classList.add('block');
+
+        // Hide all other sections
+        [dashboardSection, ticketInventorySection, busOperationsSection, customerSupportSection].forEach((sec) => {
+            if (sec !== section) {
+                sec.classList.add('hidden');
+                sec.classList.remove('block');
+            }
+        });
+
+        // Remove active class and styles from other tabs
+        [dashboarBtn, ticketInventoryButton, busOperationsButton, customerSupportButton].forEach(t => {
+            if (t !== tab) {
+                t.classList.remove('text-black', 'font-semibold', 'border-b-4'); 
+            }
+        });
+    }
+
+    dashboarBtn.addEventListener('click', () => {
+        toggleTab(dashboarBtn, dashboardSection);
+        dashboarBtn.classList.add('text-black', 'font-semibold', 'border-b-4');
+    });
+
+    ticketInventoryButton.addEventListener('click', () => {
+        toggleTab(ticketInventoryButton, ticketInventorySection);
+        ticketInventoryButton.classList.add('text-black', 'font-semibold', 'border-b-4');
+    });
+
+    busOperationsButton.addEventListener('click', () => {
+        toggleTab(busOperationsButton, busOperationsSection);
+        busOperationsButton.classList.add('text-black', 'font-semibold', 'border-b-4');
+    });
+
+    customerSupportButton.addEventListener('click', () => {
+        toggleTab(customerSupportButton, customerSupportSection);
+        customerSupportButton.classList.add('text-black', 'font-semibold', 'border-b-4');
+    });
+}

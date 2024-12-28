@@ -1,3 +1,4 @@
+import { toggleAdminNav } from "../utils/pagination.js";
 
 const logoutButton = document.getElementById('logout-btn');
 
@@ -82,5 +83,17 @@ const chart4 = new Chart(document.getElementById("chart4"), {
     }
 });
 
+// Toggle the admin navigation bar
+const dashboardButton = document.getElementById('dashboard-btn');
+const ticketInventoryButton = document.getElementById('ticket-inventory-btn');
+const busOperationsButton = document.getElementById('bus-operations-btn');
+const customerSupportButton = document.getElementById('customer-support-btn');
+
+const dashboardSection = document.getElementById('dashboard-section');
+const ticketInventorySection = document.getElementById('ticket-inventory-section');
+const busOperationsSection = document.getElementById('bus-operations-section');
+const customerSupportSection = document.getElementById('customer-support-section');
+
+toggleAdminNav(dashboardButton, ticketInventoryButton, busOperationsButton, customerSupportButton, dashboardSection, ticketInventorySection, busOperationsSection, customerSupportSection);
 
 
