@@ -108,15 +108,16 @@ const from = document.getElementById('from');
 const to = document.getElementById('to');
 const discount = document.getElementById('discount');
 const price = document.getElementById('price');
+const errHTML = document.getElementById('route-err-msg');
 
 from.addEventListener('change', () => {
-    updatePrice(from.value, to.value, discount.value, price);
+    updatePrice(from.value, to.value, discount.value, price, from, to, errHTML, ticketBtn);
 });
 to.addEventListener('change', () => {
-    updatePrice(from.value, to.value, discount.value, price);
+    updatePrice(from.value, to.value, discount.value, price, from, to, errHTML, ticketBtn);
 });
 discount.addEventListener('change', () => {
-    updatePrice(from.value, to.value, discount.value, price);
+    updatePrice(from.value, to.value, discount.value, price, from, to, errHTML, ticketBtn);
 });
 
 ticketBtn.addEventListener('click', () => {

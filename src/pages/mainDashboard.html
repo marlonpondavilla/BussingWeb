@@ -79,7 +79,7 @@
                 <!-- From Location -->
                 <div class="mb-6">
                     <label for="from" class="block text-sm font-medium text-gray-600 mb-2">From</label>
-                    <select id="from" name="from" class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500">
+                    <select id="from" name="from" class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md">
                         <option value="" disabled selected>Select a location</option>
                         <option value="Cubao">Cubao Terminal</option>
                         <option value="Bulakan">Bulakan Terminal</option>
@@ -92,7 +92,7 @@
                 <!-- To Location -->
                 <div class="mb-6">
                     <label for="to" class="block text-sm font-medium text-gray-600 mb-2">To</label>
-                    <select id="to" name="to" class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500">
+                    <select id="to" name="to" class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md">
                         <option value="" disabled selected>Select a destination</option>
                         <option value="Cubao">Cubao Terminal</option>
                         <option value="Bulakan">Bulakan Terminal</option>
@@ -100,6 +100,7 @@
                         <option value="Santolan">Santolan</option>
                         <option value="Ermita">Ermita</option>
                     </select>
+                    <p class="mt-2 mx-5 text-red-400 text-sm hidden" id="route-err-msg">Routes cannot be the same, select a different route.</p>
                 </div>
         
                 <!-- Discount Selection (Dropdown) -->
