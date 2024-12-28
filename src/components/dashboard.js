@@ -120,7 +120,7 @@ discount.addEventListener('change', () => {
 });
 
 ticketBtn.addEventListener('click', () => {
-    alert(`Ticket from ${from.value} to ${to.value} with a ${discount.value}% discount costs $${price.innerHTML}`);
+    alert(`Ticket from ${from.value} to ${to.value} with a ${discount.value}% discount costs ₱${price.innerHTML}`);
     
 });
 

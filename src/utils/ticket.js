@@ -1,7 +1,7 @@
 
 
 export function generateTicket(from, to, discount, price) {
-  alert(`Ticket from ${from} to ${to} with a ${discount}% discount costs $${price}`);
+  alert(`Ticket from ${from} to ${to} with a ${discount}% discount costs ${price}`);
 }
 
 export function updatePrice(from, to, discount, priceHTML) {
@@ -21,11 +21,14 @@ export function updatePrice(from, to, discount, priceHTML) {
     if(from === to){
         updatedPrice = 0;
         alert('Route should not be the same');
-    } else if(from === 'Cubao' && to === 'Bulakan' || from === 'Bulakan' && to === 'Cubao'){
+    } 
+    
+    // Base price is 120 for these routes
+    if(from.includes('Bulakan') || from.includes('Divisoria') || from.includes('Ermita')){
         updatedPrice = 120 - (120 * discountPrice);
-    } else if(from === 'Divisoria' && to === 'Santolan' || from === 'Santolan' && to === 'Divisoria'){
+    } else{
         updatedPrice = 105 - (105 * discountPrice);
     }
-    
+
     priceHTML.innerHTML = updatedPrice.toFixed(2);
 }
