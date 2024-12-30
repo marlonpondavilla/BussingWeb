@@ -10,7 +10,6 @@ services/
 # Environment variables (if present)
 .env
 
-# Build output
 dist/
 build/
 
