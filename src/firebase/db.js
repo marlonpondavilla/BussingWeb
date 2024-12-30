@@ -7,6 +7,7 @@ const db = getFirestore(firebaseApp);
 
 const usersCollection = collection(db, 'userLoggedIn');
 const signedUpUsersCollection = collection(db, 'signedUpUsers');
+const adminLoggedInCollection = collection(db, 'adminLoggedIn');
 
 // Function to add user to Firestore
 export async function addUserToFirestore(userData) {
@@ -23,5 +24,13 @@ export async function addSignedUpUserToFirestore(signedUpUserData) {
         const docRef = await addDoc(signedUpUsersCollection, signedUpUserData);
     } catch(e){
         console.error('Error adding signup: ', e);
+    }
+}
+
+export async function addAdminToFirestore(adminData){
+    try{
+        const docRef = await addDoc(adminLoggedInCollection, adminData);
+    } catch(e){
+        console.error('Error adding admin: ', e);
     }
 }

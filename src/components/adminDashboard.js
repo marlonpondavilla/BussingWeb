@@ -1,11 +1,14 @@
 import { toggleAdminNav } from "../utils/pagination.js";
+import { logoutAdmin } from '../utils/user.js';
+import { initializeApp } from 'https://www.gstatic.com/firebasejs/9.22.2/firebase-app.js';
+import { getAuth } from 'https://www.gstatic.com/firebasejs/9.22.2/firebase-auth.js';
+import { firebaseConfig } from '../services/firebaseConfig.js';
+
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app); 
 
 const logoutButton = document.getElementById('logout-btn');
-
-logoutButton.addEventListener('click', () =>{
-    alert('You have successfully logged out');
-    window.location.replace('../index.html');
-});
+logoutAdmin(logoutButton, auth);
 
 // Tickets sold and unsold chart
 const chart1 = new Chart(document.getElementById("chart1"), {

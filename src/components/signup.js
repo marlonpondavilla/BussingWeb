@@ -107,6 +107,7 @@ submitBtn.addEventListener('click', async (e) => {
       lastName: userData.lastName,
       marketing: userData.marketing,
       terms: userData.terms,
+      isAdmin: false,
       timeCreated: new Date(),
     };
 

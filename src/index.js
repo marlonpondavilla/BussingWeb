@@ -69,6 +69,13 @@ loginBtn.addEventListener('click', async (e) => {
         const userCredential = await signInWithEmailAndPassword(auth, enteredUsername, enteredPassword);
         const user = userCredential.user;
 
+        // check if is admin
+        if(user.email.includes('bussing.com')){
+            console.log(user.email, 'is an admin');
+        } else{
+            console.log(user.email, 'is not an admin');
+        }
+
         // Store user data in localStorage
         localStorage.setItem('userName', user.displayName || 'Hello, User');
         localStorage.setItem('userEmail', user.email);
