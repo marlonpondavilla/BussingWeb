@@ -6,6 +6,7 @@ import { showPage, showUserSettings } from '../utils/pagination.js';
 import { logoutUser } from '../utils/user.js';
 import { date } from '../utils/date.js';
 import { generateTicket, updatePrice } from '../utils/ticket.js';
+import { getHomeData } from '../firebase/db.js';
 
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
@@ -40,16 +41,17 @@ logoutUser(logoutButton, auth);
 // Bus data rendering
 const bussingArticle = document.getElementById('bussing-article');
 let bussingHTML = "";
+const homeData = await getHomeData('HomeDocuments')
 
-busData.forEach((busInfo) => {
+for (let homeDoc of homeData){
     bussingHTML += `
        <article class="bus-card w-full md:w-4/5 lg:w-1/2 bg-white rounded-lg shadow-lg p-6 mx-auto">
             <div class="card-header flex justify-between items-center mb-6">
-                <h2 class="text-xl font-semibold text-gray-900">BUS0${busInfo.busNumber}</h2>
+                <h2 class="text-xl font-semibold text-gray-900">BUS0${homeDoc.busNo}</h2>
                 <h3 class="text-lg">
-                    <span class="text-gray-700">${busInfo.startingPoint}</span>
+                    <span class="text-gray-700">${homeDoc.startingPoint}</span>
                     <span><i class="fa-solid fa-arrow-right text-yellow-500"></i></span> 
-                    <span class="bus-arrival text-red-600 font-semibold">${busInfo.arrivalPoint}</span>
+                    <span class="bus-arrival text-red-600 font-semibold">${homeDoc.arrivalPoint}</span>
                 </h3>
             </div>
             <hr class="border-gray-300 mb-4">
@@ -62,34 +64,34 @@ busData.forEach((busInfo) => {
                             View Now
                         </summary>
                         <div class="mt-4 space-y-2">
-                            <p class="text-gray-700">Bus Plate Number: <span class="font-medium text-gray-900">${busInfo.busInformation.busPlateNumber}</span></p>
-                            <p class="text-gray-700">Bus Model: <span class="font-medium text-gray-900">${busInfo.busInformation.busModel}</span></p>
-                            <p class="text-gray-700">Bus Capacity: <span class="font-medium text-gray-900">${busInfo.busInformation.busCapacity}</span></p>
-                            <p class="text-gray-700">Bus Driver: <span class="font-medium text-gray-900">${busInfo.busInformation.busDriver}</span></p>
-                            <p class="text-gray-700">Bus Conductor: <span class="font-medium text-gray-900">${busInfo.busInformation.busConductor}</span></p>
+                            <p class="text-gray-700">Bus Plate Number: <span class="font-medium text-gray-900">${homeDoc.plateNo}</span></p>
+                            <p class="text-gray-700">Bus Model: <span class="font-medium text-gray-900">${homeDoc.busModel}</span></p>
+                            <p class="text-gray-700">Bus Capacity: <span class="font-medium text-gray-900">${homeDoc.busCapacity}</span></p>
+                            <p class="text-gray-700">Bus Driver: <span class="font-medium text-gray-900">${homeDoc.busDriver}</span></p>
+                            <p class="text-gray-700">Bus Conductor: <span class="font-medium text-gray-900">${homeDoc.busConductor}</span></p>
                         </div>
                     </details>
 
                 </div>
                 <div class="card-time text-right">
                     <h5 class="font-medium text-gray-700">Departure Time:</h5>
-                    <p class="text-gray-800">${busInfo.departureTime}</p>
+                    <p class="text-gray-800">${homeDoc.departureTime}</p>
                 </div>
             </div>
             <hr class="border-gray-300 my-4">
             <div class="card-maps w-full flex justify-between items-center bg-slate-800 p-4 rounded-lg">
                 <h6 class="text-white font-semibold">Status:</h6>
                 <button class="px-6 py-2 text-white rounded-md bg-purple-600 hover:bg-purple-500 font-semibold transition duration-200">
-                    ${busInfo.status}
+                    ${homeDoc.status}
                 </button>
             </div>
         </article>
     `;
-});
+}
 
-// Header navigation
 bussingArticle.innerHTML = bussingHTML;
 
+// Header navigation
 const homeTab = document.querySelector('.home');
 const ticketTab = document.querySelector('.ticket');
 const scheduleTab = document.querySelector('.schedule');

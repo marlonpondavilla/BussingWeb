@@ -1,5 +1,5 @@
 import { initializeApp } from 'https://www.gstatic.com/firebasejs/9.22.2/firebase-app.js';
-import { getFirestore, collection, addDoc } from 'https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore.js';
+import { getFirestore, collection, addDoc, getDocs } from 'https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore.js';
 import { firebaseConfig } from '../services/firebaseConfig.js';
 
 const firebaseApp = initializeApp(firebaseConfig);
@@ -27,10 +27,24 @@ export async function addSignedUpUserToFirestore(signedUpUserData) {
     }
 }
 
+// Function to add admin to Firestore
 export async function addAdminToFirestore(adminData){
     try{
         const docRef = await addDoc(adminLoggedInCollection, adminData);
     } catch(e){
         console.error('Error adding admin: ', e);
+    }
+}
+
+// function to retrieve data from Firestore
+export async function getHomeData(collectionName) {
+    try{
+        const snapshot = await getDocs(collection(db, collectionName));
+        if(snapshot.empty){
+            return [];
+        }
+        return snapshot.docs.map(doc => doc.data());
+    } catch(e){
+        console.error('Error getting documents: ', e);
     }
 }
