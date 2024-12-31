@@ -37,7 +37,7 @@ export async function addAdminToFirestore(adminData){
 }
 
 // function to retrieve data from Firestore
-export async function getHomeData(collectionName) {
+export async function getFirestoreData(collectionName) {
     try{
         const snapshot = await getDocs(collection(db, collectionName));
         if(snapshot.empty){

@@ -140,79 +140,21 @@
             
                 <!-- Schedule Table -->
                 <table class="min-w-full bg-white table-auto border-collapse">
-                  <thead>
-                    <tr class="bg-gray-200">
-                      <th class="px-4 py-2 border-b text-left">Bus</th>
-                      <th class="px-4 py-2 border-b text-left">Departure Time</th>
-                      <th class="px-4 py-2 border-b text-left">From</th>
-                      <th class="px-4 py-2 border-b text-left">To</th>
-                      <th class="px-4 py-2 border-b text-left">Price</th>
-                      <th class="px-4 py-2 border-b text-left">Available Seats</th>
-                      <th class="px-4 py-2 border-b text-left">Status</th>
-                    </tr>
-                  </thead>
-                <tbody>
-                    <!-- Dummy Data: Bus Schedules -->
-                    <tr>
-                      <td class="px-4 py-2 border-b">Bus 01</td>
-                      <td class="px-4 py-2 border-b">08:00 AM</td>
-                      <td class="px-4 py-2 border-b">Cubao</td>
-                      <td class="px-4 py-2 border-b">Divisoria</td>
-                      <td class="px-4 py-2 border-b">₱200</td>
-                      <td class="px-4 py-2 border-b">20 seats</td>
-                      <td class="px-4 py-2 border-b text-blue-500">
-                        On boarding passengers
-                      </td>
-                    </tr>
-            
-                    <tr>
-                      <td class="px-4 py-2 border-b">Bus 02</td>
-                      <td class="px-4 py-2 border-b">09:30 AM</td>
-                      <td class="px-4 py-2 border-b">Cubao</td>
-                      <td class="px-4 py-2 border-b">Bulakan</td>
-                      <td class="px-4 py-2 border-b">₱150</td>
-                      <td class="px-4 py-2 border-b">15 seats</td>
-                      <td class="px-4 py-2 border-b text-red-500">
-                        Arrived at destination
-                      </td>
-                    </tr>
-            
-                    <tr>
-                      <td class="px-4 py-2 border-b">Bus 03</td>
-                      <td class="px-4 py-2 border-b">10:15 AM</td>
-                      <td class="px-4 py-2 border-b">Ermita</td>
-                      <td class="px-4 py-2 border-b">Santolan</td>
-                      <td class="px-4 py-2 border-b">₱180</td>
-                      <td class="px-4 py-2 border-b">10 seats</td>
-                      <td class="px-4 py-2 border-b text-blue-500">
-                        On boarding passengers
-                      </td>
-                    </tr>
-            
-                    <tr>
-                      <td class="px-4 py-2 border-b">Bus 04</td>
-                      <td class="px-4 py-2 border-b">11:00 AM</td>
-                      <td class="px-4 py-2 border-b">Divisoria</td>
-                      <td class="px-4 py-2 border-b">Ermita</td>
-                      <td class="px-4 py-2 border-b">₱220</td>
-                      <td class="px-4 py-2 border-b">25 seats</td>
-                      <td class="px-4 py-2 border-b text-green-500">
-                        Traveling to destination
-                      </td>
-                    </tr>
-            
-                    <tr>
-                      <td class="px-4 py-2 border-b">Bus 05</td>
-                      <td class="px-4 py-2 border-b">12:30 PM</td>
-                      <td class="px-4 py-2 border-b">Bulakan</td>
-                      <td class="px-4 py-2 border-b">Cubao</td>
-                      <td class="px-4 py-2 border-b">₱160</td>
-                      <td class="px-4 py-2 border-b">5 seats</td>
-                      <td class="px-4 py-2 border-b text-red-500">
-                        Arrived at destination
-                      </td>
-                    </tr>
-                  </tbody>
+                    <thead>
+                        <tr class="bg-gray-200">
+                            <th class="px-4 py-2 border-b text-left">Bus</th>
+                            <th class="px-4 py-2 border-b text-left">Departure Time</th>
+                            <th class="px-4 py-2 border-b text-left">From</th>
+                            <th class="px-4 py-2 border-b text-left">To</th>
+                            <th class="px-4 py-2 border-b text-left">Price</th>
+                            <th class="px-4 py-2 border-b text-left">Available Seats</th>
+                            <th class="px-4 py-2 border-b text-left">Status</th>
+                        </tr>
+                    </thead>
+                    <tbody id="schedule-table">
+                        <!-- Dummy Data: Bus Schedules -->
+                        <!-- fetch data to firestore  -->
+                    </tbody>
                 </table>
             </div>
         </section>

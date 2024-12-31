@@ -6,7 +6,7 @@ import { showPage, showUserSettings } from '../utils/pagination.js';
 import { logoutUser } from '../utils/user.js';
 import { date } from '../utils/date.js';
 import { generateTicket, updatePrice } from '../utils/ticket.js';
-import { getHomeData } from '../firebase/db.js';
+import { getFirestoreData } from '../firebase/db.js';
 
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
@@ -41,7 +41,13 @@ logoutUser(logoutButton, auth);
 // Bus data rendering
 const bussingArticle = document.getElementById('bussing-article');
 let bussingHTML = "";
-const homeData = await getHomeData('HomeDocuments')
+const homeData = await getFirestoreData('HomeDocuments');
+
+// check if the data is empty
+if(homeData.length === 0){
+    bussingHTML = 
+        `<h2 class="text-2xl text-center text-gray-700">No bus data available</h2>`;
+}
 
 for (let homeDoc of homeData){
     bussingHTML += `
@@ -90,6 +96,37 @@ for (let homeDoc of homeData){
 }
 
 bussingArticle.innerHTML = bussingHTML;
+
+// Ticket generation rendering
+
+
+// schedule rendering
+const scheduleData = await getFirestoreData('ScheduleDocuments');
+const scheduleSectionHTML = document.getElementById('schedule-table');
+let scheduleHTML = "";
+
+// check if the data is empty
+if(scheduleData.length === 0){
+    scheduleHTML = 
+        `<h2 class="text-2xl text-center text-gray-700">No schedule available</h2>`;
+}
+
+for (let scheduleDoc of scheduleData){
+    scheduleHTML += `
+    <tr>
+        <td class="px-4 py-2 border-b text-center font-semibold">Bus 0${scheduleDoc.busNo}</td>
+        <td class="px-4 py-2 border-b text-center">${scheduleDoc.departureTime}</td>
+        <td class="px-4 py-2 border-b text-center font-semibold">${scheduleDoc.from}</td>
+        <td class="px-4 py-2 border-b text-center font-semibold">${scheduleDoc.to}</td>
+        <td class="px-4 py-2 border-b text-center">₱${scheduleDoc.price}</td>
+        <td class="px-4 py-2 border-b text-center">${scheduleDoc.availableSeats} seats</td>
+        <td class="px-4 py-2 border-b text-center text-blue-500">
+            ${scheduleDoc.status}
+        </td>
+    </tr>
+    `;
+}
+scheduleSectionHTML.innerHTML = scheduleHTML;
 
 // Header navigation
 const homeTab = document.querySelector('.home');
