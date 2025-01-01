@@ -3,7 +3,7 @@ import { logoutAdmin } from '../utils/user.js';
 import { initializeApp } from 'https://www.gstatic.com/firebasejs/9.22.2/firebase-app.js';
 import { getAuth } from 'https://www.gstatic.com/firebasejs/9.22.2/firebase-auth.js';
 import { firebaseConfig } from '../services/firebaseConfig.js';
-import { addScheduleToFirestore, getFirestoreData, getSingleSchedule, updateSingleSchedule } from "../firebase/db.js";
+import { addScheduleToFirestore, getFirestoreData, getSingleSchedule, updateSingleSchedule, checkBusNumberExists } from "../firebase/db.js";
 
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app); 
@@ -184,13 +184,28 @@ document.getElementById('add-schedule-btn').addEventListener('click', function()
         })
     })
 
+    // Handle form submission for adding/editing bus schedule
+    const busNumErr = document.getElementById('bus-num-err-msg');
+    const saveBtn = document.getElementById('modal-save-btn');
 
+    document.getElementById('bus-number').addEventListener('input', async () => {
+        try{
+            if(await checkBusNumberExists(document.getElementById('bus-number').value)){
+                busNumErr.classList.remove('hidden');
+                saveBtn.classList.add('cursor-not-allowed');
+                saveBtn.disabled = true
+            } else{
+                busNumErr.classList.add('hidden');
+                saveBtn.classList.remove('cursor-not-allowed');
+            }
+        } catch(e){
+            console.error('Error checking bus number: ', e);
+        }
+    })
 
-  // Handle form submission for adding/editing bus schedule
+  
   document.getElementById('schedule-form').addEventListener('submit', async function(event) {
     event.preventDefault();
-
-    // Get the values from the form
     const busNumber = document.getElementById('bus-number').value;
     const departureTime = document.getElementById('departure-time').value;
     const from = document.getElementById('from').value;
@@ -211,9 +226,7 @@ document.getElementById('add-schedule-btn').addEventListener('click', function()
     }
 
     await addScheduleToFirestore(scheduleDataObject);
-    console.log("Schedule added successfully");
+    location.reload();
 
-    // Close the modal after submission
-    scheduleModal.style.display = 'none';
   });
 

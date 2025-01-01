@@ -59,6 +59,20 @@ export async function getFirestoreData(collectionName) {
     }
 }
 
+// Function to check if busNo already exists
+export async function checkBusNumberExists(busNo) {
+    try {
+        const q = query(collection(db, 'ScheduleDocuments'), where('busNo', '==', busNo));
+        const snapshot = await getDocs(q);
+
+        // Return true if busNo already exists
+        return !snapshot.empty;
+    } catch (e) {
+        console.error('Error checking busNo: ', e);
+        return false;
+    }
+}   
+
 // Create a function to get a single document from Firestore where the document's busNo field matches the provided busNo
 export async function getSingleSchedule(busNo) {
     try {
