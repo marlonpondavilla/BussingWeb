@@ -138,26 +138,7 @@
                   <tbody id="schedule-table">
                     <!-- Dummy Data: Bus Schedules -->
                     <!-- These rows will be populated dynamically (fetch data from Firestore) -->
-                    <tr>
-                      <td class="px-4 py-2 border-b">Bus 101</td>
-                      <td class="px-4 py-2 border-b">10:30 AM</td>
-                      <td class="px-4 py-2 border-b">City A</td>
-                      <td class="px-4 py-2 border-b">City B</td>
-                      <td class="px-4 py-2 border-b">$25</td>
-                      <td class="px-4 py-2 border-b">20</td>
-                      <td class="px-4 py-2 border-b text-green-600">Active</td>
-                      <td class="px-4 py-2 border-b text-blue-500 cursor-pointer">Edit</td>
-                    </tr>
-                    <tr>
-                      <td class="px-4 py-2 border-b">Bus 102</td>
-                      <td class="px-4 py-2 border-b">12:00 PM</td>
-                      <td class="px-4 py-2 border-b">City B</td>
-                      <td class="px-4 py-2 border-b">City C</td>
-                      <td class="px-4 py-2 border-b">$30</td>
-                      <td class="px-4 py-2 border-b">15</td>
-                      <td class="px-4 py-2 border-b text-red-600">Inactive</td>
-                      <td class="px-4 py-2 border-b text-blue-500 cursor-pointer">Edit</td>
-                    </tr>
+                    
                   </tbody>
                 </table>
               
@@ -174,7 +155,7 @@
                       </div>
                       <div>
                         <label for="departure-time" class="block text-lg">Departure Time:</label>
-                        <input type="time" id="departure-time" name="departure-time" class="w-full px-4 py-2 border border-gray-300 rounded-lg" required>
+                        <input type="time" id="departure-time" name="departure-time" class="w-full px-4 py-2 border border-gray-300 rounded-lg" required min="00:00" max="23:59">
                       </div>
                       <div>
                         <label for="from" class="block text-lg">From:</label>
@@ -195,8 +176,8 @@
                       <div>
                         <label for="status" class="block text-lg">Status:</label>
                         <select id="status" name="status" class="w-full px-4 py-2 border border-gray-300 rounded-lg">
-                          <option value="active">Active</option>
-                          <option value="inactive">Inactive</option>
+                          <option value="Active">Active</option>
+                          <option value="Inactive">Inactive</option>
                         </select>
                       </div>
                       <div class="flex justify-between">

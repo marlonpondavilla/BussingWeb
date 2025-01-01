@@ -3,6 +3,7 @@ import { logoutAdmin } from '../utils/user.js';
 import { initializeApp } from 'https://www.gstatic.com/firebasejs/9.22.2/firebase-app.js';
 import { getAuth } from 'https://www.gstatic.com/firebasejs/9.22.2/firebase-auth.js';
 import { firebaseConfig } from '../services/firebaseConfig.js';
+import { addScheduleToFirestore, getFirestoreData } from "../firebase/db.js";
 
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app); 
@@ -112,8 +113,32 @@ document.getElementById('add-schedule-btn').addEventListener('click', function()
     scheduleModal.style.display = 'none';
   })
 
+    //   Get the schedules from Firestore
+    const scheduleData = await getFirestoreData('ScheduleDocuments');
+    let newRowHTML = "";
+
+    for(let scheduleDoc of scheduleData){
+        // Update the schedule table dynamically
+        console.log(scheduleDoc);
+        newRowHTML += `
+        <tr>
+            <td class="px-4 py-2 border-b">Bus 0${scheduleDoc.busNo}</td>
+            <td class="px-4 py-2 border-b">${scheduleDoc.departureTime}</td>
+            <td class="px-4 py-2 border-b">${scheduleDoc.from}</td>
+            <td class="px-4 py-2 border-b">${scheduleDoc.to}</td>
+            <td class="px-4 py-2 border-b">₱${scheduleDoc.price}</td>
+            <td class="px-4 py-2 border-b">${scheduleDoc.availableSeats} seats</td>
+            <td class="px-4 py-2 border-b ${scheduleDoc.status === 'Active' ? 'text-green-600' : 'text-red-600'}">${scheduleDoc.status}</td>
+            <td class="px-4 py-2 border-b text-blue-500 cursor-pointer">Edit</td>
+        </tr>
+    `;
+    }
+
+    document.getElementById('schedule-table').innerHTML = newRowHTML;
+
+
   // Handle form submission for adding/editing bus schedule
-  document.getElementById('schedule-form').addEventListener('submit', function(event) {
+  document.getElementById('schedule-form').addEventListener('submit', async function(event) {
     event.preventDefault();
 
     // Get the values from the form
@@ -125,23 +150,21 @@ document.getElementById('add-schedule-btn').addEventListener('click', function()
     const availableSeats = document.getElementById('available-seats').value;
     const status = document.getElementById('status').value;
 
-    // Update the schedule table dynamically (here, we're just adding a new row as an example)
-    const newRow = `
-      <tr>
-        <td class="px-4 py-2 border-b">${busNumber}</td>
-        <td class="px-4 py-2 border-b">${departureTime}</td>
-        <td class="px-4 py-2 border-b">${from}</td>
-        <td class="px-4 py-2 border-b">${to}</td>
-        <td class="px-4 py-2 border-b">$${price}</td>
-        <td class="px-4 py-2 border-b">${availableSeats}</td>
-        <td class="px-4 py-2 border-b ${status === 'active' ? 'text-green-600' : 'text-red-600'}">${status}</td>
-        <td class="px-4 py-2 border-b text-blue-500 cursor-pointer">Edit</td>
-      </tr>
-    `;
+    // Add the schedule to Firestore
+    const scheduleDataObject = {
+        busNo: busNumber,
+        departureTime: departureTime,
+        from: from,
+        to: to,
+        price: price,
+        availableSeats: availableSeats,
+        status: status
+    }
 
-    document.getElementById('schedule-table').insertAdjacentHTML('beforeend', newRow);
+    await addScheduleToFirestore(scheduleDataObject);
+    console.log("Schedule added successfully");
 
     // Close the modal after submission
-    closeModal();
+    scheduleModal.style.display = 'none';
   });
 

@@ -53,7 +53,7 @@ for (let homeDoc of homeData){
     bussingHTML += `
        <article class="bus-card w-full md:w-4/5 lg:w-1/2 bg-white rounded-lg shadow-lg p-6 mx-auto">
             <div class="card-header flex justify-between items-center mb-6">
-                <h2 class="text-xl font-semibold text-gray-900">BUS0${homeDoc.busNo}</h2>
+                <h2 class="text-xl font-semibold text-gray-900">BUS 0${homeDoc.busNo}</h2>
                 <h3 class="text-lg">
                     <span class="text-gray-700">${homeDoc.startingPoint}</span>
                     <span><i class="fa-solid fa-arrow-right text-yellow-500"></i></span> 
@@ -120,9 +120,7 @@ for (let scheduleDoc of scheduleData){
         <td class="px-4 py-2 border-b text-center font-semibold">${scheduleDoc.to}</td>
         <td class="px-4 py-2 border-b text-center">₱${scheduleDoc.price}</td>
         <td class="px-4 py-2 border-b text-center">${scheduleDoc.availableSeats} seats</td>
-        <td class="px-4 py-2 border-b text-center text-blue-500">
-            ${scheduleDoc.status}
-        </td>
+        <td class="px-4 py-2 border-b text-center ${scheduleDoc.status === 'Active' ? 'text-green-600' : 'text-red-600'}">${scheduleDoc.status}</td>
     </tr>
     `;
 }

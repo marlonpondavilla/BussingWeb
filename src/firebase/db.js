@@ -8,6 +8,7 @@ const db = getFirestore(firebaseApp);
 const usersCollection = collection(db, 'userLoggedIn');
 const signedUpUsersCollection = collection(db, 'signedUpUsers');
 const adminLoggedInCollection = collection(db, 'adminLoggedIn');
+const scheduleCollection = collection(db, 'ScheduleDocuments');
 
 // Function to add user to Firestore
 export async function addUserToFirestore(userData) {
@@ -33,6 +34,15 @@ export async function addAdminToFirestore(adminData){
         const docRef = await addDoc(adminLoggedInCollection, adminData);
     } catch(e){
         console.error('Error adding admin: ', e);
+    }
+}
+
+// add schedule to Firestore
+export async function addScheduleToFirestore(scheduleData){
+    try{
+        const docRef = await addDoc(scheduleCollection, scheduleData);
+    } catch(e){
+        console.error('Error adding schedule: ', e);
     }
 }
 
