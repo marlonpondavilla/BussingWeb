@@ -1,5 +1,5 @@
 import { initializeApp } from 'https://www.gstatic.com/firebasejs/9.22.2/firebase-app.js';
-import { getFirestore, collection, addDoc, getDocs } from 'https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore.js';
+import { getFirestore, collection, addDoc, getDocs, where, query } from 'https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore.js';
 import { firebaseConfig } from '../services/firebaseConfig.js';
 
 const firebaseApp = initializeApp(firebaseConfig);
@@ -58,3 +58,24 @@ export async function getFirestoreData(collectionName) {
         console.error('Error getting documents: ', e);
     }
 }
+
+// Create a function to get a single document from Firestore where the document's busNo field matches the provided busNo
+export async function getSingleSchedule(busNo) {
+    try {
+
+        const q = query(collection(db, 'ScheduleDocuments'), where('busNo', '==', busNo));
+
+        const snapshot = await getDocs(q);
+
+        if (snapshot.empty) {
+            return null;  
+        }
+
+        return snapshot.docs[0].data();
+
+    } catch (e) {
+        console.error('Error getting document: ', e);
+        return null; 
+    }
+}
+

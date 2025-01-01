@@ -3,7 +3,7 @@ import { logoutAdmin } from '../utils/user.js';
 import { initializeApp } from 'https://www.gstatic.com/firebasejs/9.22.2/firebase-app.js';
 import { getAuth } from 'https://www.gstatic.com/firebasejs/9.22.2/firebase-auth.js';
 import { firebaseConfig } from '../services/firebaseConfig.js';
-import { addScheduleToFirestore, getFirestoreData } from "../firebase/db.js";
+import { addScheduleToFirestore, getFirestoreData, getSingleSchedule } from "../firebase/db.js";
 
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app); 
@@ -119,7 +119,6 @@ document.getElementById('add-schedule-btn').addEventListener('click', function()
 
     for(let scheduleDoc of scheduleData){
         // Update the schedule table dynamically
-        console.log(scheduleDoc);
         newRowHTML += `
         <tr>
             <td class="px-4 py-2 border-b">Bus 0${scheduleDoc.busNo}</td>
@@ -129,12 +128,49 @@ document.getElementById('add-schedule-btn').addEventListener('click', function()
             <td class="px-4 py-2 border-b">₱${scheduleDoc.price}</td>
             <td class="px-4 py-2 border-b">${scheduleDoc.availableSeats} seats</td>
             <td class="px-4 py-2 border-b ${scheduleDoc.status === 'Active' ? 'text-green-600' : 'text-red-600'}">${scheduleDoc.status}</td>
-            <td class="px-4 py-2 border-b text-blue-500 cursor-pointer">Edit</td>
+            <td class="px-4 py-2 border-b text-blue-500 cursor-pointer" data-row-edit="${scheduleDoc.busNo}" id="row-edit-${scheduleDoc.busNo}">Edit</td>
         </tr>
     `;
     }
-
+    // Update the table with the new row
     document.getElementById('schedule-table').innerHTML = newRowHTML;
+
+    // Add event listener to the edit buttons
+    const editButtons = document.querySelectorAll('[data-row-edit]');
+    const editModal = document.getElementById('edit-schedule-modal');
+    
+    editModal.style.display = 'none';
+    
+    document.getElementById('cancel-edit-btn').addEventListener('click', () => {
+        editModal.style.display = 'none';
+    })
+
+    editButtons.forEach((rowData) => {
+
+        rowData.addEventListener('click', async() => {
+            editModal.style.display = 'flex';
+
+            const busNo = rowData.getAttribute('data-row-edit');
+            const singleSchedData = await getSingleSchedule(busNo);
+
+            if(singleSchedData){
+                document.getElementById('editBusNo').value = singleSchedData.busNo;
+                document.getElementById('editDepartureTime').value = singleSchedData.departureTime;
+                document.getElementById('editFrom').value = singleSchedData.from;
+                document.getElementById('editTo').value = singleSchedData.to;
+                document.getElementById('editPrice').value = singleSchedData.price;
+                document.getElementById('editAvailableSeats').value = singleSchedData.availableSeats;
+                document.getElementById('editStatus').value = singleSchedData.status;
+            }
+        })
+    })
+
+    // handle form submission for editing bus schedule
+    document.getElementById('edit-schedule-modal').addEventListener('submit', (event) => {
+        event.preventDefault();
+
+        editModal.style.display = 'none';
+    })
 
 
   // Handle form submission for adding/editing bus schedule
