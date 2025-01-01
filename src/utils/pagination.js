@@ -137,3 +137,36 @@ export function toggleAdminNav(dashboarBtn, ticketInventoryButton, busOperations
     });
 }
 
+export function toggleBusOperations(button1, button2, section1, section2){
+    button1.classList.add("border-2", "p-2", "bg-gray-200");
+    
+    function toggleTab(tab, section){
+        [section1, section2].forEach((sec) => {
+            if(sec !== section){
+                sec.classList.add('hidden');
+                sec.classList.remove('block');
+            } else{
+                sec.classList.remove('hidden');
+                sec.classList.add('block');
+            }
+        });
+
+        [button1, button2].forEach(t => {
+            if(t !== tab){
+                t.classList.remove("border-2", "p-2", "bg-gray-200");
+            } else{
+                t.classList.add("border-2", "p-2", "bg-gray-200");
+            }
+        })
+    }
+    
+
+    button1.addEventListener('click', () => {
+        toggleTab(button1, section1);
+    });
+
+    button2.addEventListener('click', () => {
+        toggleTab(button2, section2);
+    });
+}
+

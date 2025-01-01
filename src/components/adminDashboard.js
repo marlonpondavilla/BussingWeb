@@ -3,6 +3,7 @@ import { logoutAdmin } from '../utils/user.js';
 import { initializeApp } from 'https://www.gstatic.com/firebasejs/9.22.2/firebase-app.js';
 import { getAuth } from 'https://www.gstatic.com/firebasejs/9.22.2/firebase-auth.js';
 import { firebaseConfig } from '../services/firebaseConfig.js';
+import { toggleBusOperations } from "../utils/pagination.js";
 import { addScheduleToFirestore, getFirestoreData, getSingleSchedule, updateSingleSchedule, checkBusNumberExists } from "../firebase/db.js";
 
 const app = initializeApp(firebaseConfig);
@@ -101,6 +102,14 @@ const customerSupportSection = document.getElementById('customer-support-section
 toggleAdminNav(dashboardButton, ticketInventoryButton, busOperationsButton, customerSupportButton, dashboardSection, ticketInventorySection, busOperationsSection, customerSupportSection);
 
 // bus operations admin
+
+const busScheduleTab = document.getElementById('bus-schedule-tab');
+const busInfoTab = document.getElementById('bus-info-tab');
+const busScheduleSection = document.getElementById('bus-schedule-section');
+const busInfoSection = document.getElementById('bus-info-section');
+toggleBusOperations(busScheduleTab, busInfoTab, busScheduleSection, busInfoSection);
+
+
 const scheduleModal = document.getElementById('schedule-modal');
 scheduleModal.style.display = 'none';
 
@@ -229,4 +238,33 @@ document.getElementById('add-schedule-btn').addEventListener('click', function()
     location.reload();
 
   });
+
+//  Bus Information
+const busInfoData = await getFirestoreData('HomeDocuments')
+let busInfoTr = "";
+
+console.log(busInfoData)
+
+for(let busInfoDoc of busInfoData){
+    busInfoTr += `
+        <tr>
+            <td class="px-4 py-2 border-b">${busInfoDoc.busNo}</td>
+            <td class="px-4 py-2 border-b">${busInfoDoc.startingPoint}</td>
+            <td class="px-4 py-2 border-b">${busInfoDoc.arrivalPoint}</td>
+            <td class="px-4 py-2 border-b">${busInfoDoc.departureTime}</td>
+            <td class="px-4 py-2 border-b">${busInfoDoc.plateNo}</td>
+            <td class="px-4 py-2 border-b">${busInfoDoc.busModel}</td>
+            <td class="px-4 py-2 border-b">${busInfoDoc.busCapacity}</td>
+            <td class="px-4 py-2 border-b">${busInfoDoc.busConductor}</td>
+            <td class="px-4 py-2 border-b">${busInfoDoc.busDriver}</td>
+            <td class="px-4 py-2 border-b">${busInfoDoc.status}</td>
+            <td class="px-4 py-2 border-b text-blue-600 cursor-pointer">
+            <button class="edit-btn" data-bus-info-edt-btn="${busInfoDoc.busNo}" id="bus-schedule-edit-btn">Edit</button>
+            <button class="ml-2 text-red-600" data-bus-info-del-btn="${busInfoDoc.busNo}" id="bus-schedule-delete-btn">Delete</button>
+            </td>
+        </tr>
+    `;
+}
+document.getElementById('bus-info-table').innerHTML = busInfoTr;
+
 
