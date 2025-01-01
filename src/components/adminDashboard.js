@@ -3,7 +3,7 @@ import { logoutAdmin } from '../utils/user.js';
 import { initializeApp } from 'https://www.gstatic.com/firebasejs/9.22.2/firebase-app.js';
 import { getAuth } from 'https://www.gstatic.com/firebasejs/9.22.2/firebase-auth.js';
 import { firebaseConfig } from '../services/firebaseConfig.js';
-import { addScheduleToFirestore, getFirestoreData, getSingleSchedule } from "../firebase/db.js";
+import { addScheduleToFirestore, getFirestoreData, getSingleSchedule, updateSingleSchedule } from "../firebase/db.js";
 
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app); 
@@ -154,23 +154,36 @@ document.getElementById('add-schedule-btn').addEventListener('click', function()
             const singleSchedData = await getSingleSchedule(busNo);
 
             if(singleSchedData){
-                document.getElementById('editBusNo').value = singleSchedData.busNo;
+                const busNo = document.getElementById('editBusNo').value = singleSchedData.busNo;
                 document.getElementById('editDepartureTime').value = singleSchedData.departureTime;
                 document.getElementById('editFrom').value = singleSchedData.from;
                 document.getElementById('editTo').value = singleSchedData.to;
                 document.getElementById('editPrice').value = singleSchedData.price;
                 document.getElementById('editAvailableSeats').value = singleSchedData.availableSeats;
                 document.getElementById('editStatus').value = singleSchedData.status;
+
+                // handle form submission for editing bus schedule
+                document.getElementById('edit-schedule-modal').addEventListener('submit', async (event) => {
+                    event.preventDefault();
+                    
+                    const updatedSingleScheduleData = {
+                        busNo: document.getElementById('editBusNo').value,
+                        departureTime: document.getElementById('editDepartureTime').value,
+                        from: document.getElementById('editFrom').value,
+                        to: document.getElementById('editTo').value,
+                        price: document.getElementById('editPrice').value,
+                        availableSeats: document.getElementById('editAvailableSeats').value,
+                        status: document.getElementById('editStatus').value
+                    }
+
+                    await updateSingleSchedule(busNo, updatedSingleScheduleData)
+                    alert('Schedule updated successfully');
+                    location.reload();
+                });
             }
         })
     })
 
-    // handle form submission for editing bus schedule
-    document.getElementById('edit-schedule-modal').addEventListener('submit', (event) => {
-        event.preventDefault();
-
-        editModal.style.display = 'none';
-    })
 
 
   // Handle form submission for adding/editing bus schedule

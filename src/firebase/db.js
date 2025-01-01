@@ -1,5 +1,5 @@
 import { initializeApp } from 'https://www.gstatic.com/firebasejs/9.22.2/firebase-app.js';
-import { getFirestore, collection, addDoc, getDocs, where, query } from 'https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore.js';
+import { getFirestore, collection, addDoc, getDocs, where, query, doc, updateDoc } from 'https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore.js';
 import { firebaseConfig } from '../services/firebaseConfig.js';
 
 const firebaseApp = initializeApp(firebaseConfig);
@@ -76,6 +76,29 @@ export async function getSingleSchedule(busNo) {
     } catch (e) {
         console.error('Error getting document: ', e);
         return null; 
+    }
+}
+
+export async function updateSingleSchedule(busNo, updatedData){
+    try{
+        // query to find the document where busNo matches the provided busNo
+        const q = query(collection(db, 'ScheduleDocuments' ), where('busNo', '==', busNo));
+
+        const snapshot = await getDocs(q);
+
+        // check if the document exists
+        if(snapshot.empty){
+            return;
+        }
+
+        // get the document reference
+        const docRef = doc(db, 'ScheduleDocuments', snapshot.docs[0].id)
+
+        // update the document
+        await updateDoc(docRef, updatedData);
+        
+    } catch(e){
+        console.error('Error updating document: ', e);
     }
 }
 
