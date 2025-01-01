@@ -87,6 +87,7 @@ export function showUserSettings(button, section) {
     });
 }
 
+// admin navigation
 export function toggleAdminNav(dashboarBtn, ticketInventoryButton, busOperationsButton, customerSupportButton, dashboardSection, ticketInventorySection, busOperationsSection, customerSupportSection){
     dashboarBtn.classList.add('text-black', 'font-semibold', 'border-b-4');
     dashboardSection.classList.remove('hidden');
@@ -135,3 +136,4 @@ export function toggleAdminNav(dashboarBtn, ticketInventoryButton, busOperations
         customerSupportButton.classList.add('text-black', 'font-semibold', 'border-b-4');
     });
 }
+

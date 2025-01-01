@@ -111,9 +111,103 @@
              </section>
 
             <!-- bus operations section -->
-            <section class="bus-operations-section hidden" id="bus-operations-section">
-                <h2 class="text-3xl font-bold mb-4">Bus Operations</h2>
-            </section>
+            <section class="bus-operations-section" id="bus-operations-section">
+                <h2 class="text-3xl font-bold mb-6 text-gray-700">Bus Operations</h2>
+              
+                <!-- Add New Schedule Button -->
+                <div class="flex justify-end mb-4">
+                  <button class="bg-blue-500 text-white py-2 px-4 rounded-lg hover:bg-blue-600" id="add-schedule-btn">
+                    Add New Schedule
+                  </button>
+                </div>
+              
+                <!-- Schedule Table -->
+                <table class="min-w-full bg-white table-auto border-collapse shadow-md rounded-lg">
+                  <thead>
+                    <tr class="bg-gray-200">
+                      <th class="px-4 py-2 border-b text-left">Bus</th>
+                      <th class="px-4 py-2 border-b text-left">Departure Time</th>
+                      <th class="px-4 py-2 border-b text-left">From</th>
+                      <th class="px-4 py-2 border-b text-left">To</th>
+                      <th class="px-4 py-2 border-b text-left">Price</th>
+                      <th class="px-4 py-2 border-b text-left">Available Seats</th>
+                      <th class="px-4 py-2 border-b text-left">Status</th>
+                      <th class="px-4 py-2 border-b text-left">Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody id="schedule-table">
+                    <!-- Dummy Data: Bus Schedules -->
+                    <!-- These rows will be populated dynamically (fetch data from Firestore) -->
+                    <tr>
+                      <td class="px-4 py-2 border-b">Bus 101</td>
+                      <td class="px-4 py-2 border-b">10:30 AM</td>
+                      <td class="px-4 py-2 border-b">City A</td>
+                      <td class="px-4 py-2 border-b">City B</td>
+                      <td class="px-4 py-2 border-b">$25</td>
+                      <td class="px-4 py-2 border-b">20</td>
+                      <td class="px-4 py-2 border-b text-green-600">Active</td>
+                      <td class="px-4 py-2 border-b text-blue-500 cursor-pointer">Edit</td>
+                    </tr>
+                    <tr>
+                      <td class="px-4 py-2 border-b">Bus 102</td>
+                      <td class="px-4 py-2 border-b">12:00 PM</td>
+                      <td class="px-4 py-2 border-b">City B</td>
+                      <td class="px-4 py-2 border-b">City C</td>
+                      <td class="px-4 py-2 border-b">$30</td>
+                      <td class="px-4 py-2 border-b">15</td>
+                      <td class="px-4 py-2 border-b text-red-600">Inactive</td>
+                      <td class="px-4 py-2 border-b text-blue-500 cursor-pointer">Edit</td>
+                    </tr>
+                  </tbody>
+                </table>
+              
+                <!-- Modal for Adding/Editing Schedule -->
+                <div id="schedule-modal" class="fixed inset-0 bg-gray-800 bg-opacity-50 flex justify-center items-center">
+                  <div class="modal-content bg-white p-6 rounded-lg w-1/3">
+                    <h3 class="text-xl font-semibold mb-4">Add / Edit Bus Schedule</h3>
+              
+                    <!-- Form for Adding / Editing Bus Schedule -->
+                    <form id="schedule-form" class="space-y-4">
+                      <div>
+                        <label for="bus-number" class="block text-lg">Bus Number:</label>
+                        <input type="text" id="bus-number" name="bus-number" class="w-24 text-lg text-center px-4 py-2 border border-gray-300 rounded-lg" required>
+                      </div>
+                      <div>
+                        <label for="departure-time" class="block text-lg">Departure Time:</label>
+                        <input type="time" id="departure-time" name="departure-time" class="w-full px-4 py-2 border border-gray-300 rounded-lg" required>
+                      </div>
+                      <div>
+                        <label for="from" class="block text-lg">From:</label>
+                        <input type="text" id="from" name="from" class="w-full px-4 py-2 border border-gray-300 rounded-lg" required>
+                      </div>
+                      <div>
+                        <label for="to" class="block text-lg">To:</label>
+                        <input type="text" id="to" name="to" class="w-full px-4 py-2 border border-gray-300 rounded-lg" required>
+                      </div>
+                      <div>
+                        <label for="price" class="block text-lg">Price:</label>
+                        <input type="number" id="price" name="price" class="w-full px-4 py-2 border border-gray-300 rounded-lg" required>
+                      </div>
+                      <div>
+                        <label for="available-seats" class="block text-lg">Available Seats:</label>
+                        <input type="number" id="available-seats" name="available-seats" class="w-full px-4 py-2 border border-gray-300 rounded-lg" required>
+                      </div>
+                      <div>
+                        <label for="status" class="block text-lg">Status:</label>
+                        <select id="status" name="status" class="w-full px-4 py-2 border border-gray-300 rounded-lg">
+                          <option value="active">Active</option>
+                          <option value="inactive">Inactive</option>
+                        </select>
+                      </div>
+                      <div class="flex justify-between">
+                        <button type="submit" class="py-2 px-4 bg-blue-500 text-white rounded-lg hover:bg-blue-600" id="modal-save-btn">Save</button>
+                        <button type="button" class="py-2 px-4 bg-red-500 text-white rounded-lg hover:bg-red-600" id="modal-cancel-btn">Cancel</button>
+                      </div>
+                    </form>
+                  </div>
+                </div>
+              
+              </section>
 
             <!-- customer support section -->
             <section class="customer-support-section hidden" id="customer-support-section">

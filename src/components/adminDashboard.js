@@ -99,4 +99,49 @@ const customerSupportSection = document.getElementById('customer-support-section
 
 toggleAdminNav(dashboardButton, ticketInventoryButton, busOperationsButton, customerSupportButton, dashboardSection, ticketInventorySection, busOperationsSection, customerSupportSection);
 
+// bus operations admin
+const scheduleModal = document.getElementById('schedule-modal');
+scheduleModal.style.display = 'none';
+
+document.getElementById('add-schedule-btn').addEventListener('click', function() {
+    scheduleModal.style.display = 'flex';
+  });
+
+  // Close the modal
+  document.getElementById('modal-cancel-btn').addEventListener('click', () => {
+    scheduleModal.style.display = 'none';
+  })
+
+  // Handle form submission for adding/editing bus schedule
+  document.getElementById('schedule-form').addEventListener('submit', function(event) {
+    event.preventDefault();
+
+    // Get the values from the form
+    const busNumber = document.getElementById('bus-number').value;
+    const departureTime = document.getElementById('departure-time').value;
+    const from = document.getElementById('from').value;
+    const to = document.getElementById('to').value;
+    const price = document.getElementById('price').value;
+    const availableSeats = document.getElementById('available-seats').value;
+    const status = document.getElementById('status').value;
+
+    // Update the schedule table dynamically (here, we're just adding a new row as an example)
+    const newRow = `
+      <tr>
+        <td class="px-4 py-2 border-b">${busNumber}</td>
+        <td class="px-4 py-2 border-b">${departureTime}</td>
+        <td class="px-4 py-2 border-b">${from}</td>
+        <td class="px-4 py-2 border-b">${to}</td>
+        <td class="px-4 py-2 border-b">$${price}</td>
+        <td class="px-4 py-2 border-b">${availableSeats}</td>
+        <td class="px-4 py-2 border-b ${status === 'active' ? 'text-green-600' : 'text-red-600'}">${status}</td>
+        <td class="px-4 py-2 border-b text-blue-500 cursor-pointer">Edit</td>
+      </tr>
+    `;
+
+    document.getElementById('schedule-table').insertAdjacentHTML('beforeend', newRow);
+
+    // Close the modal after submission
+    closeModal();
+  });
 
