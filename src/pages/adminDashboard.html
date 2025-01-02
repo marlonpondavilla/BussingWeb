@@ -206,29 +206,29 @@
                         <!-- Form for Adding / Editing Bus Schedule -->
                         <form id="schedule-form" class="space-y-4">
                             <div>
-                            <label for="bus-number" class="block text-lg">Bus Number:</label>
-                            <input type="text" id="bus-number" name="bus-number" class="w-24 text-lg text-center px-4 py-2 border border-gray-300 rounded-lg" required>
-                            <p class="text-red-500 hidden" id="bus-num-err-msg">This bus number already exist in the system</p>
+                                <label for="bus-number" class="block text-lg">Bus Number:</label>
+                                <input type="text" id="bus-number" name="bus-number" class="w-24 text-lg text-center px-4 py-2 border border-gray-300 rounded-lg" required>
+                                <p class="text-red-500 hidden" id="bus-num-err-msg">This bus number already exist in the system</p>
                             </div>
                             <div>
-                            <label for="departure-time" class="block text-lg">Departure Time:</label>
-                            <input type="time" id="departure-time" name="departure-time" class="w-full px-4 py-2 border border-gray-300 rounded-lg" required min="00:00" max="23:59">
+                                <label for="departure-time" class="block text-lg">Departure Time:</label>
+                                <input type="time" id="departure-time" name="departure-time" class="w-full px-4 py-2 border border-gray-300 rounded-lg" required min="00:00" max="23:59">
                             </div>
                             <div>
-                            <label for="from" class="block text-lg">From:</label>
-                            <input type="text" id="from" name="from" class="w-full px-4 py-2 border border-gray-300 rounded-lg" required>
+                                <label for="from" class="block text-lg">From:</label>
+                                <input type="text" id="from" name="from" class="w-full px-4 py-2 border border-gray-300 rounded-lg" required>
                             </div>
                             <div>
-                            <label for="to" class="block text-lg">To:</label>
-                            <input type="text" id="to" name="to" class="w-full px-4 py-2 border border-gray-300 rounded-lg" required>
+                                <label for="to" class="block text-lg">To:</label>
+                                <input type="text" id="to" name="to" class="w-full px-4 py-2 border border-gray-300 rounded-lg" required>
                             </div>
                             <div>
-                            <label for="price" class="block text-lg">Price:</label>
-                            <input type="number" id="price" name="price" class="w-full px-4 py-2 border border-gray-300 rounded-lg" required>
+                                <label for="price" class="block text-lg">Price:</label>
+                                <input type="number" id="price" name="price" class="w-full px-4 py-2 border border-gray-300 rounded-lg" required>
                             </div>
                             <div>
-                            <label for="available-seats" class="block text-lg">Available Seats:</label>
-                            <input type="number" id="available-seats" name="available-seats" class="w-full px-4 py-2 border border-gray-300 rounded-lg" required>
+                                <label for="available-seats" class="block text-lg">Available Seats:</label>
+                                <input type="number" id="available-seats" name="available-seats" class="w-full px-4 py-2 border border-gray-300 rounded-lg" required>
                             </div>
                             <div>
                             <label for="status" class="block text-lg">Status:</label>
@@ -248,6 +248,11 @@
 
                 <!-- bus info update section -->
                 <div class="bus-info-section hidden" id="bus-info-section">
+                    <div class="flex justify-end mb-4">
+                        <button class="bg-blue-500 text-white py-2 px-4 mr-4 rounded-lg hover:bg-blue-600" id="add-bus-info-modal-btn">
+                        Add New Bus
+                        </button>
+                    </div>
                     <div class="container mx-auto px-4 py-6">
                         <!-- Table -->
                         <div class="overflow-x-auto">
@@ -273,59 +278,71 @@
                             </table>
                         </div>
                     </div>
-                    
                     <!-- Edit Modal -->
-                    <div id="editModal" class="fixed inset-0 bg-gray-800 bg-opacity-50 hidden justify-center items-center z-50">
-                        <div class="bg-white rounded-lg p-6 w-96">
-                            <h3 class="text-xl font-semibold text-gray-700 mb-4">Edit Bus Information</h3>
-                            <form id="editBusForm">
-                                <!-- Bus No -->
+                    <div class="modal fixed inset-0 bg-gray-500 bg-opacity-50 hidden justify-center items-center" id="bus-info-modal">
+                        <div class="modal-content bg-white rounded-lg p-6 w-96">
+                            <h2 class="text-lg font-semibold mb-4">Edit Bus Information</h2>
+                            
+                            <!-- Edit Form -->
+                            <form id="editBusForm overflow-x-auto">
                                 <div class="mb-4">
-                                    <label for="editBusNo" class="block text-sm font-medium text-gray-600">Bus Number</label>
-                                    <input type="text" id="editBusNo" class="mt-2 block w-full px-4 py-2 border border-gray-300 rounded-md" readonly>
+                                    <label for="busNo" class="block text-sm font-medium text-gray-700">Bus No</label>
+                                    <input type="text" id="busNo" name="busNo" class="form-input w-1/4 mt-1 border-2 rounded-lg" disabled>
                                 </div>
-                    
-                                <!-- Starting Point -->
                                 <div class="mb-4">
-                                    <label for="editStartingPoint" class="block text-sm font-medium text-gray-600">Starting Point</label>
-                                    <input type="text" id="editStartingPoint" class="mt-2 block w-full px-4 py-2 border border-gray-300 rounded-md">
+                                    <label for="startingPoint" class="block text-sm font-medium text-gray-700">Starting Point</label>
+                                    <input type="text" id="startingPoint" name="startingPoint" required class="form-input w-full mt-1 border-2 py-1">
                                 </div>
-                    
-                                <!-- Arrival Point -->
                                 <div class="mb-4">
-                                    <label for="editArrivalPoint" class="block text-sm font-medium text-gray-600">Arrival Point</label>
-                                    <input type="text" id="editArrivalPoint" class="mt-2 block w-full px-4 py-2 border border-gray-300 rounded-md">
+                                    <label for="arrivalPoint" class="block text-sm font-medium text-gray-700">Arrival Point</label>
+                                    <input type="text" id="arrivalPoint" name="arrivalPoint" required class="form-input w-full mt-1 border-2 py-1">
                                 </div>
-                    
-                                <!-- Bus Capacity -->
                                 <div class="mb-4">
-                                    <label for="editBusCapacity" class="block text-sm font-medium text-gray-600">Bus Capacity</label>
-                                    <input type="number" id="editBusCapacity" class="mt-2 block w-full px-4 py-2 border border-gray-300 rounded-md">
+                                    <label for="departureTime" class="block text-sm font-medium text-gray-700">Departure Time</label>
+                                    <input type="time" id="departureTime" name="departureTime" required min="00:00" max="23:59" class="form-input w-full mt-1 border-2 py-1">
                                 </div>
-                    
-                                <!-- Bus Conductor -->
                                 <div class="mb-4">
-                                    <label for="editBusConductor" class="block text-sm font-medium text-gray-600">Bus Conductor</label>
-                                    <input type="text" id="editBusConductor" class="mt-2 block w-full px-4 py-2 border border-gray-300 rounded-md">
+                                    <label for="plateNo" class="block text-sm font-medium text-gray-700">Plate No</label>
+                                    <input type="text" id="plateNo" name="plateNo" required class="form-input w-full mt-1 border-2 py-1">
                                 </div>
-                    
-                                <!-- Bus Driver -->
                                 <div class="mb-4">
-                                    <label for="editBusDriver" class="block text-sm font-medium text-gray-600">Bus Driver</label>
-                                    <input type="text" id="editBusDriver" class="mt-2 block w-full px-4 py-2 border border-gray-300 rounded-md">
+                                    <label for="busModel" class="block text-sm font-medium text-gray-700">Bus Model</label>
+                                    <input type="text" id="busModel" name="busModel" required class="form-input w-full mt-1 border-2 py-1">
                                 </div>
-                    
-                                <!-- Submit and Cancel Buttons -->
-                                <div class="flex justify-between">
-                                    <button type="button" onclick="closeEditModal()" class="px-4 py-2 bg-gray-300 text-white rounded-md">Cancel</button>
-                                    <button type="submit" class="px-4 py-2 bg-blue-600 text-white rounded-md">Save Changes</button>
+                                <div class="mb-4">
+                                    <label for="busCapacity" class="block text-sm font-medium text-gray-700">Bus Capacity</label>
+                                    <input type="number" id="busCapacity" name="busCapacity" required class="form-input w-full mt-1 border-2 py-1">
+                                </div>
+                                <div class="mb-4">
+                                    <label for="busConductor" class="block text-sm font-medium text-gray-700">Bus Conductor</label>
+                                    <input type="text" id="busConductor" name="busConductor" required class="form-input w-full mt-1 border-2 py-1">
+                                </div>
+                                <div class="mb-4">
+                                    <label for="busDriver" class="block text-sm font-medium text-gray-700">Bus Driver</label>
+                                    <input type="text" id="busDriver" name="busDriver" required class="form-input w-full mt-1 border-2 py-1">
+                                </div>
+                                <div class="mb-4">
+                                    <label for="status" class="block text-sm font-medium text-gray-700">Status</label>
+                                    <select name="status" class="w-full py-1 border-2" id="status">
+                                        <option value="Active">Active</option>
+                                        <option value="Inactive">Inactive</option>
+                                    </select>
+                                </div>
+
+                                <div class="bus-info-edt hidden justify-end" id="bus-info-edt">
+                                    <button type="submit" class="bg-blue-600 text-white py-2 px-4 hover:bg-blue-800 rounded" id="info-edt-save">Save Changes</button>
+                                    <button type="button" class="ml-4 bg-gray-300 text-black py-2 px-4 rounded" id="info-edt-cancel">Cancel</button>
+                                </div>
+                                <div class="bus-info-add hidden justify-end" id="bus-info-add">
+                                    <button type="submit" class="bg-green-600 text-white py-2 px-4 hover:bg-green-800 rounded" id="info-add-save">Save Changes</button>
+                                    <button type="button" class="ml-4 bg-gray-300 text-black py-2 px-4 rounded" id="info-add-cancel">Cancel</button>
                                 </div>
                             </form>
                         </div>
                     </div>
                 </div>
               
-              </section>
+            </section>
 
             <!-- customer support section -->
             <section class="customer-support-section hidden" id="customer-support-section">

@@ -243,8 +243,6 @@ document.getElementById('add-schedule-btn').addEventListener('click', function()
 const busInfoData = await getFirestoreData('HomeDocuments')
 let busInfoTr = "";
 
-console.log(busInfoData)
-
 for(let busInfoDoc of busInfoData){
     busInfoTr += `
         <tr>
@@ -259,12 +257,60 @@ for(let busInfoDoc of busInfoData){
             <td class="px-4 py-2 border-b">${busInfoDoc.busDriver}</td>
             <td class="px-4 py-2 border-b">${busInfoDoc.status}</td>
             <td class="px-4 py-2 border-b text-blue-600 cursor-pointer">
-            <button class="edit-btn" data-bus-info-edt-btn="${busInfoDoc.busNo}" id="bus-schedule-edit-btn">Edit</button>
-            <button class="ml-2 text-red-600" data-bus-info-del-btn="${busInfoDoc.busNo}" id="bus-schedule-delete-btn">Delete</button>
+            <button class="edit-btn" data-bus-info-edt-btn="${busInfoDoc.busNo}" id="bus-info-edit-btn">Edit</button>
+            <button class="ml-2 text-red-600" data-bus-info-del-btn="${busInfoDoc.busNo}" id="bus-info-delete-btn">Delete</button>
             </td>
         </tr>
     `;
 }
+// Update the table with the new row
 document.getElementById('bus-info-table').innerHTML = busInfoTr;
 
+const busInfoAddBtn = document.getElementById('add-bus-info-modal-btn');
+const busInfoModal = document.getElementById('bus-info-modal');
+const busInfoEdtDiv = document.getElementById('bus-info-edt');
+const busInfoAddDiv = document.getElementById('bus-info-add');
+
+const busInfoEdtCancelBtn = document.getElementById('info-edt-cancel');
+const busInfoEdtSaveBtn = document.getElementById('info-edt-save');
+
+const busInfoAddCancelBtn = document.getElementById('info-add-cancel');
+const busInfoAddSaveBtn = document.getElementById('info-add-save');
+
+const busInfoEdtBtn = document.querySelectorAll('[data-bus-info-edt-btn]');
+const busInfoDelBtn = document.querySelectorAll('[data-bus-info-del-btn]');
+
+// will show the modal and the hidden buttons for editing
+busInfoEdtBtn.forEach(edtBtn => {
+    edtBtn.addEventListener('click', () => {
+        showBusInfoModal(busInfoEdtDiv, busInfoModal);
+        closeBusInfoModal(busInfoEdtCancelBtn, busInfoModal);
+    })
+})
+
+// will show the modal and the hidden buttons for adding
+busInfoAddBtn.addEventListener('click', () => {
+    showBusInfoModal(busInfoAddDiv, busInfoModal)
+    closeBusInfoModal(busInfoAddCancelBtn, busInfoModal);
+})
+
+function showBusInfoModal(div, modal){
+    // loops through the divs and shows the div that was clicked
+    [busInfoEdtDiv, busInfoAddDiv].forEach(d => {
+        if(d !== div){
+            d.classList.add('hidden');
+        } else{
+            d.classList.remove('hidden');
+        }
+    })
+    modal.classList.remove('hidden');
+    modal.classList.add('flex');
+}
+
+function closeBusInfoModal(closeBtn, modal){
+    closeBtn.addEventListener('click', () => {
+        modal.classList.remove('flex');
+        modal.classList.add('hidden');
+    })
+}
 
