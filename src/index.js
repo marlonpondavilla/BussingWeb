@@ -1,7 +1,7 @@
 import { initializeApp } from 'https://www.gstatic.com/firebasejs/9.22.2/firebase-app.js';
 import { getAuth, signInWithPopup, GoogleAuthProvider, signInWithEmailAndPassword } from 'https://www.gstatic.com/firebasejs/9.22.2/firebase-auth.js';
 import { firebaseConfig } from '../src/services/firebaseConfig.js';
-import { addUserToFirestore } from './firebase/db.js';
+import { addDataToFirestore } from './firebase/db.js';
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
@@ -31,7 +31,7 @@ googleBtn.addEventListener('click', async () => {
         };
 
         // Add user to Firestore
-        await addUserToFirestore(userDataObject); 
+        await addDataToFirestore('userLoggedIn', userDataObject); 
 
         // Redirect to the main dashboard after the user is added
         window.location.href = './pages/mainDashboard.html';
@@ -91,7 +91,7 @@ loginBtn.addEventListener('click', async (e) => {
         };
 
         // Add user to Firestore
-        await addUserToFirestore(userDataObject); 
+        await addDataToFirestore('signedUpUsers', userDataObject); 
         window.location.href = './pages/mainDashboard.html';
     } catch (error) {
         // Handle Firebase authentication errors

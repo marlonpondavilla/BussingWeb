@@ -1,7 +1,7 @@
 import { initializeApp } from 'https://www.gstatic.com/firebasejs/9.22.2/firebase-app.js';
 import { getAuth, signInWithEmailAndPassword } from 'https://www.gstatic.com/firebasejs/9.22.2/firebase-auth.js';
 import { firebaseConfig } from '../services/firebaseConfig.js';
-import { addAdminToFirestore } from '../firebase/db.js';
+import { addDataToFirestore } from '../firebase/db.js';
 const app = initializeApp(firebaseConfig);
 const auth = getAuth();
 
@@ -43,7 +43,7 @@ loginButton.addEventListener('click', async (e) => {
         };
 
         // Add admin to Firestore
-        await addAdminToFirestore(adminDataObject);
+        await addDataToFirestore('adminLoggedIn', adminDataObject);
 
         // check if is admin
         if(admin.email.includes('@bussing.com')){

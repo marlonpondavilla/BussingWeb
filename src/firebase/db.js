@@ -5,44 +5,12 @@ import { firebaseConfig } from '../services/firebaseConfig.js';
 const firebaseApp = initializeApp(firebaseConfig);
 const db = getFirestore(firebaseApp);
 
-const usersCollection = collection(db, 'userLoggedIn');
-const signedUpUsersCollection = collection(db, 'signedUpUsers');
-const adminLoggedInCollection = collection(db, 'adminLoggedIn');
-const scheduleCollection = collection(db, 'ScheduleDocuments');
-
-// Function to add user to Firestore
-export async function addUserToFirestore(userData) {
-    try {
-        const docRef = await addDoc(usersCollection, userData);
-    } catch (e) {
-        console.error('Error adding google user: ', e);
-    }
-}
-
-// Function to add signed up user to Firestore
-export async function addSignedUpUserToFirestore(signedUpUserData) {
+// add data to Firestore
+export async function addDataToFirestore(collectionName, scheduleData){
     try{
-        const docRef = await addDoc(signedUpUsersCollection, signedUpUserData);
+        const docRef = await addDoc(collection(db, collectionName), scheduleData);
     } catch(e){
-        console.error('Error adding signup: ', e);
-    }
-}
-
-// Function to add admin to Firestore
-export async function addAdminToFirestore(adminData){
-    try{
-        const docRef = await addDoc(adminLoggedInCollection, adminData);
-    } catch(e){
-        console.error('Error adding admin: ', e);
-    }
-}
-
-// add schedule to Firestore
-export async function addScheduleToFirestore(scheduleData){
-    try{
-        const docRef = await addDoc(scheduleCollection, scheduleData);
-    } catch(e){
-        console.error('Error adding schedule: ', e);
+        console.error('Error adding Data to Firestore: ', e);
     }
 }
 
@@ -60,9 +28,9 @@ export async function getFirestoreData(collectionName) {
 }
 
 // Function to check if busNo already exists
-export async function checkBusNumberExists(busNo) {
+export async function checkBusNumberExists(busNo, collectionName) {
     try {
-        const q = query(collection(db, 'ScheduleDocuments'), where('busNo', '==', busNo));
+        const q = query(collection(db, collectionName), where('busNo', '==', busNo));
         const snapshot = await getDocs(q);
 
         // Return true if busNo already exists
@@ -73,11 +41,11 @@ export async function checkBusNumberExists(busNo) {
     }
 }   
 
-// Create a function to get a single document from Firestore where the document's busNo field matches the provided busNo
-export async function getSingleSchedule(busNo) {
+// get a single document from Firestore where the document's busNo field matches the provided busNo
+export async function getSingleFirestoreData(busNo, collectionName) {
     try {
 
-        const q = query(collection(db, 'ScheduleDocuments'), where('busNo', '==', busNo));
+        const q = query(collection(db, collectionName), where('busNo', '==', busNo));
 
         const snapshot = await getDocs(q);
 
@@ -93,22 +61,18 @@ export async function getSingleSchedule(busNo) {
     }
 }
 
-export async function updateSingleSchedule(busNo, updatedData){
+export async function updateSingleFirestoreData(busNo, collectionName, updatedData){
     try{
         // query to find the document where busNo matches the provided busNo
-        const q = query(collection(db, 'ScheduleDocuments' ), where('busNo', '==', busNo));
+        const q = query(collection(db, collectionName ), where('busNo', '==', busNo));
 
         const snapshot = await getDocs(q);
 
-        // check if the document exists
         if(snapshot.empty){
             return;
         }
 
-        // get the document reference
-        const docRef = doc(db, 'ScheduleDocuments', snapshot.docs[0].id)
-
-        // update the document
+        const docRef = doc(db, collectionName, snapshot.docs[0].id)
         await updateDoc(docRef, updatedData);
         
     } catch(e){

@@ -4,7 +4,7 @@ import { initializeApp } from 'https://www.gstatic.com/firebasejs/9.22.2/firebas
 import { getAuth } from 'https://www.gstatic.com/firebasejs/9.22.2/firebase-auth.js';
 import { firebaseConfig } from '../services/firebaseConfig.js';
 import { toggleBusOperations } from "../utils/pagination.js";
-import { addScheduleToFirestore, getFirestoreData, getSingleSchedule, updateSingleSchedule, checkBusNumberExists } from "../firebase/db.js";
+import { addDataToFirestore, getFirestoreData, getSingleFirestoreData, updateSingleFirestoreData, checkBusNumberExists } from "../firebase/db.js";
 
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app); 
@@ -154,44 +154,51 @@ document.getElementById('add-schedule-btn').addEventListener('click', function()
         editModal.style.display = 'none';
     })
 
-    editButtons.forEach((rowData) => {
+    // Assuming editButtons are your "Edit" buttons for each row.
+editButtons.forEach((rowData) => {
+    rowData.addEventListener('click', async() => {
+        // Show the modal to edit the schedule
+        editModal.style.display = 'flex';
 
-        rowData.addEventListener('click', async() => {
-            editModal.style.display = 'flex';
+        // Get the bus number from the clicked row's data attribute
+        const busNo = rowData.getAttribute('data-row-edit');
+        const singleSchedData = await getSingleFirestoreData(busNo, 'ScheduleDocuments');
 
-            const busNo = rowData.getAttribute('data-row-edit');
-            const singleSchedData = await getSingleSchedule(busNo);
+        if (singleSchedData) {
+            // Populate the modal with the current data
+            document.getElementById('editBusNo').value = singleSchedData.busNo;
+            document.getElementById('editDepartureTime').value = singleSchedData.departureTime;
+            document.getElementById('editFrom').value = singleSchedData.from;
+            document.getElementById('editTo').value = singleSchedData.to;
+            document.getElementById('editPrice').value = singleSchedData.price;
+            document.getElementById('editAvailableSeats').value = singleSchedData.availableSeats;
+            document.getElementById('editStatus').value = singleSchedData.status;
+        }
+    });
+});
 
-            if(singleSchedData){
-                const busNo = document.getElementById('editBusNo').value = singleSchedData.busNo;
-                document.getElementById('editDepartureTime').value = singleSchedData.departureTime;
-                document.getElementById('editFrom').value = singleSchedData.from;
-                document.getElementById('editTo').value = singleSchedData.to;
-                document.getElementById('editPrice').value = singleSchedData.price;
-                document.getElementById('editAvailableSeats').value = singleSchedData.availableSeats;
-                document.getElementById('editStatus').value = singleSchedData.status;
+// Attach the form submit listener just once, outside the click handler.
+document.getElementById('edit-schedule-modal').addEventListener('submit', async (event) => {
+    event.preventDefault();
 
-                // handle form submission for editing bus schedule
-                document.getElementById('edit-schedule-modal').addEventListener('submit', async (event) => {
-                    event.preventDefault();
-                    
-                    const updatedSingleScheduleData = {
-                        busNo: document.getElementById('editBusNo').value,
-                        departureTime: document.getElementById('editDepartureTime').value,
-                        from: document.getElementById('editFrom').value,
-                        to: document.getElementById('editTo').value,
-                        price: document.getElementById('editPrice').value,
-                        availableSeats: document.getElementById('editAvailableSeats').value,
-                        status: document.getElementById('editStatus').value
-                    }
+    // Gather the updated schedule data from the modal
+    const updatedSingleScheduleData = {
+        busNo: document.getElementById('editBusNo').value,
+        departureTime: document.getElementById('editDepartureTime').value,
+        from: document.getElementById('editFrom').value,
+        to: document.getElementById('editTo').value,
+        price: document.getElementById('editPrice').value,
+        availableSeats: document.getElementById('editAvailableSeats').value,
+        status: document.getElementById('editStatus').value
+    };
 
-                    await updateSingleSchedule(busNo, updatedSingleScheduleData)
-                    alert('Schedule updated successfully');
-                    location.reload();
-                });
-            }
-        })
-    })
+    // Update the document in Firestore with the new data
+    await updateSingleFirestoreData(updatedSingleScheduleData.busNo, 'ScheduleDocuments', updatedSingleScheduleData);
+
+    alert('Schedule updated successfully');
+    location.reload(); // Reload page or close modal as needed
+});
+
 
     // Handle form submission for adding/editing bus schedule
     const busNumErr = document.getElementById('bus-num-err-msg');
@@ -199,7 +206,7 @@ document.getElementById('add-schedule-btn').addEventListener('click', function()
 
     document.getElementById('bus-number').addEventListener('input', async () => {
         try{
-            if(await checkBusNumberExists(document.getElementById('bus-number').value)){
+            if(await checkBusNumberExists(document.getElementById('bus-number').value, 'ScheduleDocuments')){
                 busNumErr.classList.remove('hidden');
                 saveBtn.classList.add('cursor-not-allowed');
                 saveBtn.disabled = true
@@ -234,16 +241,16 @@ document.getElementById('add-schedule-btn').addEventListener('click', function()
         status: status
     }
 
-    await addScheduleToFirestore(scheduleDataObject);
+    await addDataToFirestore('ScheduleDocuments',scheduleDataObject);
     location.reload();
 
   });
 
 //  Bus Information
-const busInfoData = await getFirestoreData('HomeDocuments')
+const busInfoDataFirestore = await getFirestoreData('HomeDocuments')
 let busInfoTr = "";
 
-for(let busInfoDoc of busInfoData){
+for(let busInfoDoc of busInfoDataFirestore){
     busInfoTr += `
         <tr>
             <td class="px-4 py-2 border-b">${busInfoDoc.busNo}</td>
@@ -255,10 +262,10 @@ for(let busInfoDoc of busInfoData){
             <td class="px-4 py-2 border-b">${busInfoDoc.busCapacity}</td>
             <td class="px-4 py-2 border-b">${busInfoDoc.busConductor}</td>
             <td class="px-4 py-2 border-b">${busInfoDoc.busDriver}</td>
-            <td class="px-4 py-2 border-b">${busInfoDoc.status}</td>
+            <td class="px-4 py-2 border-b ${busInfoDoc.status === 'Active' ? 'text-green-500' : 'text-red-500'}">${busInfoDoc.status}</td>
             <td class="px-4 py-2 border-b text-blue-600 cursor-pointer">
-            <button class="edit-btn" data-bus-info-edt-btn="${busInfoDoc.busNo}" id="bus-info-edit-btn">Edit</button>
-            <button class="ml-2 text-red-600" data-bus-info-del-btn="${busInfoDoc.busNo}" id="bus-info-delete-btn">Delete</button>
+                <button class="edit-btn" data-bus-info-edt-btn="${busInfoDoc.busNo}" id="bus-info-edit-btn">Edit</button>
+                <button class="ml-2 text-red-600" data-bus-info-del-btn="${busInfoDoc.busNo}" id="bus-info-delete-btn">Delete</button>
             </td>
         </tr>
     `;
@@ -266,41 +273,126 @@ for(let busInfoDoc of busInfoData){
 // Update the table with the new row
 document.getElementById('bus-info-table').innerHTML = busInfoTr;
 
+const busInfoEdtModal = document.getElementById('bus-info-edit-modal');
+const busInfoAddModal = document.getElementById('bus-info-add-modal');
+
+
+const busInfoAddForm = document.getElementById('bus-info-add-form');
+const busInfoEdtForm = document.getElementById('bus-info-edt-form');
+
+const busInfoNumErrMsg = document.getElementById('bus-info-num-err-msg');
+
 const busInfoAddBtn = document.getElementById('add-bus-info-modal-btn');
-const busInfoModal = document.getElementById('bus-info-modal');
 const busInfoEdtDiv = document.getElementById('bus-info-edt');
 const busInfoAddDiv = document.getElementById('bus-info-add');
+
+const busInfoAddCancelBtn = document.getElementById('info-add-cancel');
+const busInfoAddNowBtn = document.getElementById('info-add-now');
 
 const busInfoEdtCancelBtn = document.getElementById('info-edt-cancel');
 const busInfoEdtSaveBtn = document.getElementById('info-edt-save');
 
-const busInfoAddCancelBtn = document.getElementById('info-add-cancel');
-const busInfoAddSaveBtn = document.getElementById('info-add-save');
-
 const busInfoEdtBtn = document.querySelectorAll('[data-bus-info-edt-btn]');
 const busInfoDelBtn = document.querySelectorAll('[data-bus-info-del-btn]');
 
-// will show the modal and the hidden buttons for editing
-busInfoEdtBtn.forEach(edtBtn => {
-    edtBtn.addEventListener('click', () => {
-        showBusInfoModal(busInfoEdtDiv, busInfoModal);
-        closeBusInfoModal(busInfoEdtCancelBtn, busInfoModal);
-    })
-})
+document.getElementById('busNo-add').addEventListener('input', async() => {
+    try{
+        if(await checkBusNumberExists(document.getElementById('busNo-add').value, 'HomeDocuments')){
+            busInfoNumErrMsg.classList.remove('hidden');
+            busInfoAddNowBtn.disabled = true;
+            busInfoAddNowBtn.classList.add('cursor-not-allowed');
+        } else{
+            busInfoNumErrMsg.classList.add('hidden');
+            busInfoAddNowBtn.disabled = false;
+            busInfoAddNowBtn.classList.remove('cursor-not-allowed');
+        }
+    } catch(e){
+        console.error('Error checking bus number: ', e);
+    }
+});
 
 // will show the modal and the hidden buttons for adding
 busInfoAddBtn.addEventListener('click', () => {
-    showBusInfoModal(busInfoAddDiv, busInfoModal)
-    closeBusInfoModal(busInfoAddCancelBtn, busInfoModal);
+    showBusInfoModal(busInfoAddModal)
+    closeBusInfoModal(busInfoAddCancelBtn, busInfoAddModal);
+
+
+    busInfoAddForm.addEventListener('submit', async(e) => {
+        e.preventDefault();
+
+        const newBusInfoDataObj = {
+            busNo: document.getElementById('busNo-add').value,
+            startingPoint: document.getElementById('startingPoint-add').value,
+            arrivalPoint: document.getElementById('arrivalPoint-add').value,
+            departureTime: document.getElementById('departureTime-add').value,
+            plateNo: document.getElementById('plateNo-add').value,
+            busModel: document.getElementById('busModel-add').value,
+            busCapacity: document.getElementById('busNo-add').value,
+            busConductor: document.getElementById('busCapacity-add').value,
+            busDriver: document.getElementById('busDriver-add').value,
+            status: document.getElementById('status-add').value
+        }
+        
+        await addDataToFirestore('HomeDocuments', newBusInfoDataObj);
+        alert('Bus Information added successfully');
+        location.reload();
+    }) 
 })
 
-function showBusInfoModal(div, modal){
+
+
+// will show the modal and the hidden buttons for editing
+busInfoEdtBtn.forEach( (edtBtn) => {
+    edtBtn.addEventListener('click', async() => {
+        showBusInfoModal(busInfoEdtModal);
+        closeBusInfoModal(busInfoEdtCancelBtn, busInfoEdtModal);
+
+        const busNoEdt = edtBtn.getAttribute('data-bus-info-edt-btn');
+        const singleBusInfo = await getSingleFirestoreData(busNoEdt, 'HomeDocuments');
+
+        if(singleBusInfo){
+            document.getElementById('busNo').value = singleBusInfo.busNo;
+            document.getElementById('startingPoint').value = singleBusInfo.startingPoint;
+            document.getElementById('arrivalPoint').value = singleBusInfo.arrivalPoint;
+            document.getElementById('departureTime').value = singleBusInfo.departureTime;
+            document.getElementById('plateNo').value = singleBusInfo.plateNo;
+            document.getElementById('busModel').value = singleBusInfo.busModel;
+            document.getElementById('busCapacity').value = singleBusInfo.busCapacity;
+            document.getElementById('busConductor').value = singleBusInfo.busConductor;
+            document.getElementById('busDriver').value = singleBusInfo.busDriver;
+            document.getElementById('statusInfo').value = singleBusInfo.status;
+        }
+    })
+})
+
+busInfoEdtForm.addEventListener('submit', async(e) => {
+    e.preventDefault();
+
+    const updatedBusInfoData = {
+        busNo: document.getElementById('busNo').value,
+        startingPoint: document.getElementById('startingPoint').value,
+        arrivalPoint: document.getElementById('arrivalPoint').value,
+        departureTime: document.getElementById('departureTime').value,
+        plateNo: document.getElementById('plateNo').value,
+        busModel: document.getElementById('busModel').value,
+        busCapacity: document.getElementById('busCapacity').value,
+        busConductor: document.getElementById('busConductor').value,
+        busDriver: document.getElementById('busDriver').value,
+        status: document.getElementById('statusInfo').value
+    }
+
+    await updateSingleFirestoreData(updatedBusInfoData.busNo, 'HomeDocuments', updatedBusInfoData);
+    alert('Bus Information updated successfully');
+    location.reload();
+})
+
+function showBusInfoModal(modal){
     // loops through the divs and shows the div that was clicked
-    [busInfoEdtDiv, busInfoAddDiv].forEach(d => {
-        if(d !== div){
-            d.classList.add('hidden');
+    [busInfoAddModal, busInfoEdtModal].forEach(m => {
+        if(m !== modal){
+            m.classList.add('hidden');
         } else{
-            d.classList.remove('hidden');
+            m.classList.remove('hidden');
         }
     })
     modal.classList.remove('hidden');

@@ -278,64 +278,118 @@
                             </table>
                         </div>
                     </div>
-                    <!-- Edit Modal -->
-                    <div class="modal fixed inset-0 bg-gray-500 bg-opacity-50 hidden justify-center items-center" id="bus-info-modal">
+                    <!-- Add Bus Modal -->
+                    <div class="modal fixed inset-0 bg-gray-500 bg-opacity-50 hidden justify-center items-center" id="bus-info-add-modal">
                         <div class="modal-content bg-white rounded-lg p-6 w-96">
-                            <h2 class="text-lg font-semibold mb-4">Edit Bus Information</h2>
+                            <h2 class="text-lg font-semibold mb-4" id="bus-info-header">Add Bus Information</h2>
+                            
+                            <!-- Add bus Form -->
+                            <form class="bus-info-form overflow-x-auto" id="bus-info-add-form">
+                                <div class="mb-4">
+                                    <label for="busNo-add" class="block text-sm font-medium text-gray-700">Bus No</label>
+                                    <input type="text" id="busNo-add" name="busNo-add" class="form-input w-1/4 mt-1 border-2 rounded-lg font-semibold text-center" required>
+                                    <p class="text-red-500 hidden" id="bus-info-num-err-msg">This bus number already exist in the system</p>
+                                </div>
+                                <div class="mb-4">
+                                    <label for="startingPoint-add" class="block text-sm font-medium text-gray-700">Starting Point</label>
+                                    <input type="text" id="startingPoint-add" name="startingPoint-add" required class="form-input w-full mt-1 border-2 p-2">
+                                </div>
+                                <div class="mb-4">
+                                    <label for="arrivalPoint-add" class="block text-sm font-medium text-gray-700">Arrival Point</label>
+                                    <input type="text" id="arrivalPoint-add" name="arrivalPoint-add" required class="form-input w-full mt-1 border-2 p-2">
+                                </div>
+                                <div class="mb-4">
+                                    <label for="departureTime-add" class="block text-sm font-medium text-gray-700">Departure Time</label>
+                                    <input type="time" id="departureTime-add" name="departureTime-add" required min="00:00" max="23:59" class="form-input w-full mt-1 border-2 p-2">
+                                </div>
+                                <div class="mb-4">
+                                    <label for="plateNo-add" class="block text-sm font-medium text-gray-700">Plate No</label>
+                                    <input type="text" id="plateNo-add" name="plateNo-add" required class="form-input w-full mt-1 border-2 p-2">
+                                </div>
+                                <div class="mb-4">
+                                    <label for="busModel-add" class="block text-sm font-medium text-gray-700">Bus Model</label>
+                                    <input type="text" id="busModel-add" name="busModel-add" required class="form-input w-full mt-1 border-2 p-2">
+                                </div>
+                                <div class="mb-4">
+                                    <label for="busCapacity-add" class="block text-sm font-medium text-gray-700">Bus Capacity</label>
+                                    <input type="number" id="busCapacity-add" name="busCapacity-add" required class="form-input w-full mt-1 border-2 p-2">
+                                </div>
+                                <div class="mb-4">
+                                    <label for="busConductor-add" class="block text-sm font-medium text-gray-700">Bus Conductor</label>
+                                    <input type="text" id="busConductor-add" name="busConductor-add" required class="form-input w-full mt-1 border-2 p-2">
+                                </div>
+                                <div class="mb-4">
+                                    <label for="busDriver-add" class="block text-sm font-medium text-gray-700">Bus Driver</label>
+                                    <input type="text" id="busDriver-add" name="busDriver-add" required class="form-input w-full mt-1 border-2 p-2">
+                                </div>
+                                <div class="mb-4">
+                                    <label for="status-add" class="block text-sm font-medium text-gray-700">Status</label>
+                                    <select name="status-add" class="w-full py-1 border-2" id="status-add">
+                                        <option value="Active">Active</option>
+                                        <option value="Inactive">Inactive</option>
+                                    </select>
+                                </div>
+                                <div class="bus-info-add justify-end" id="bus-info-add">
+                                    <button type="submit" class="bg-green-600 text-white py-2 px-4 hover:bg-green-800 rounded" id="info-add-now">Add Now</button>
+                                    <button type="button" class="ml-4 bg-gray-300 text-black py-2 px-4 rounded" id="info-add-cancel">Cancel</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                    <!-- Edit Modal -->
+                    <div class="modal fixed inset-0 bg-gray-500 bg-opacity-50 hidden justify-center items-center" id="bus-info-edit-modal">
+                        <div class="modal-content bg-white rounded-lg p-6 w-96">
+                            <h2 class="text-lg font-semibold mb-4" id="bus-info-header">Edit Bus Information</h2>
                             
                             <!-- Edit Form -->
-                            <form id="editBusForm overflow-x-auto">
+                            <form class="bus-info-form overflow-x-auto" id="bus-info-edt-form">
                                 <div class="mb-4">
                                     <label for="busNo" class="block text-sm font-medium text-gray-700">Bus No</label>
-                                    <input type="text" id="busNo" name="busNo" class="form-input w-1/4 mt-1 border-2 rounded-lg" disabled>
+                                    <input type="text" id="busNo" name="busNo" class="form-input w-1/4 mt-1 border-2 rounded-lg font-semibold text-center" disabled>
                                 </div>
                                 <div class="mb-4">
                                     <label for="startingPoint" class="block text-sm font-medium text-gray-700">Starting Point</label>
-                                    <input type="text" id="startingPoint" name="startingPoint" required class="form-input w-full mt-1 border-2 py-1">
+                                    <input type="text" id="startingPoint" name="startingPoint" required class="form-input w-full mt-1 border-2 p-2">
                                 </div>
                                 <div class="mb-4">
                                     <label for="arrivalPoint" class="block text-sm font-medium text-gray-700">Arrival Point</label>
-                                    <input type="text" id="arrivalPoint" name="arrivalPoint" required class="form-input w-full mt-1 border-2 py-1">
+                                    <input type="text" id="arrivalPoint" name="arrivalPoint" required class="form-input w-full mt-1 border-2 p-2">
                                 </div>
                                 <div class="mb-4">
                                     <label for="departureTime" class="block text-sm font-medium text-gray-700">Departure Time</label>
-                                    <input type="time" id="departureTime" name="departureTime" required min="00:00" max="23:59" class="form-input w-full mt-1 border-2 py-1">
+                                    <input type="time" id="departureTime" name="departureTime" required min="00:00" max="23:59" class="form-input w-full mt-1 border-2 p-2">
                                 </div>
                                 <div class="mb-4">
                                     <label for="plateNo" class="block text-sm font-medium text-gray-700">Plate No</label>
-                                    <input type="text" id="plateNo" name="plateNo" required class="form-input w-full mt-1 border-2 py-1">
+                                    <input type="text" id="plateNo" name="plateNo" required class="form-input w-full mt-1 border-2 p-2">
                                 </div>
                                 <div class="mb-4">
                                     <label for="busModel" class="block text-sm font-medium text-gray-700">Bus Model</label>
-                                    <input type="text" id="busModel" name="busModel" required class="form-input w-full mt-1 border-2 py-1">
+                                    <input type="text" id="busModel" name="busModel" required class="form-input w-full mt-1 border-2 p-2">
                                 </div>
                                 <div class="mb-4">
                                     <label for="busCapacity" class="block text-sm font-medium text-gray-700">Bus Capacity</label>
-                                    <input type="number" id="busCapacity" name="busCapacity" required class="form-input w-full mt-1 border-2 py-1">
+                                    <input type="number" id="busCapacity" name="busCapacity" required class="form-input w-full mt-1 border-2 p-2">
                                 </div>
                                 <div class="mb-4">
                                     <label for="busConductor" class="block text-sm font-medium text-gray-700">Bus Conductor</label>
-                                    <input type="text" id="busConductor" name="busConductor" required class="form-input w-full mt-1 border-2 py-1">
+                                    <input type="text" id="busConductor" name="busConductor" required class="form-input w-full mt-1 border-2 p-2">
                                 </div>
                                 <div class="mb-4">
                                     <label for="busDriver" class="block text-sm font-medium text-gray-700">Bus Driver</label>
-                                    <input type="text" id="busDriver" name="busDriver" required class="form-input w-full mt-1 border-2 py-1">
+                                    <input type="text" id="busDriver" name="busDriver" required class="form-input w-full mt-1 border-2 p-2">
                                 </div>
                                 <div class="mb-4">
-                                    <label for="status" class="block text-sm font-medium text-gray-700">Status</label>
-                                    <select name="status" class="w-full py-1 border-2" id="status">
+                                    <label for="statusInfo" class="block text-sm font-medium text-gray-700">Status</label>
+                                    <select name="statusInfo" class="w-full py-1 border-2" id="statusInfo">
                                         <option value="Active">Active</option>
                                         <option value="Inactive">Inactive</option>
                                     </select>
                                 </div>
 
-                                <div class="bus-info-edt hidden justify-end" id="bus-info-edt">
+                                <div class="bus-info-edt justify-end" id="bus-info-edt">
                                     <button type="submit" class="bg-blue-600 text-white py-2 px-4 hover:bg-blue-800 rounded" id="info-edt-save">Save Changes</button>
                                     <button type="button" class="ml-4 bg-gray-300 text-black py-2 px-4 rounded" id="info-edt-cancel">Cancel</button>
-                                </div>
-                                <div class="bus-info-add hidden justify-end" id="bus-info-add">
-                                    <button type="submit" class="bg-green-600 text-white py-2 px-4 hover:bg-green-800 rounded" id="info-add-save">Save Changes</button>
-                                    <button type="button" class="ml-4 bg-gray-300 text-black py-2 px-4 rounded" id="info-add-cancel">Cancel</button>
                                 </div>
                             </form>
                         </div>
