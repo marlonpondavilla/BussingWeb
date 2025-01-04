@@ -9,6 +9,7 @@ const db = getFirestore(firebaseApp);
 export async function addDataToFirestore(collectionName, scheduleData){
     try{
         const docRef = await addDoc(collection(db, collectionName), scheduleData);
+        return;
     } catch(e){
         console.error('Error adding Data to Firestore: ', e);
     }
@@ -73,6 +74,7 @@ export async function updateSingleFirestoreData(busNo, collectionName, updatedDa
 
         const docRef = doc(db, collectionName, snapshot.docs[0].id)
         await updateDoc(docRef, updatedData);
+        return;
         
     } catch(e){
         console.error('Error updating document: ', e);
