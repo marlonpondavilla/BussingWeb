@@ -1,5 +1,5 @@
 import { initializeApp } from 'https://www.gstatic.com/firebasejs/9.22.2/firebase-app.js';
-import { getFirestore, collection, addDoc, getDocs, where, query, doc, updateDoc } from 'https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore.js';
+import { getFirestore, collection, addDoc, getDocs, where, query, doc, updateDoc, deleteDoc } from 'https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore.js';
 import { firebaseConfig } from '../services/firebaseConfig.js';
 
 const firebaseApp = initializeApp(firebaseConfig);
@@ -46,7 +46,6 @@ export async function getSingleFirestoreData(busNo, collectionName) {
     try {
 
         const q = query(collection(db, collectionName), where('busNo', '==', busNo));
-
         const snapshot = await getDocs(q);
 
         if (snapshot.empty) {
@@ -79,4 +78,27 @@ export async function updateSingleFirestoreData(busNo, collectionName, updatedDa
         console.error('Error updating document: ', e);
     }
 }
+
+// delete specific document from Firestore
+export async function deleteSingleFirestoreData(busNo, collectionName){
+    try{
+        const q = query(collection(db, collectionName), where('busNo', '==', busNo));
+        const snapshot = await getDocs(q);
+
+        if(snapshot.empty){
+            console.error('No matching delete document');
+            return;
+        }
+
+        const documentId = snapshot.docs[0].id;
+
+        const docRef = doc(db, collectionName, documentId);
+
+        await deleteDoc(docRef);    
+    } catch(e){
+        console.error('Error deleting document: ', e);
+    }
+}
+
+
 

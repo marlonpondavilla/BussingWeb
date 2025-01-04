@@ -4,7 +4,8 @@ import { initializeApp } from 'https://www.gstatic.com/firebasejs/9.22.2/firebas
 import { getAuth } from 'https://www.gstatic.com/firebasejs/9.22.2/firebase-auth.js';
 import { firebaseConfig } from '../services/firebaseConfig.js';
 import { toggleBusOperations } from "../utils/pagination.js";
-import { addDataToFirestore, getFirestoreData, getSingleFirestoreData, updateSingleFirestoreData, checkBusNumberExists } from "../firebase/db.js";
+import { showSuccessAlert, handleDeleteInformation } from "../utils/alert.js";
+import { addDataToFirestore, getFirestoreData, getSingleFirestoreData, updateSingleFirestoreData, checkBusNumberExists, deleteSingleFirestoreData } from "../firebase/db.js";
 
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app); 
@@ -130,15 +131,19 @@ document.getElementById('add-schedule-btn').addEventListener('click', function()
         // Update the schedule table dynamically
         newRowHTML += `
         <tr>
-            <td class="px-4 py-2 border-b">Bus 0${scheduleDoc.busNo}</td>
-            <td class="px-4 py-2 border-b">${scheduleDoc.departureTime}</td>
-            <td class="px-4 py-2 border-b">${scheduleDoc.from}</td>
-            <td class="px-4 py-2 border-b">${scheduleDoc.to}</td>
-            <td class="px-4 py-2 border-b">₱${scheduleDoc.price}</td>
-            <td class="px-4 py-2 border-b">${scheduleDoc.availableSeats} seats</td>
-            <td class="px-4 py-2 border-b ${scheduleDoc.status === 'Active' ? 'text-green-600' : 'text-red-600'}">${scheduleDoc.status}</td>
-            <td class="px-4 py-2 border-b text-blue-500 cursor-pointer" data-row-edit="${scheduleDoc.busNo}" id="row-edit-${scheduleDoc.busNo}">Edit</td>
-        </tr>
+        <td class="px-4 py-2 border-b">Bus 0${scheduleDoc.busNo}</td>
+        <td class="px-4 py-2 border-b">${scheduleDoc.departureTime}</td>
+        <td class="px-4 py-2 border-b">${scheduleDoc.from}</td>
+        <td class="px-4 py-2 border-b">${scheduleDoc.to}</td>
+        <td class="px-4 py-2 border-b">₱${scheduleDoc.price}</td>
+        <td class="px-4 py-2 border-b">${scheduleDoc.availableSeats} seats</td>
+        <td class="px-4 py-2 border-b ${scheduleDoc.status === 'Active' ? 'text-green-600' : 'text-red-600'}">${scheduleDoc.status}</td>
+        <td class="px-4 py-2 border-b">
+            <span class="text-blue-500 cursor-pointer mr-4" data-row-edit="${scheduleDoc.busNo}" id="row-edit-${scheduleDoc.busNo}">Edit</span>
+            <span class="text-red-500 cursor-pointer" data-row-delete="${scheduleDoc.busNo}" id="row-delete-${scheduleDoc.busNo}">Delete</span>
+        </td>
+    </tr>
+
     `;
     }
     // Update the table with the new row
@@ -146,6 +151,7 @@ document.getElementById('add-schedule-btn').addEventListener('click', function()
 
     // Add event listener to the edit buttons
     const editButtons = document.querySelectorAll('[data-row-edit]');
+    const deleteButtons = document.querySelectorAll('[data-row-delete]');
     const editModal = document.getElementById('edit-schedule-modal');
     
     editModal.style.display = 'none';
@@ -177,6 +183,15 @@ editButtons.forEach((rowData) => {
     });
 });
 
+// Add event listener to the delete buttons
+deleteButtons.forEach((rowData) => {
+    const deleteBusNo = rowData.getAttribute('data-row-delete');
+
+    rowData.addEventListener('click', async() => {
+        handleDeleteInformation(deleteBusNo, 'ScheduleDocuments');
+    })
+})
+
 // Attach the form submit listener just once, outside the click handler.
 document.getElementById('edit-schedule-modal').addEventListener('submit', async (event) => {
     event.preventDefault();
@@ -194,9 +209,7 @@ document.getElementById('edit-schedule-modal').addEventListener('submit', async 
 
     // Update the document in Firestore with the new data
     await updateSingleFirestoreData(updatedSingleScheduleData.busNo, 'ScheduleDocuments', updatedSingleScheduleData);
-
-    alert('Schedule updated successfully');
-    location.reload(); // Reload page or close modal as needed
+    showSuccessAlert('Schedule updated successfully');
 });
 
 
@@ -213,6 +226,7 @@ document.getElementById('edit-schedule-modal').addEventListener('submit', async 
             } else{
                 busNumErr.classList.add('hidden');
                 saveBtn.classList.remove('cursor-not-allowed');
+                saveBtn.disabled = false;
             }
         } catch(e){
             console.error('Error checking bus number: ', e);
@@ -220,8 +234,9 @@ document.getElementById('edit-schedule-modal').addEventListener('submit', async 
     })
 
   
-  document.getElementById('schedule-form').addEventListener('submit', async function(event) {
+  document.getElementById('schedule-form').addEventListener('submit', async (event) => {
     event.preventDefault();
+    
     const busNumber = document.getElementById('bus-number').value;
     const departureTime = document.getElementById('departure-time').value;
     const from = document.getElementById('from').value;
@@ -241,9 +256,8 @@ document.getElementById('edit-schedule-modal').addEventListener('submit', async 
         status: status
     }
 
-    await addDataToFirestore('ScheduleDocuments',scheduleDataObject);
-    location.reload();
-
+    await addDataToFirestore('ScheduleDocuments', scheduleDataObject);
+    showSuccessAlert('Schedule added successfully');
   });
 
 //  Bus Information
@@ -253,7 +267,7 @@ let busInfoTr = "";
 for(let busInfoDoc of busInfoDataFirestore){
     busInfoTr += `
         <tr>
-            <td class="px-4 py-2 border-b">${busInfoDoc.busNo}</td>
+            <td class="px-4 py-2 border-b">0${busInfoDoc.busNo}</td>
             <td class="px-4 py-2 border-b">${busInfoDoc.startingPoint}</td>
             <td class="px-4 py-2 border-b">${busInfoDoc.arrivalPoint}</td>
             <td class="px-4 py-2 border-b">${busInfoDoc.departureTime}</td>
@@ -263,9 +277,9 @@ for(let busInfoDoc of busInfoDataFirestore){
             <td class="px-4 py-2 border-b">${busInfoDoc.busConductor}</td>
             <td class="px-4 py-2 border-b">${busInfoDoc.busDriver}</td>
             <td class="px-4 py-2 border-b ${busInfoDoc.status === 'Active' ? 'text-green-500' : 'text-red-500'}">${busInfoDoc.status}</td>
-            <td class="px-4 py-2 border-b text-blue-600 cursor-pointer">
-                <button class="edit-btn" data-bus-info-edt-btn="${busInfoDoc.busNo}" id="bus-info-edit-btn">Edit</button>
-                <button class="ml-2 text-red-600" data-bus-info-del-btn="${busInfoDoc.busNo}" id="bus-info-delete-btn">Delete</button>
+            <td class=" flex flex-wrap gap-2 justify-start px-4 py-2 border-b cursor-pointer">
+                <span class="edit-btn mr-4 text-blue-600" data-bus-info-edt-btn="${busInfoDoc.busNo}" id="bus-info-edit-btn">Edit</span>
+                <span class=" text-red-600" data-bus-info-del-btn="${busInfoDoc.busNo}" id="bus-info-delete-btn">Delete</span>
             </td>
         </tr>
     `;
@@ -275,7 +289,7 @@ document.getElementById('bus-info-table').innerHTML = busInfoTr;
 
 const busInfoEdtModal = document.getElementById('bus-info-edit-modal');
 const busInfoAddModal = document.getElementById('bus-info-add-modal');
-
+const busInfoDelModal = document.getElementById('bus-info-del-modal');
 
 const busInfoAddForm = document.getElementById('bus-info-add-form');
 const busInfoEdtForm = document.getElementById('bus-info-edt-form');
@@ -283,17 +297,14 @@ const busInfoEdtForm = document.getElementById('bus-info-edt-form');
 const busInfoNumErrMsg = document.getElementById('bus-info-num-err-msg');
 
 const busInfoAddBtn = document.getElementById('add-bus-info-modal-btn');
-const busInfoEdtDiv = document.getElementById('bus-info-edt');
-const busInfoAddDiv = document.getElementById('bus-info-add');
-
-const busInfoAddCancelBtn = document.getElementById('info-add-cancel');
 const busInfoAddNowBtn = document.getElementById('info-add-now');
-
+const busInfoAddCancelBtn = document.getElementById('info-add-cancel');
 const busInfoEdtCancelBtn = document.getElementById('info-edt-cancel');
-const busInfoEdtSaveBtn = document.getElementById('info-edt-save');
+const busInfoDelBtn = document.getElementById('info-del-btn');
+const busInfoCancelDelBtn = document.getElementById('info-del-cancel-btn');
 
-const busInfoEdtBtn = document.querySelectorAll('[data-bus-info-edt-btn]');
-const busInfoDelBtn = document.querySelectorAll('[data-bus-info-del-btn]');
+const busInfoEdtBtnAll = document.querySelectorAll('[data-bus-info-edt-btn]');
+const busInfoDelBtnAll = document.querySelectorAll('[data-bus-info-del-btn]');
 
 document.getElementById('busNo-add').addEventListener('input', async() => {
     try{
@@ -334,15 +345,14 @@ busInfoAddBtn.addEventListener('click', () => {
         }
         
         await addDataToFirestore('HomeDocuments', newBusInfoDataObj);
-        alert('Bus Information added successfully');
-        location.reload();
+        showSuccessAlert('Bus Information added successfully');
     }) 
 })
 
 
 
 // will show the modal and the hidden buttons for editing
-busInfoEdtBtn.forEach( (edtBtn) => {
+busInfoEdtBtnAll.forEach( (edtBtn) => {
     edtBtn.addEventListener('click', async() => {
         showBusInfoModal(busInfoEdtModal);
         closeBusInfoModal(busInfoEdtCancelBtn, busInfoEdtModal);
@@ -382,10 +392,18 @@ busInfoEdtForm.addEventListener('submit', async(e) => {
     }
 
     await updateSingleFirestoreData(updatedBusInfoData.busNo, 'HomeDocuments', updatedBusInfoData);
-    alert('Bus Information updated successfully');
-    location.reload();
-})
+    showSuccessAlert('Bus Information updated successfully');
+});
 
+// delete bus information
+busInfoDelBtnAll.forEach( (delBtn) => {
+    const busNoDelete = delBtn.getAttribute('data-bus-info-del-btn');
+
+    delBtn.addEventListener('click', () => {
+        handleDeleteInformation(busNoDelete, 'HomeDocuments');
+    })
+})
+ 
 function showBusInfoModal(modal){
     // loops through the divs and shows the div that was clicked
     [busInfoAddModal, busInfoEdtModal].forEach(m => {
@@ -405,4 +423,5 @@ function closeBusInfoModal(closeBtn, modal){
         modal.classList.add('hidden');
     })
 }
+
 
