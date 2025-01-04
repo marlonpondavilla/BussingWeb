@@ -31,7 +31,7 @@ googleBtn.addEventListener('click', async () => {
         };
 
         // Add user to Firestore
-        await addDataToFirestore('userLoggedIn', userDataObject); 
+        await addDataToFirestore('UserLoggedInCollection', userDataObject); 
 
         // Redirect to the main dashboard after the user is added
         window.location.href = './pages/mainDashboard.html';
@@ -91,7 +91,7 @@ loginBtn.addEventListener('click', async (e) => {
         };
 
         // Add user to Firestore
-        await addDataToFirestore('signedUpUsers', userDataObject); 
+        await addDataToFirestore('UserLoggedInCollection', userDataObject); 
         window.location.href = './pages/mainDashboard.html';
     } catch (error) {
         // Handle Firebase authentication errors

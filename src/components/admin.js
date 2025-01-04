@@ -43,7 +43,7 @@ loginButton.addEventListener('click', async (e) => {
         };
 
         // Add admin to Firestore
-        await addDataToFirestore('adminLoggedIn', adminDataObject);
+        await addDataToFirestore('AdminLoggedInCollection', adminDataObject);
 
         // check if is admin
         if(admin.email.includes('@bussing.com')){

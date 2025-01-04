@@ -1,8 +1,8 @@
 import { initializeApp } from 'https://www.gstatic.com/firebasejs/9.22.2/firebase-app.js';
 import { getAuth, createUserWithEmailAndPassword, sendEmailVerification, updateProfile } from 'https://www.gstatic.com/firebasejs/9.22.2/firebase-auth.js';
-import { getFirestore, collection, addDoc } from 'https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore.js';
+import { getFirestore } from 'https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore.js';
 import { firebaseConfig } from '../services/firebaseConfig.js';
-import { addSignedUpUserToFirestore } from '../firebase/db.js';
+import { addDataToFirestore } from '../firebase/db.js';
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
@@ -112,7 +112,7 @@ submitBtn.addEventListener('click', async (e) => {
     };
 
     // Insert the user data into Firestore
-    await addSignedUpUserToFirestore(signedUpUserToFirestore);
+    await addDataToFirestore('SignedUpUserCollection',signedUpUserToFirestore);
     removeInputValues();
 
   } catch (error) {

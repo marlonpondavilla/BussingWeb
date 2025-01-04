@@ -41,7 +41,7 @@ logoutUser(logoutButton, auth);
 // Bus data rendering
 const bussingArticle = document.getElementById('bussing-article');
 let bussingHTML = "";
-const homeData = await getFirestoreData('HomeDocuments');
+const homeData = await getFirestoreData('HomeDocumentsCollection');
 
 // check if the data is empty
 if(homeData.length === 0){
@@ -101,7 +101,7 @@ bussingArticle.innerHTML = bussingHTML;
 
 
 // schedule rendering
-const scheduleData = await getFirestoreData('ScheduleDocuments');
+const scheduleData = await getFirestoreData('ScheduleDocumentsCollection');
 const scheduleSectionHTML = document.getElementById('schedule-table');
 let scheduleHTML = "";
 
