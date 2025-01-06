@@ -105,6 +105,13 @@ const to = document.getElementById('to');
 const discount = document.getElementById('discount');
 const price = document.getElementById('price');
 const errHTML = document.getElementById('route-err-msg');
+const qrPopUp = document.getElementById('qr-popup');
+const qrCodeDiv = document.getElementById('qr-code');
+const qrDiscount = document.getElementById('qr-discount');
+const qrFrom = document.getElementById('qr-from');
+const qrTo = document.getElementById('qr-to');
+const qrCodeLabel = document.getElementById('qr-code-label');
+const closePopUp = document.getElementById('close-popup');
 
 from.addEventListener('change', () => {
     updatePrice(from.value, to.value, discount.value, price, from, to, errHTML, ticketBtn);
@@ -118,8 +125,13 @@ discount.addEventListener('change', () => {
 
 ticketForm.addEventListener('submit', (e) => {
     e.preventDefault();
-    alert(`Ticket from ${from.value} to ${to.value} with a ${discount.value}% discount costs ₱${price.innerHTML}`);
+    generateTicket(from.value, to.value, discount.value, price.innerHTML, qrPopUp, qrCodeDiv, qrDiscount, qrFrom, qrTo, qrCodeLabel);
     
+});
+
+closePopUp.addEventListener('click', () => {
+    qrPopUp.classList.add('hidden');
+    qrPopUp.classList.remove('flex');
 });
 
 // schedule rendering
