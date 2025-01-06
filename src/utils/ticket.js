@@ -2,6 +2,7 @@
 
 export function generateTicket(from, to, discount, price) {
   alert(`Ticket from ${from} to ${to} with a ${discount}% discount costs ${price}`);
+  
 }
 
 export function updatePrice(from, to, discount, priceHTML, fromHTML, toHTML, errHTML, button) {

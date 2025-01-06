@@ -1,7 +1,8 @@
 export function showPage(homeTab, ticketTab, scheduleTab, historyTab, activeClass, homeSection, ticketSection, scheduleSection, historySection) {
 
-    homeSection.classList.remove('hidden');
-    ticketSection.classList.add('hidden');
+    // change the home section to be the default section (temporarily set to ticket section)
+    homeSection.classList.add('hidden');
+    ticketSection.classList.remove('hidden');
     scheduleSection.classList.add('hidden');
     historySection.classList.add('hidden');
 

@@ -97,8 +97,30 @@ for (let homeDoc of homeData){
 
 bussingArticle.innerHTML = bussingHTML;
 
-// Ticket generation rendering
+// Ticket generation
+const ticketForm = document.getElementById('ticket-form');
+const ticketBtn = document.getElementById('ticket-btn');
+const from = document.getElementById('from');
+const to = document.getElementById('to');
+const discount = document.getElementById('discount');
+const price = document.getElementById('price');
+const errHTML = document.getElementById('route-err-msg');
 
+from.addEventListener('change', () => {
+    updatePrice(from.value, to.value, discount.value, price, from, to, errHTML, ticketBtn);
+});
+to.addEventListener('change', () => {
+    updatePrice(from.value, to.value, discount.value, price, from, to, errHTML, ticketBtn);
+});
+discount.addEventListener('change', () => {
+    updatePrice(from.value, to.value, discount.value, price, from, to, errHTML, ticketBtn);
+});
+
+ticketForm.addEventListener('submit', (e) => {
+    e.preventDefault();
+    alert(`Ticket from ${from.value} to ${to.value} with a ${discount.value}% discount costs ₱${price.innerHTML}`);
+    
+});
 
 // schedule rendering
 const scheduleData = await getFirestoreData('ScheduleDocumentsCollection');
@@ -139,28 +161,7 @@ const historySection = document.querySelector('.history-section');
 
 showPage(homeTab, ticketTab, scheduleTab, historyTab, 'highlighted', homeSection, ticketSection, scheduleSection, historySection);
 
-// Ticket generation
-const ticketBtn = document.getElementById('ticket-btn');
-const from = document.getElementById('from');
-const to = document.getElementById('to');
-const discount = document.getElementById('discount');
-const price = document.getElementById('price');
-const errHTML = document.getElementById('route-err-msg');
 
-from.addEventListener('change', () => {
-    updatePrice(from.value, to.value, discount.value, price, from, to, errHTML, ticketBtn);
-});
-to.addEventListener('change', () => {
-    updatePrice(from.value, to.value, discount.value, price, from, to, errHTML, ticketBtn);
-});
-discount.addEventListener('change', () => {
-    updatePrice(from.value, to.value, discount.value, price, from, to, errHTML, ticketBtn);
-});
-
-ticketBtn.addEventListener('click', () => {
-    alert(`Ticket from ${from.value} to ${to.value} with a ${discount.value}% discount costs ₱${price.innerHTML}`);
-    
-});
 
 
 
