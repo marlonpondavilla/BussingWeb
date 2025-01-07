@@ -1,7 +1,7 @@
 import { addDataToFirestore } from '../firebase/db.js';
 import QRCode from 'https://cdn.skypack.dev/qrcode';
 
-export function generateTicket(from, to, discount, price, qrPopUp, qrDisplay, qrDiscount, qrFrom, qrTo, qrCode) {
+export function generateTicket(from, to, discount, price, qrPopUp, qrDisplay, qrDiscount, qrFrom, qrTo, qrCode, uid) {
     
     const ticketCode = generateTicketCode();
     const date = new Date();
@@ -28,6 +28,7 @@ export function generateTicket(from, to, discount, price, qrPopUp, qrDisplay, qr
     });
 
     sendGeneratedTicket({
+        uid: uid,
         ticketCode: ticketCode,
         from: from,
         to: to,
@@ -96,7 +97,6 @@ function generateTicketCode() {
 
 async function sendGeneratedTicket(ticketData){
     await addDataToFirestore('TicketGeneratedCollection', ticketData);
-    alert('Ticket sent to firestore successfully!');
 }
 
 

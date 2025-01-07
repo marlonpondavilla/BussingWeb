@@ -136,8 +136,8 @@ discount.addEventListener('change', () => {
 
 ticketForm.addEventListener('submit', (e) => {
     e.preventDefault();
-    generateTicket(from.value, to.value, discount.value, price.innerHTML, qrPopUp, qrCodeDiv, qrDiscount, qrFrom, qrTo, qrCodeLabel);
-    
+    generateTicket(from.value, to.value, discount.value, price.innerHTML, qrPopUp, qrCodeDiv, qrDiscount, qrFrom, qrTo, qrCodeLabel, localStorage.getItem('userId'));
+    console.log('user id: ', localStorage.getItem('userId'));
 });
 
 closePopUp.addEventListener('click', () => {

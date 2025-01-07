@@ -61,6 +61,25 @@ export async function getSingleFirestoreData(busNo, collectionName) {
     }
 }
 
+export async function getSingleFirestoreDocument(field, value, collectionName) {
+    try {
+        // Dynamically create the query based on the field and value
+        const q = query(collection(db, collectionName), where(field, '==', value));
+        const snapshot = await getDocs(q);
+
+        if (snapshot.empty) {
+            return null;  // No document found
+        }
+
+        return snapshot.docs[0].data();  // Return the data of the first document
+
+    } catch (e) {
+        console.error('Error getting document: ', e);
+        return null;  // Return null on error
+    }
+}
+
+
 export async function updateSingleFirestoreData(busNo, collectionName, updatedData){
     try{
         // query to find the document where busNo matches the provided busNo
@@ -85,6 +104,26 @@ export async function updateSingleFirestoreData(busNo, collectionName, updatedDa
 export async function deleteSingleFirestoreData(busNo, collectionName){
     try{
         const q = query(collection(db, collectionName), where('busNo', '==', busNo));
+        const snapshot = await getDocs(q);
+
+        if(snapshot.empty){
+            console.error('No matching delete document');
+            return;
+        }
+
+        const documentId = snapshot.docs[0].id;
+
+        const docRef = doc(db, collectionName, documentId);
+
+        await deleteDoc(docRef);    
+    } catch(e){
+        console.error('Error deleting document: ', e);
+    }
+}
+
+export async function deleteSingleFirestoreDocument(field, value, collectionName){
+    try{
+        const q = query(collection(db, collectionName), where(field, '==', value));
         const snapshot = await getDocs(q);
 
         if(snapshot.empty){
