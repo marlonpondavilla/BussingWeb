@@ -91,8 +91,10 @@ export function showUserSettings(button, section) {
 // admin navigation
 export function toggleAdminNav(dashboarBtn, ticketInventoryButton, busOperationsButton, customerSupportButton, dashboardSection, ticketInventorySection, busOperationsSection, customerSupportSection){
     dashboarBtn.classList.add('text-black', 'font-semibold', 'border-b-4');
-    dashboardSection.classList.remove('hidden');
-    ticketInventorySection.classList.add('hidden');
+
+    // change the dashboard section to be the default section (temporarily set to ticket section)
+    dashboardSection.classList.add('hidden');
+    ticketInventorySection.classList.remove('hidden');
     busOperationsSection.classList.add('hidden');
     customerSupportSection.classList.add('hidden');
 

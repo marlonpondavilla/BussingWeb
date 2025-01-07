@@ -4,6 +4,7 @@ import QRCode from 'https://cdn.skypack.dev/qrcode';
 export function generateTicket(from, to, discount, price, qrPopUp, qrDisplay, qrDiscount, qrFrom, qrTo, qrCode) {
     
     const ticketCode = generateTicketCode();
+    const date = new Date();
 
     const text = `
         Ticket Code: ${ticketCode}
@@ -32,7 +33,7 @@ export function generateTicket(from, to, discount, price, qrPopUp, qrDisplay, qr
         to: to,
         discount: discount,
         price: price,
-        createdAt: new Date()
+        createdAt: date.toISOString().split('T')[0]
     })
 }
 

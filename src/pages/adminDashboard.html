@@ -107,6 +107,24 @@
             <!-- ticket inventory section -->
              <section class="ticket-inventory-section hidden" id="ticket-inventory-section">
                 <h2 class="text-3xl font-bold mb-4 text-gray-700">Ticket Inventory</h2>
+                <input type="text" name="search-ticket" id="search-ticket" placeholder="Search tickets..." class="self-end p-2 m-4 border border-black rounded w-1/4">
+
+                 <!-- Ticket Inventory Table -->
+                <table class="min-w-full table-auto border-collapse border border-gray-300">
+                    <thead>
+                    <tr class="bg-gray-200">
+                        <th class="border px-4 py-2">Ticket Code</th>
+                        <th class="border px-4 py-2">Route</th>
+                        <th class="border px-4 py-2">Discount</th>
+                        <th class="border px-4 py-2">Price</th>
+                        <th class="border px-4 py-2">Timestamp</th>
+                        <th class="border px-4 py-2">Actions</th>
+                    </tr>
+                    </thead>
+                    <tbody id="ticket-inventory-table">
+                    <!-- Dynamic ticket rows will be populated here -->
+                    </tbody>
+                </table>
              </section>
 
             <!-- bus operations section -->

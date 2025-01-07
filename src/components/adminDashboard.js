@@ -102,8 +102,28 @@ const customerSupportSection = document.getElementById('customer-support-section
 
 toggleAdminNav(dashboardButton, ticketInventoryButton, busOperationsButton, customerSupportButton, dashboardSection, ticketInventorySection, busOperationsSection, customerSupportSection);
 
-// bus operations admin
+// bus ticket inventory admin
+const ticketGenratedCollection = await getFirestoreData('TicketGeneratedCollection');
+let ticketTrHTML = '';
 
+for(let ticketGeneratedDoc of ticketGenratedCollection){
+    ticketTrHTML += `
+        <tr class="border-2 border-b-black">
+            <td class="border py-2 text-center">${ticketGeneratedDoc.ticketCode}</td>
+            <td class="border py-2 text-center">${ticketGeneratedDoc.from} - ${ticketGeneratedDoc.to}</td>
+            <td class="border py-2 text-center">${ticketGeneratedDoc.discount}</td>
+            <td class="border py-2 text-center">${ticketGeneratedDoc.price}</td>
+            <td class="border py-2 text-center">${ticketGeneratedDoc.createdAt}</td>
+            <td class="border py-2 text-center"><button class="border py-2 px-3 bg-green-500 hover:bg-green-600">Confirm</button> <button class="border p-2 bg-red-500 hover:bg-red-600 text-white">reject</button></td>
+       </tr>
+    `;
+}
+
+document.getElementById('ticket-inventory-table').innerHTML = ticketTrHTML;
+
+
+
+// bus operations admin
 const busScheduleTab = document.getElementById('bus-schedule-tab');
 const busInfoTab = document.getElementById('bus-info-tab');
 const busScheduleSection = document.getElementById('bus-schedule-section');
