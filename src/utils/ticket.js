@@ -1,3 +1,4 @@
+import { addDataToFirestore } from '../firebase/db.js';
 import QRCode from 'https://cdn.skypack.dev/qrcode';
 
 export function generateTicket(from, to, discount, price, qrPopUp, qrDisplay, qrDiscount, qrFrom, qrTo, qrCode) {
@@ -24,6 +25,15 @@ export function generateTicket(from, to, discount, price, qrPopUp, qrDisplay, qr
             console.log('QR Code generated successfully!');
         }
     });
+
+    sendGeneratedTicket({
+        ticketCode: ticketCode,
+        from: from,
+        to: to,
+        discount: discount,
+        price: price,
+        createdAt: new Date()
+    })
 }
 
 
@@ -81,6 +91,11 @@ function generateTicketCode() {
     }
 
     return ticketCode; 
+}
+
+async function sendGeneratedTicket(ticketData){
+    await addDataToFirestore('TicketGeneratedCollection', ticketData);
+    alert('Ticket sent to firestore successfully!');
 }
 
 
