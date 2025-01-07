@@ -113,7 +113,7 @@ for(let ticketGeneratedDoc of ticketGenratedCollection){
             <td class="border py-2 text-center">${ticketGeneratedDoc.ticketCode}</td>
             <td class="border py-2 text-center">${ticketGeneratedDoc.from} - ${ticketGeneratedDoc.to}</td>
             <td class="border py-2 text-center">${ticketGeneratedDoc.discount}</td>
-            <td class="border py-2 text-center">${ticketGeneratedDoc.price}</td>
+            <td class="border py-2 text-center">₱${ticketGeneratedDoc.price}</td>
             <td class="border py-2 text-center">${ticketGeneratedDoc.createdAt}</td>
             <td class="border py-2 text-center">
                 <button class="border py-2 px-3 bg-green-500 hover:bg-green-600" data-ticket-confirm="${ticketGeneratedDoc.ticketCode}">Confirm</button> 
@@ -135,7 +135,7 @@ ticketConfirmBtns.forEach((confirmBtn) => {
         const confirmedTicketReq = await getSingleFirestoreDocument('ticketCode', userClickedBtn, 'TicketGeneratedCollection');
         await addDataToFirestore('TicketConfirmedCollection', confirmedTicketReq);
         await deleteSingleFirestoreDocument('ticketCode', userClickedBtn, 'TicketGeneratedCollection');
-        location.reload();
+        showSuccessAlert('Ticket confirmed successfully');
     })
 });
 
@@ -144,7 +144,7 @@ ticketRejectBtns.forEach( (rejectBtn) => {
 
     rejectBtn.addEventListener('click', async () => {
         await deleteSingleFirestoreDocument('ticketCode', userClickedBtn, 'TicketGeneratedCollection');
-        location.reload();
+        showSuccessAlert('Ticket rejected successfully');
     })
 })
 

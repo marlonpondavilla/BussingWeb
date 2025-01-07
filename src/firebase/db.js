@@ -28,6 +28,22 @@ export async function getFirestoreData(collectionName) {
     }
 }
 
+export async function getAllFirestoreDocumentById(field, value, collectionName) {
+    try{
+        const q = query(collection(db, collectionName), where(field, '==', value));
+
+        const snapshot = await getDocs(q);
+
+        if(snapshot.empty){
+            return null;
+        }
+
+        return snapshot.docs.map(doc => doc.data());
+    } catch(e){
+        console.error('Error getting documents: ', e);
+    }
+}
+
 // Function to check if busNo already exists
 export async function checkBusNumberExists(busNo, collectionName) {
     try {

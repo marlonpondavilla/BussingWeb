@@ -6,7 +6,7 @@ import { showPage, showUserSettings } from '../utils/pagination.js';
 import { logoutUser } from '../utils/user.js';
 import { date } from '../utils/date.js';
 import { generateTicket, updatePrice } from '../utils/ticket.js';
-import { getFirestoreData } from '../firebase/db.js';
+import { getFirestoreData, getSingleFirestoreDocument, getAllFirestoreDocumentById } from '../firebase/db.js';
 
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
@@ -172,6 +172,21 @@ for (let scheduleDoc of scheduleData){
 }
 scheduleSectionHTML.innerHTML = scheduleHTML;
 
+// History rendering
+const historyData = await getAllFirestoreDocumentById('uid', localStorage.getItem('userId'), 'TicketConfirmedCollection');
+let historySectionHTML = '';
+
+for(let historyDoc of historyData){
+    historySectionHTML += `
+        <tr class="border-b border-gray-200 hover:bg-gray-50">
+            <td class="px-6 py-3 text-sm text-gray-800">${historyDoc.createdAt}</td>
+            <td class="px-6 py-3 text-sm text-gray-800">${historyDoc.ticketCode}</td>
+            <td class="px-6 py-3 text-sm text-gray-800">₱${historyDoc.price}</td>
+            <td class="px-6 py-3 text-sm text-gray-800">${historyDoc.from} - ${historyDoc.to}</td>
+        </tr>
+    `;
+}
+document.getElementById('history-table').innerHTML = historySectionHTML;
 // Header navigation
 const homeTab = document.querySelector('.home');
 const ticketTab = document.querySelector('.ticket');

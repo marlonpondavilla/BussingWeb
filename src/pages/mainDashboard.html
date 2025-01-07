@@ -193,37 +193,14 @@
                 <table class="min-w-full table-auto">
                 <thead class="bg-gray-700">
                     <tr>
-                    <th class="px-6 py-3 text-left text-sm font-semibold text-white">Timestamp</th>
-                    <th class="px-6 py-3 text-left text-sm font-semibold text-white">Ticket Code</th>
-                    <th class="px-6 py-3 text-left text-sm font-semibold text-white">Trip</th>
-                    <th class="px-6 py-3 text-left text-sm font-semibold text-white">Status</th>
+                        <th class="px-6 py-3 text-left text-sm font-semibold text-white">Timestamp</th>
+                        <th class="px-6 py-3 text-left text-sm font-semibold text-white">Ticket Code</th>
+                        <th class="px-6 py-3 text-left text-sm font-semibold text-white">Price</th>
+                        <th class="px-6 py-3 text-left text-sm font-semibold text-white">Route</th>
                     </tr>
                 </thead>
-                <tbody>
-                    <!-- Ticket 1 -->
-                    <tr class="border-b border-gray-200 hover:bg-gray-50">
-                    <td class="px-6 py-3 text-sm text-gray-800">2024-12-20 14:30</td>
-                    <td class="px-6 py-3 text-sm text-gray-800">AB12345CD</td>
-                    <td class="px-6 py-3 text-sm text-gray-800">Bulakan Terminal - Cubao Terminal</td>
-                    <td class="px-6 py-3 text-sm text-green-500">Used</td>
-                    </tr>
-        
-                    <!-- Ticket 2 -->
-                    <tr class="border-b border-gray-200 hover:bg-gray-50">
-                    <td class="px-6 py-3 text-sm text-gray-800">2024-12-18 10:05</td>
-                    <td class="px-6 py-3 text-sm text-gray-800">XY67890ZT</td>
-                    <td class="px-6 py-3 text-sm text-gray-800">Cubao Terminal - Divisoria</td>
-                    <td class="px-6 py-3 text-sm text-red-500">Expired</td>
-                    </tr>
-        
-                    <!-- Ticket 3 -->
-                    <tr class="border-b border-gray-200 hover:bg-gray-50">
-                    <td class="px-6 py-3 text-sm text-gray-800">2024-12-15 18:20</td>
-                    <td class="px-6 py-3 text-sm text-gray-800">CD11223344</td>
-                    <td class="px-6 py-3 text-sm text-gray-800">Ermita - Santolan</td>
-                    <td class="px-6 py-3 text-sm text-green-500">Used</td>
-                    </tr>
-        
+                <tbody id="history-table">
+                    <!-- fetch data to firestore  -->
                 </tbody>
                 </table>
             </div>
