@@ -302,49 +302,54 @@ const busInfoEdtCancelBtn = document.getElementById('info-edt-cancel');
 const busInfoEdtBtnAll = document.querySelectorAll('[data-bus-info-edt-btn]');
 const busInfoDelBtnAll = document.querySelectorAll('[data-bus-info-del-btn]');
 
-document.getElementById('busNo-add').addEventListener('input', async() => {
-    try{
-        if(await checkBusNumberExists(document.getElementById('busNo-add').value, 'HomeDocuments')){
+document.getElementById('busNo-add').addEventListener('input', async () => {
+    try {
+        // const busNumber = document.getElementById('busNo-add').value;
+        const exists = await checkBusNumberExists(document.getElementById('busNo-add').value, 'HomeDocumentsCollection');
+        console.log(`Bus number exists: ${exists}`);
+
+        if (exists) {
             busInfoNumErrMsg.classList.remove('hidden');
             busInfoAddNowBtn.disabled = true;
             busInfoAddNowBtn.classList.add('cursor-not-allowed');
-        } else{
+        } else {
             busInfoNumErrMsg.classList.add('hidden');
             busInfoAddNowBtn.disabled = false;
             busInfoAddNowBtn.classList.remove('cursor-not-allowed');
         }
-    } catch(e){
+    } catch (e) {
         console.error('Error checking bus number: ', e);
     }
 });
+
+
 
 // will show the modal and the hidden buttons for adding
 busInfoAddBtn.addEventListener('click', () => {
     showBusInfoModal(busInfoAddModal)
     closeBusInfoModal(busInfoAddCancelBtn, busInfoAddModal);
 
-
-    busInfoAddForm.addEventListener('submit', async(e) => {
-        e.preventDefault();
-
-        const newBusInfoDataObj = {
-            busNo: document.getElementById('busNo-add').value,
-            startingPoint: document.getElementById('startingPoint-add').value,
-            arrivalPoint: document.getElementById('arrivalPoint-add').value,
-            departureTime: document.getElementById('departureTime-add').value,
-            plateNo: document.getElementById('plateNo-add').value,
-            busModel: document.getElementById('busModel-add').value,
-            busCapacity: document.getElementById('busNo-add').value,
-            busConductor: document.getElementById('busCapacity-add').value,
-            busDriver: document.getElementById('busDriver-add').value,
-            status: document.getElementById('status-add').value,
-            timeCreated: new Date().toLocaleString()
-        }
-        
-        await addDataToFirestore('HomeDocumentsCollection', newBusInfoDataObj);
-        showSuccessAlert('Bus Information added successfully');
-    }) 
 })
+busInfoAddForm.addEventListener('submit', async(e) => {
+    e.preventDefault();
+
+    const newBusInfoDataObj = {
+        busNo: document.getElementById('busNo-add').value,
+        startingPoint: document.getElementById('startingPoint-add').value,
+        arrivalPoint: document.getElementById('arrivalPoint-add').value,
+        departureTime: document.getElementById('departureTime-add').value,
+        plateNo: document.getElementById('plateNo-add').value,
+        busModel: document.getElementById('busModel-add').value,
+        busCapacity: document.getElementById('busNo-add').value,
+        busConductor: document.getElementById('busCapacity-add').value,
+        busDriver: document.getElementById('busDriver-add').value,
+        status: document.getElementById('status-add').value,
+        timeCreated: new Date().toLocaleString()
+    }
+    
+    await addDataToFirestore('HomeDocumentsCollection', newBusInfoDataObj);
+    showSuccessAlert('Bus Information added successfully');
+}) 
 
 
 

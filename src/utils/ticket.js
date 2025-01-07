@@ -1,12 +1,17 @@
 import QRCode from 'https://cdn.skypack.dev/qrcode';
 
 export function generateTicket(from, to, discount, price, qrPopUp, qrDisplay, qrDiscount, qrFrom, qrTo, qrCode) {
-    const text = `Ticket from ${from} to ${to} with a ${discount}% discount costs ₱${price}`;
+    
+    const ticketCode = generateTicketCode();
+
+    const text = `
+        Ticket Code: ${ticketCode}
+        Price: ${price}`;
   
     qrPopUp.classList.remove('hidden');
     qrPopUp.classList.add('flex');
 
-    qrCode.innerHTML = generateTicketCode(); 
+    qrCode.innerHTML = ticketCode; 
     qrFrom.innerHTML = from; 
     qrTo.innerHTML = to; 
     qrDiscount.innerHTML = discount; 
@@ -21,23 +26,14 @@ export function generateTicket(from, to, discount, price, qrPopUp, qrDisplay, qr
     });
 }
 
-function generateTicketCode() {
-    const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789'; 
-    let ticketCode = '';
-    
-    // Generate a random 8-character ticket code
-    for (let i = 0; i < 8; i++) { 
-        const randomIndex = Math.floor(Math.random() * characters.length); 
-        ticketCode += characters[randomIndex];
-    }
-
-    return ticketCode; 
-}
 
 export function updatePrice(from, to, discount, priceHTML, fromHTML, toHTML, errHTML, button) {
     let updatedPrice = 0;
     let discountPrice = 0;
-
+    
+    const basePrice = 105;
+    const regularPrice = 120;
+    
     if(discount.toLowerCase() === 'student'){
         discountPrice = 0.2;
     } else if(discount.toLowerCase() === 'senior'){
@@ -49,12 +45,12 @@ export function updatePrice(from, to, discount, priceHTML, fromHTML, toHTML, err
     }
     
     // Base price is 120 for these routes
-    if(from.includes('Bulakan') || from.includes('Divisoria') || from.includes('Ermita')){
-        updatedPrice = 120 - (120 * discountPrice);
+    if(from.includes('Bulakan') || from.includes('Cubao')){
+        updatedPrice = basePrice - (basePrice * discountPrice);
     } else{
-        updatedPrice = 105 - (105 * discountPrice);
+        updatedPrice = regularPrice - (regularPrice * discountPrice);
     }
-
+    
     // err handler
     if(from === to){
         updatedPrice = 0;
@@ -70,6 +66,28 @@ export function updatePrice(from, to, discount, priceHTML, fromHTML, toHTML, err
         button.disabled = false;
         button.classList.remove('cursor-not-allowed');
     }
-
+    
     priceHTML.innerHTML = updatedPrice.toFixed(2);
 }
+
+function generateTicketCode() {
+    const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789'; 
+    let ticketCode = '';
+    
+    // Generate a random 8-character ticket code
+    for (let i = 0; i < 8; i++) { 
+        const randomIndex = Math.floor(Math.random() * characters.length); 
+        ticketCode += characters[randomIndex];
+    }
+
+    return ticketCode; 
+}
+
+
+
+
+
+
+
+
+

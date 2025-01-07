@@ -80,12 +80,7 @@
                     <div class="mb-6">
                         <label for="from" class="block text-sm font-medium text-gray-600 mb-2">From</label>
                         <select id="from" name="from" class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md" required>
-                            <option value="" disabled selected>Select a location</option>
-                            <option value="Cubao">Cubao Terminal</option>
-                            <option value="Bulakan">Bulakan Terminal</option>
-                            <option value="Divisoria">Divisoria</option>
-                            <option value="Santolan">Santolan</option>
-                            <option value="Ermita">Ermita</option>
+                            <!-- from options are js rendered -->
                         </select>
                     </div>
             
@@ -93,12 +88,7 @@
                     <div class="mb-6">
                         <label for="to" class="block text-sm font-medium text-gray-600 mb-2">To</label>
                         <select id="to" name="to" class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md" required>
-                            <option value="" disabled selected>Select a destination</option>
-                            <option value="Cubao">Cubao Terminal</option>
-                            <option value="Bulakan">Bulakan Terminal</option>
-                            <option value="Divisoria">Divisoria</option>
-                            <option value="Santolan">Santolan</option>
-                            <option value="Ermita">Ermita</option>
+                            <!-- to options are js rendered -->
                         </select>
                         <p class="mt-2 mx-5 text-red-400 text-sm hidden" id="route-err-msg">Routes cannot be the same, select a different route.</p>
                     </div>
@@ -113,7 +103,7 @@
                             <option value="Senior">Senior</option>
                             <option value="PWD">PWD (Persons with Disabilities)</option>
                         </select>
-                        <p class="my-2 mx-5 text-red-400 text-sm">Note: Your ticket will not be scanned if the selected discount does not apply.</p>
+                        <p class="my-2 mx-5 text-red-400 text-sm">Note: Your ticket will be rejected if the selected discount does not apply.</p>
                     </div>
 
                     <!-- Price Display -->
@@ -146,13 +136,13 @@
                         <div class="ticket-label text-lg font-semibold mb-4">
                             Ticket Code: <span class="text-gray-500 text-base" id="qr-code-label">null</span>
                             <h2 class="text-2xl font-semibold text-gray-700 mt-1" id="busNumber">
-                                <span id="qr-from">Cubao</span> - <span id="qr-to">Bulakan</span>
+                                <span id="qr-from">From</span> - <span id="qr-to">To</span>
                             </h2>
                         </div>
                     </div>
             
                     <div class="w-1/2 flex flex-col justify-end items-center">
-                        <canvas class="w-32 h-32 border border-gray-300 rounded-lg shadow-md" id="qr-code"></canvas>
+                        <canvas class="w-1 h-auto border border-gray-300 rounded-lg shadow-md" id="qr-code"></canvas>
                         <div class="text-sm font-semibold mt-2">Discount: <span class="text-gray-500" id="qr-discount">none</span></div>
                     </div>
                 </div>
@@ -173,6 +163,7 @@
                             <th class="px-4 py-2 border-b text-center">Bus</th>
                             <th class="px-4 py-2 border-b text-center">Departure Time</th>
                             <th class="px-4 py-2 border-b text-center">From</th>
+                            <th class="px-4 py-2 border-b text-center">Vice Versa</th>
                             <th class="px-4 py-2 border-b text-center">To</th>
                             <th class="px-4 py-2 border-b text-center">Price</th>
                             <th class="px-4 py-2 border-b text-center">Available Seats</th>

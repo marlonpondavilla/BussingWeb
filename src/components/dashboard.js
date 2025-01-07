@@ -43,7 +43,6 @@ const bussingArticle = document.getElementById('bussing-article');
 let bussingHTML = "";
 const homeData = await getFirestoreData('HomeDocumentsCollection');
 
-// check if the data is empty
 if(homeData.length === 0){
     bussingHTML = 
         `<h2 class="text-2xl text-center text-gray-700">No bus data available</h2>`;
@@ -113,6 +112,18 @@ const qrTo = document.getElementById('qr-to');
 const qrCodeLabel = document.getElementById('qr-code-label');
 const closePopUp = document.getElementById('close-popup');
 
+let optionHTML = '<option value="" disabled selected>Select a location</option>';
+const optionDataSchedule = await getFirestoreData('ScheduleDocumentsCollection');
+
+for (let dataSchedule of optionDataSchedule){
+    optionHTML += `
+        <option value="${dataSchedule.from}">${dataSchedule.from}</option>
+        <option value="${dataSchedule.to}">${dataSchedule.to}</option>
+    `;    
+}
+document.getElementById('from').innerHTML = optionHTML;
+document.getElementById('to').innerHTML = optionHTML;
+
 from.addEventListener('change', () => {
     updatePrice(from.value, to.value, discount.value, price, from, to, errHTML, ticketBtn);
 });
@@ -151,6 +162,7 @@ for (let scheduleDoc of scheduleData){
         <td class="px-4 py-2 border-b text-center font-semibold">Bus 0${scheduleDoc.busNo}</td>
         <td class="px-4 py-2 border-b text-center">${scheduleDoc.departureTime}</td>
         <td class="px-4 py-2 border-b text-center font-semibold">${scheduleDoc.from}</td>
+        <td class="px-4 py-2 border-b text-center"><i class="fa-solid fa-arrows-left-right text-xl"></i></td>
         <td class="px-4 py-2 border-b text-center font-semibold">${scheduleDoc.to}</td>
         <td class="px-4 py-2 border-b text-center">₱${scheduleDoc.price}</td>
         <td class="px-4 py-2 border-b text-center">${scheduleDoc.availableSeats} seats</td>

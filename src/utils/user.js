@@ -4,6 +4,7 @@ export function logoutUser(button, auth){
             localStorage.removeItem('userName');
             localStorage.removeItem('userEmail');
             localStorage.removeItem('userPhoto');
+            localStorage.removeItem('userId');
             alert("You will be redirected to the login page");
             window.location.href = '../index.html';
         }).catch((error) => {

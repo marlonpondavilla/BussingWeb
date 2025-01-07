@@ -18,6 +18,7 @@ googleBtn.addEventListener('click', async () => {
         const user = result.user;
         
         // Store user information in localStorage
+        localStorage.setItem('userId', user.uid);
         localStorage.setItem('userName', user.displayName);
         localStorage.setItem('userEmail', user.email);
         localStorage.setItem('userPhoto', user.photoURL);
@@ -80,6 +81,7 @@ loginBtn.addEventListener('click', async (e) => {
         localStorage.setItem('userName', user.displayName || 'Hello, User');
         localStorage.setItem('userEmail', user.email);
         localStorage.setItem('userPhoto', user.photoURL || 'https://t3.ftcdn.net/jpg/03/94/89/90/360_F_394899054_4TMgw6eiMYUfozaZU3Kgr5e0LdH4ZrsU.jpg');
+        localStorage.setItem('userId', user.uid);
 
         // Prepare user data object
         const userDataObject = {
