@@ -84,14 +84,14 @@ export async function getSingleFirestoreDocument(field, value, collectionName) {
         const snapshot = await getDocs(q);
 
         if (snapshot.empty) {
-            return null;  // No document found
+            return null;  
         }
 
-        return snapshot.docs[0].data();  // Return the data of the first document
+        return snapshot.docs[0].data();  
 
     } catch (e) {
         console.error('Error getting document: ', e);
-        return null;  // Return null on error
+        return null;  
     }
 }
 
@@ -156,6 +156,34 @@ export async function deleteSingleFirestoreDocument(field, value, collectionName
         console.error('Error deleting document: ', e);
     }
 }
+
+export async function getSearchTerm(field, searchTerm, collectionName) {
+    try {
+        const collRef = collection(db, collectionName); 
+        const q = query(
+            collRef,
+            where(field, '>=', searchTerm),
+            where(field, '<=', searchTerm + '\uf8ff') 
+        );
+
+        const querySnapshot = await getDocs(q); 
+        if (querySnapshot.empty) {
+            return null;
+        }
+
+        const results = [];
+        querySnapshot.forEach((doc) => {
+            results.push(doc.data());
+        });
+
+        return results;
+    } catch (error) {
+        console.error('Error querying Firestore:', error);
+        return null; 
+    }
+}
+
+
 
 
 

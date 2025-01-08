@@ -180,35 +180,32 @@
         <!-- History Section -->
         <section class="history-section hidden">
            <div class="container-history w-1/2 md:w-1/2 lg:1/4 mx-auto">
-            <!-- Header Section -->
-            <div class="flex items-center justify-between mb-4">
-                <h1 class="text-3xl font-semibold">Ticket History</h1>
-                <div class="w-1/3">
-                <input type="text" placeholder="Search anything" class="w-full p-2 border border-gray-300 rounded-lg shadow-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+                <!-- Header Section -->
+                <div class="flex items-center justify-between mb-4">
+                    <h1 class="text-3xl font-semibold">Ticket History</h1>
                 </div>
-            </div>
-        
-            <!-- Ticket History Table -->
-            <div class="overflow-x-auto bg-white shadow-md rounded-lg border border-gray-200">
-                <table class="min-w-full table-auto">
-                <thead class="bg-gray-700">
-                    <tr>
-                        <th class="px-6 py-3 text-left text-sm font-semibold text-white">Timestamp</th>
-                        <th class="px-6 py-3 text-left text-sm font-semibold text-white">Ticket Code</th>
-                        <th class="px-6 py-3 text-left text-sm font-semibold text-white">Price</th>
-                        <th class="px-6 py-3 text-left text-sm font-semibold text-white">Route</th>
-                    </tr>
-                </thead>
-                <tbody id="history-table">
-                    <!-- fetch data to firestore  -->
-                </tbody>
-                </table>
-            </div>
-  
-            <!-- Footer with Pagination or Load More -->
-            <div class="mt-6 text-center">
-                <button class="px-6 py-2 bg-blue-500 text-white rounded-lg shadow-md hover:bg-blue-600 focus:outline-none">Load More <i class="fa-solid fa-arrows-rotate"></i></button>
-            </div>
+            
+                <!-- Ticket History Table -->
+                <div class="overflow-x-auto bg-white shadow-md rounded-lg border border-gray-200">
+                    <table class="min-w-full table-auto">
+                    <thead class="bg-gray-700">
+                        <tr>
+                            <th class="px-6 py-3 text-left text-sm font-semibold text-white">Timestamp</th>
+                            <th class="px-6 py-3 text-left text-sm font-semibold text-white">Ticket Code</th>
+                            <th class="px-6 py-3 text-left text-sm font-semibold text-white">Price</th>
+                            <th class="px-6 py-3 text-left text-sm font-semibold text-white">Route</th>
+                        </tr>
+                    </thead>
+                    <tbody id="history-table">
+                        <!-- fetch data to firestore  -->
+                    </tbody>
+                    </table>
+                </div>
+    
+                <!-- Footer with Pagination or Load More -->
+                <!-- <div class="mt-6 text-center">
+                    <button class="px-6 py-2 bg-blue-500 text-white rounded-lg shadow-md hover:bg-blue-600 focus:outline-none">Load More <i class="fa-solid fa-arrows-rotate"></i></button>
+                </div> -->
            </div>
         </section>
     </main>

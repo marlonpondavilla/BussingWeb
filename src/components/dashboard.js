@@ -6,6 +6,7 @@ import { showPage, showUserSettings } from '../utils/pagination.js';
 import { logoutUser } from '../utils/user.js';
 import { date } from '../utils/date.js';
 import { generateTicket, updatePrice } from '../utils/ticket.js';
+import { showSuccessAlert } from '../utils/alert.js';
 import { getFirestoreData, getSingleFirestoreDocument, getAllFirestoreDocumentById } from '../firebase/db.js';
 
 const app = initializeApp(firebaseConfig);
@@ -137,12 +138,12 @@ discount.addEventListener('change', () => {
 ticketForm.addEventListener('submit', (e) => {
     e.preventDefault();
     generateTicket(from.value, to.value, discount.value, price.innerHTML, qrPopUp, qrCodeDiv, qrDiscount, qrFrom, qrTo, qrCodeLabel, localStorage.getItem('userId'));
-    console.log('user id: ', localStorage.getItem('userId'));
 });
 
 closePopUp.addEventListener('click', () => {
     qrPopUp.classList.add('hidden');
     qrPopUp.classList.remove('flex');
+    showSuccessAlert('Ticket has been received by Bussing');
 });
 
 // schedule rendering
@@ -176,17 +177,24 @@ scheduleSectionHTML.innerHTML = scheduleHTML;
 const historyData = await getAllFirestoreDocumentById('uid', localStorage.getItem('userId'), 'TicketConfirmedCollection');
 let historySectionHTML = '';
 
-for(let historyDoc of historyData){
-    historySectionHTML += `
-        <tr class="border-b border-gray-200 hover:bg-gray-50">
-            <td class="px-6 py-3 text-sm text-gray-800">${historyDoc.createdAt}</td>
-            <td class="px-6 py-3 text-sm text-gray-800">${historyDoc.ticketCode}</td>
-            <td class="px-6 py-3 text-sm text-gray-800">₱${historyDoc.price}</td>
-            <td class="px-6 py-3 text-sm text-gray-800">${historyDoc.from} - ${historyDoc.to}</td>
-        </tr>
-    `;
+if(!historyData){
+    historySectionHTML = 
+        `<h2 class="text-2xl text-center text-gray-700 py-3">No history available</h2>`;
+} else{
+    for(let historyDoc of historyData){
+        historySectionHTML += `
+            <tr class="border-b border-gray-200 hover:bg-gray-50">
+                <td class="px-6 py-3 text-sm text-gray-800">${historyDoc.createdAt}</td>
+                <td class="px-6 py-3 text-sm text-gray-800">${historyDoc.ticketCode}</td>
+                <td class="px-6 py-3 text-sm text-gray-800">₱${historyDoc.price}</td>
+                <td class="px-6 py-3 text-sm text-gray-800">${historyDoc.from} - ${historyDoc.to}</td>
+            </tr>
+        `;
+    }
 }
 document.getElementById('history-table').innerHTML = historySectionHTML;
+
+
 // Header navigation
 const homeTab = document.querySelector('.home');
 const ticketTab = document.querySelector('.ticket');

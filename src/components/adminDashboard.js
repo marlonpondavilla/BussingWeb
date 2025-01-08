@@ -5,7 +5,7 @@ import { getAuth } from 'https://www.gstatic.com/firebasejs/9.22.2/firebase-auth
 import { firebaseConfig } from '../services/firebaseConfig.js';
 import { toggleBusOperations } from "../utils/pagination.js";
 import { showSuccessAlert, handleDeleteInformation } from "../utils/alert.js";
-import { addDataToFirestore, getFirestoreData, getSingleFirestoreData, getSingleFirestoreDocument, updateSingleFirestoreData, checkBusNumberExists, deleteSingleFirestoreData, deleteSingleFirestoreDocument } from "../firebase/db.js";
+import { addDataToFirestore, getFirestoreData, getSingleFirestoreData, getSingleFirestoreDocument, updateSingleFirestoreData, checkBusNumberExists, deleteSingleFirestoreData, deleteSingleFirestoreDocument,getSearchTerm } from "../firebase/db.js";
 
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app); 
@@ -148,7 +148,62 @@ ticketRejectBtns.forEach( (rejectBtn) => {
     })
 })
 
+document.getElementById('search-ticket').addEventListener('input', async () => {
+    const searchTicket = document.getElementById('search-ticket').value;
 
+    // If the input is empty, show all tickets
+    if (!searchTicket) {
+        const ticketGenratedCollection = await getFirestoreData('TicketGeneratedCollection');
+        let ticketTrHTML = '';
+
+        for (let ticketGeneratedDoc of ticketGenratedCollection) {
+            ticketTrHTML += `
+                <tr class="border-2 border-b-black">
+                    <td class="border py-2 text-center">${ticketGeneratedDoc.uid}</td>
+                    <td class="border py-2 text-center">${ticketGeneratedDoc.ticketCode}</td>
+                    <td class="border py-2 text-center">${ticketGeneratedDoc.from} - ${ticketGeneratedDoc.to}</td>
+                    <td class="border py-2 text-center">${ticketGeneratedDoc.discount}</td>
+                    <td class="border py-2 text-center">₱${ticketGeneratedDoc.price}</td>
+                    <td class="border py-2 text-center">${ticketGeneratedDoc.createdAt}</td>
+                    <td class="border py-2 text-center">
+                        <button class="border py-2 px-3 bg-green-500 hover:bg-green-600" data-ticket-confirm="${ticketGeneratedDoc.ticketCode}">Confirm</button> 
+                        <button class="border p-2 bg-red-500 hover:bg-red-600 text-white" data-ticket-reject="${ticketGeneratedDoc.ticketCode}">Reject</button>
+                    </td>
+                </tr>
+            `;
+        }
+
+        document.getElementById('ticket-inventory-table').innerHTML = ticketTrHTML;
+        return;
+    }
+
+    // Perform the search query for tickets matching the search input
+    const ticketFound = await getSearchTerm('ticketCode', searchTicket, 'TicketGeneratedCollection');
+    let searchResultsHTML = '';
+
+    if (ticketFound && ticketFound.length > 0) {
+        // Loop through the results and create HTML table rows
+        ticketFound.forEach(ticket => {
+            searchResultsHTML += `
+                <tr class="border-2 border-b-black">
+                    <td class="border py-2 text-center">${ticket.uid}</td>
+                    <td class="border py-2 text-center">${ticket.ticketCode}</td>
+                    <td class="border py-2 text-center">${ticket.from} - ${ticket.to}</td>
+                    <td class="border py-2 text-center">${ticket.discount}</td>
+                    <td class="border py-2 text-center">₱${ticket.price}</td>
+                    <td class="border py-2 text-center">${ticket.createdAt}</td>
+                    <td class="border py-2 text-center">
+                        <button class="border py-2 px-3 bg-green-500 hover:bg-green-600" data-ticket-confirm="${ticket.ticketCode}">Confirm</button> 
+                        <button class="border p-2 bg-red-500 hover:bg-red-600 text-white" data-ticket-reject="${ticket.ticketCode}">Reject</button>
+                    </td>
+                </tr>
+            `;
+        });
+        document.getElementById('ticket-inventory-table').innerHTML = searchResultsHTML;
+    } else {
+        document.getElementById('ticket-inventory-table').innerHTML = '<tr><td colspan="7" class="text-center py-2">No tickets found</td></tr>';
+    }
+});
 
 // bus operations admin
 const busScheduleTab = document.getElementById('bus-schedule-tab');
