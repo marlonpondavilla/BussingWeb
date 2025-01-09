@@ -183,6 +183,20 @@ export async function getSearchTerm(field, searchTerm, collectionName) {
     }
 }
 
+export async function getCollectionSize(collectionName){
+    try{
+        const snapshot = await getDocs(collection(db, collectionName));
+
+        if(snapshot.empty){
+            return 0;
+        }
+
+        return snapshot.size;
+    } catch(e){
+        console.error('Error getting ticket sold size: ', e);
+    }
+}
+
 
 
 

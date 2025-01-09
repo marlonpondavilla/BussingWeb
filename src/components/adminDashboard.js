@@ -5,13 +5,22 @@ import { getAuth } from 'https://www.gstatic.com/firebasejs/9.22.2/firebase-auth
 import { firebaseConfig } from '../services/firebaseConfig.js';
 import { toggleBusOperations } from "../utils/pagination.js";
 import { showSuccessAlert, handleDeleteInformation } from "../utils/alert.js";
-import { addDataToFirestore, getFirestoreData, getSingleFirestoreData, getSingleFirestoreDocument, updateSingleFirestoreData, checkBusNumberExists, deleteSingleFirestoreData, deleteSingleFirestoreDocument,getSearchTerm } from "../firebase/db.js";
+import { addDataToFirestore, getFirestoreData, getSingleFirestoreData, getSingleFirestoreDocument, updateSingleFirestoreData, checkBusNumberExists, deleteSingleFirestoreDocument, getSearchTerm, getCollectionSize, getAllFirestoreDocumentById } from "../firebase/db.js";
 
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app); 
 
 const logoutButton = document.getElementById('logout-btn');
 logoutAdmin(logoutButton, auth);
+
+// Get the data for admin pie charts
+const ticketSoldSize = await getCollectionSize('TicketConfirmedCollection');
+const activeBuses = await getAllFirestoreDocumentById('status', 'Active', 'ScheduleDocumentsCollection');
+const inactiveBuses = await getAllFirestoreDocumentById('status', 'Inactive', 'ScheduleDocumentsCollection');
+const totalRoutes = await getAllFirestoreDocumentById('from', '')
+
+document.getElementById('total-ticket-sold').textContent = ticketSoldSize;
+document.getElementById('active-buses').textContent = activeBuses.length;
 
 // Tickets sold and unsold chart
 const chart1 = new Chart(document.getElementById("chart1"), {
@@ -36,9 +45,9 @@ const chart1 = new Chart(document.getElementById("chart1"), {
 const chart2 = new Chart(document.getElementById("chart2"), {
     type: "doughnut",
     data: {
-        labels: ["Operational Buses", "Inactive Buses"],
+        labels: ["Active Buses", "Inactive Buses"],
         datasets: [{
-            data: [100, 20],
+            data: [activeBuses.length, inactiveBuses.length],
             backgroundColor: ["#1abc9c", "#ecf0f1"],
             hoverBackgroundColor: ["#16a085", "#bdc3c7"]
         }]
