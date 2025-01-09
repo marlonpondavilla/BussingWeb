@@ -28,6 +28,21 @@ window.onload = () => {
     }
 }
 
+// Header navigation
+const homeTab = document.querySelector('.home');
+const ticketTab = document.querySelector('.ticket');
+const scheduleTab = document.querySelector('.schedule');
+const historyTab = document.querySelector('.history');
+
+const homeSection = document.querySelector('.home-section');
+const ticketSection = document.querySelector('.ticket-section');
+const scheduleSection = document.querySelector('.schedule-section');
+const historySection = document.querySelector('.history-section');
+
+showPage(homeTab, ticketTab, scheduleTab, historyTab, 'highlighted', homeSection, ticketSection, scheduleSection, historySection);
+
+document.getElementById('profile-view-buses').addEventListener('click', () => location.reload());
+
 // Display current date
 document.querySelector('.current-date').innerHTML = date();
 
@@ -198,18 +213,7 @@ if(!historyData){
 document.getElementById('history-table').innerHTML = historySectionHTML;
 
 
-// Header navigation
-const homeTab = document.querySelector('.home');
-const ticketTab = document.querySelector('.ticket');
-const scheduleTab = document.querySelector('.schedule');
-const historyTab = document.querySelector('.history');
 
-const homeSection = document.querySelector('.home-section');
-const ticketSection = document.querySelector('.ticket-section');
-const scheduleSection = document.querySelector('.schedule-section');
-const historySection = document.querySelector('.history-section');
-
-showPage(homeTab, ticketTab, scheduleTab, historyTab, 'highlighted', homeSection, ticketSection, scheduleSection, historySection);
 
 
 
