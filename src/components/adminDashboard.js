@@ -233,18 +233,18 @@ document.getElementById('add-schedule-btn').addEventListener('click', function()
         // Update the schedule table dynamically
         newRowHTML += `
         <tr>
-        <td class="px-4 py-2 border-b">Bus 0${scheduleDoc.busNo}</td>
-        <td class="px-4 py-2 border-b">${scheduleDoc.departureTime}</td>
-        <td class="px-4 py-2 border-b">${scheduleDoc.from}</td>
-        <td class="px-4 py-2 border-b">${scheduleDoc.to}</td>
-        <td class="px-4 py-2 border-b">₱${scheduleDoc.price}</td>
-        <td class="px-4 py-2 border-b">${scheduleDoc.availableSeats} seats</td>
-        <td class="px-4 py-2 border-b ${scheduleDoc.status === 'Active' ? 'text-green-600' : 'text-red-600'}">${scheduleDoc.status}</td>
-        <td class="px-4 py-2 border-b">
-            <span class="text-blue-500 cursor-pointer mr-4" data-row-edit="${scheduleDoc.busNo}" id="row-edit-${scheduleDoc.busNo}">Edit</span>
-            <span class="text-red-500 cursor-pointer" data-row-delete="${scheduleDoc.busNo}" id="row-delete-${scheduleDoc.busNo}">Delete</span>
-        </td>
-    </tr>
+            <td class="px-4 py-2 border-b">Bus 0${scheduleDoc.busNo}</td>
+            <td class="px-4 py-2 border-b">${scheduleDoc.departureTime}</td>
+            <td class="px-4 py-2 border-b">${scheduleDoc.from}</td>
+            <td class="px-4 py-2 border-b">${scheduleDoc.to}</td>
+            <td class="px-4 py-2 border-b">₱${scheduleDoc.price}</td>
+            <td class="px-4 py-2 border-b">${scheduleDoc.availableSeats} seats</td>
+            <td class="px-4 py-2 border-b ${scheduleDoc.status === 'Active' ? 'text-green-600' : 'text-red-600'}">${scheduleDoc.status}</td>
+            <td class="px-4 py-2 border-b">
+                <span class="text-blue-500 cursor-pointer mr-4" data-row-edit="${scheduleDoc.busNo}" id="row-edit-${scheduleDoc.busNo}">Edit</span>
+                <span class="text-red-500 cursor-pointer" data-row-delete="${scheduleDoc.busNo}" id="row-delete-${scheduleDoc.busNo}">Delete</span>
+            </td>
+        </tr>
 
     `;
     }

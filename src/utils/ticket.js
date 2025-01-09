@@ -56,7 +56,6 @@ export function updatePrice(from, to, discount, priceHTML, fromHTML, toHTML, err
         discountPrice = 0;
     }
     
-    // Base price is 120 for these routes
     if(from.includes('Bulakan') || from.includes('Cubao')){
         updatedPrice = basePrice - (basePrice * discountPrice);
     } else{

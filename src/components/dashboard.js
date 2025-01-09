@@ -117,6 +117,9 @@ let optionHTML = '<option value="" disabled selected>Select a location</option>'
 const optionDataSchedule = await getFirestoreData('ScheduleDocumentsCollection');
 
 for (let dataSchedule of optionDataSchedule){
+    if(dataSchedule.status === 'Inactive') {
+        continue;
+    }
     optionHTML += `
         <option value="${dataSchedule.from}">${dataSchedule.from}</option>
         <option value="${dataSchedule.to}">${dataSchedule.to}</option>

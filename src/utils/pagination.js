@@ -92,8 +92,8 @@ export function toggleAdminNav(dashboarBtn, ticketInventoryButton, busOperations
     dashboarBtn.classList.add('text-black', 'font-semibold', 'border-b-4');
 
     // change the dashboard section to be the default section (temporarily set to ticket section)
-    dashboardSection.classList.add('hidden');
-    ticketInventorySection.classList.remove('hidden');
+    dashboardSection.classList.remove('hidden');
+    ticketInventorySection.classList.add('hidden');
     busOperationsSection.classList.add('hidden');
     customerSupportSection.classList.add('hidden');
 
