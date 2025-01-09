@@ -1,7 +1,6 @@
 import { initializeApp } from 'https://www.gstatic.com/firebasejs/9.22.2/firebase-app.js';
 import { getAuth } from 'https://www.gstatic.com/firebasejs/9.22.2/firebase-auth.js';
 import { firebaseConfig } from '../services/firebaseConfig.js'; 
-import { busData } from '../data/data.js';
 import { showPage, showUserSettings } from '../utils/pagination.js';
 import { logoutUser } from '../utils/user.js';
 import { date } from '../utils/date.js';

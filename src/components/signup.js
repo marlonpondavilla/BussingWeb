@@ -1,8 +1,10 @@
 import { initializeApp } from 'https://www.gstatic.com/firebasejs/9.22.2/firebase-app.js';
-import { getAuth, createUserWithEmailAndPassword, sendEmailVerification, updateProfile } from 'https://www.gstatic.com/firebasejs/9.22.2/firebase-auth.js';
+import { getAuth, createUserWithEmailAndPassword, updateProfile } from 'https://www.gstatic.com/firebasejs/9.22.2/firebase-auth.js';
 import { getFirestore } from 'https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore.js';
 import { firebaseConfig } from '../services/firebaseConfig.js';
 import { addDataToFirestore } from '../firebase/db.js';
+import { showSuccessAlert } from '../utils/alert.js';
+
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
@@ -30,6 +32,7 @@ function removeInputValues(){
   confirmPassword.value = '';
   marketing.checked = false;
   terms.checked = false;
+  showSuccessAlert('User signed up successfully');
 }
 
 // Email validation pattern
@@ -89,7 +92,6 @@ submitBtn.addEventListener('click', async (e) => {
   try {
     // Create user with email and password using Firebase Auth
     const userCredential = await createUserWithEmailAndPassword(auth, userData.email, userData.password);
-    alert('User signed up successfully');
 
     // Get the authenticated user object
     const user = userCredential.user; 

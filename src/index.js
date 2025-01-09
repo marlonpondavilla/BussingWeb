@@ -111,3 +111,21 @@ loginBtn.addEventListener('click', async (e) => {
     }
 });
 
+// forgot password
+async function sendPasswordReset(email) {
+    try {
+        // Send password reset email
+        await firebase.auth().sendPasswordResetEmail(email);
+        console.log('Password reset email sent!');
+    } catch (error) {
+        console.error('Error sending password reset email:', error);
+        // Handle different error types
+        if (error.code === 'auth/invalid-email') {
+            console.error('Invalid email address format.');
+        } else if (error.code === 'auth/user-not-found') {
+            console.error('No user found with that email address.');
+        }
+    }
+}
+
+
