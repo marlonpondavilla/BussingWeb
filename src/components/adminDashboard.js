@@ -115,7 +115,23 @@ toggleAdminNav(dashboardButton, ticketInventoryButton, busOperationsButton, cust
 const ticketGenratedCollection = await getFirestoreData('TicketGeneratedCollection');
 let ticketTrHTML = '';
 
-for(let ticketGeneratedDoc of ticketGenratedCollection){
+for (let ticketGeneratedDoc of ticketGenratedCollection) {
+    let formattedDate = 'N/A';
+
+    if (ticketGeneratedDoc.createdAt && typeof ticketGeneratedDoc.createdAt.toDate === 'function') {
+        const dateObj = ticketGeneratedDoc.createdAt.toDate();
+        formattedDate = dateObj.toLocaleString('en-PH', {
+            timeZone: 'Asia/Manila',
+            year: 'numeric',
+            month: 'short',
+            day: 'numeric',
+            hour: '2-digit',
+            minute: '2-digit',
+            second: '2-digit',
+            hour12: true,
+        });
+    }
+
     ticketTrHTML += `
         <tr class="border-2 border-b-black">
             <td class="border py-2 text-center">${ticketGeneratedDoc.uid}</td>
@@ -123,17 +139,18 @@ for(let ticketGeneratedDoc of ticketGenratedCollection){
             <td class="border py-2 text-center">${ticketGeneratedDoc.from} - ${ticketGeneratedDoc.to}</td>
             <td class="border py-2 text-center">${ticketGeneratedDoc.discount}</td>
             <td class="border py-2 text-center">₱${ticketGeneratedDoc.price}</td>
-            <td class="border py-2 text-center">${ticketGeneratedDoc.createdAt}</td>
+            <td class="border py-2 text-center">${formattedDate}</td>
             <td class="border py-2 text-center">
                 <button class="border py-2 px-3 bg-green-500 hover:bg-green-600" data-ticket-confirm="${ticketGeneratedDoc.ticketCode}">Confirm</button> 
-                <button class="border p-2 bg-red-500 hover:bg-red-600 text-white" data-ticket-reject="${ticketGeneratedDoc.ticketCode}">reject</button>
+                <button class="border p-2 bg-red-500 hover:bg-red-600 text-white" data-ticket-reject="${ticketGeneratedDoc.ticketCode}">Reject</button>
             </td>
-       </tr>
+        </tr>
     `;
 }
 
 document.getElementById('ticket-inventory-table').innerHTML = ticketTrHTML;
 
+    
 const ticketConfirmBtns = document.querySelectorAll('[data-ticket-confirm]');
 const ticketRejectBtns = document.querySelectorAll('[data-ticket-reject]');
 
