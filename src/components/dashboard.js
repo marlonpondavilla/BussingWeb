@@ -194,14 +194,30 @@ scheduleSectionHTML.innerHTML = scheduleHTML;
 const historyData = await getAllFirestoreDocumentById('uid', localStorage.getItem('userId'), 'TicketConfirmedCollection');
 let historySectionHTML = '';
 
-if(!historyData){
+if (!historyData || historyData.length === 0) {
     historySectionHTML = 
         `<h2 class="text-2xl text-center text-gray-700 py-3">No history available</h2>`;
-} else{
-    for(let historyDoc of historyData){
+} else {
+    for (let historyDoc of historyData) {
+        let formattedDate = 'N/A';
+
+        if (historyDoc.createdAt && typeof historyDoc.createdAt.toDate === 'function') {
+            const dateObj = historyDoc.createdAt.toDate();
+            formattedDate = dateObj.toLocaleString('en-PH', {
+                timeZone: 'Asia/Manila',
+                year: 'numeric',
+                month: 'short',
+                day: 'numeric',
+                hour: '2-digit',
+                minute: '2-digit',
+                second: '2-digit',
+                hour12: true,
+            });
+        }
+
         historySectionHTML += `
             <tr class="border-b border-gray-200 hover:bg-gray-50">
-                <td class="px-6 py-3 text-sm text-gray-800">${historyDoc.createdAt}</td>
+                <td class="px-6 py-3 text-sm text-gray-800">${formattedDate}</td>
                 <td class="px-6 py-3 text-sm text-gray-800">${historyDoc.ticketCode}</td>
                 <td class="px-6 py-3 text-sm text-gray-800">₱${historyDoc.price}</td>
                 <td class="px-6 py-3 text-sm text-gray-800">${historyDoc.from} - ${historyDoc.to}</td>
@@ -209,7 +225,9 @@ if(!historyData){
         `;
     }
 }
+
 document.getElementById('history-table').innerHTML = historySectionHTML;
+
 
 
 
