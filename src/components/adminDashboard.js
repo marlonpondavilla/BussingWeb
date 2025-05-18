@@ -468,8 +468,8 @@ busInfoAddForm.addEventListener('submit', async(e) => {
         departureTime: document.getElementById('departureTime-add').value,
         plateNo: document.getElementById('plateNo-add').value,
         busModel: document.getElementById('busModel-add').value,
-        busCapacity: document.getElementById('busNo-add').value,
-        busConductor: document.getElementById('busCapacity-add').value,
+        busCapacity: document.getElementById('busCapacity-add').value,
+        busConductor: document.getElementById('busConductor-add').value,
         busDriver: document.getElementById('busDriver-add').value,
         status: document.getElementById('status-add').value,
         timeCreated: new Date().toLocaleString()
