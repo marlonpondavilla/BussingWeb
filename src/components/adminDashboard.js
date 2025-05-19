@@ -22,11 +22,10 @@ const ticketUnsoldSize = ticketGeneratedSize - ticketSoldSize;
 // Update total sold display
 document.getElementById('total-ticket-sold').textContent = ticketSoldSize;
 
-// Create the chart
 const chart1 = new Chart(document.getElementById("chart1"), {
     type: "doughnut",
     data: {
-        labels: ["Tickets Sold", "Unconfirmed Tickets"],
+        labels: ["Sold Tickets", "Unconfirmed Tickets"],
         datasets: [{
             data: [ticketSoldSize, ticketUnsoldSize],
             backgroundColor: ["#3498db", "#ecf0f1"],
@@ -202,24 +201,20 @@ toggleAdminNav(dashboardButton, ticketInventoryButton, busOperationsButton, cust
 // bus ticket inventory admin
 const ticketGenratedCollection = await getFirestoreData('TicketGeneratedCollection');
 
-//latest first
 ticketGenratedCollection.sort((a, b) => {
     const aTime = a.createdAt?.toDate?.().getTime?.() || 0;
     const bTime = b.createdAt?.toDate?.().getTime?.() || 0;
-    return bTime - aTime; 
+    return bTime - aTime;
 });
 
 let currentPage = 1;
 const itemsPerPage = 10;
 const totalPages = Math.ceil(ticketGenratedCollection.length / itemsPerPage);
 
-function renderTablePage(page) {
+// render tickets and attach delete buttons
+function renderTickets(tickets) {
     let ticketTrHTML = '';
-    const start = (page - 1) * itemsPerPage;
-    const end = start + itemsPerPage;
-    const currentTickets = ticketGenratedCollection.slice(start, end);
-
-    for (let ticketGeneratedDoc of currentTickets) {
+    tickets.forEach((ticketGeneratedDoc) => {
         let formattedDate = 'N/A';
 
         if (ticketGeneratedDoc.createdAt && typeof ticketGeneratedDoc.createdAt.toDate === 'function') {
@@ -245,21 +240,26 @@ function renderTablePage(page) {
                 <td class="border py-2 text-center">₱${ticketGeneratedDoc.price}</td>
                 <td class="border py-2 text-center">${formattedDate}</td>
                 <td class="border py-2 text-center">
-                    <button class="border py-2 px-3 bg-green-500 hover:bg-green-600" data-ticket-confirm="${ticketGeneratedDoc.ticketCode}">Confirm</button> 
-                    <button class="border p-2 bg-red-500 hover:bg-red-600 text-white" data-ticket-reject="${ticketGeneratedDoc.ticketCode}">Reject</button>
+                    <button class="border p-2 bg-red-500 hover:bg-red-600 text-white" data-ticket-reject="${ticketGeneratedDoc.ticketCode}">Delete</button>
                 </td>
             </tr>
         `;
-    }
+    });
 
     document.getElementById('ticket-inventory-table').innerHTML = ticketTrHTML;
 
-    // Disable pagination buttons appropriately
-    document.getElementById('prev-btn').disabled = currentPage === 1;
-    document.getElementById('next-btn').disabled = currentPage === totalPages;
+    // Add event listeners to the delete buttons
+    const ticketRejectBtns = document.querySelectorAll('[data-ticket-reject]');
+    ticketRejectBtns.forEach((rejectBtn) => {
+        const userClickedBtn = rejectBtn.getAttribute('data-ticket-reject');
+
+        rejectBtn.addEventListener('click', async () => {
+            await deleteSingleFirestoreDocument('ticketCode', userClickedBtn, 'TicketGeneratedCollection');
+            showSuccessAlert('Ticket deleted successfully');
+        });
+    });
 }
 
-// Event listeners for pagination
 document.getElementById('prev-btn').addEventListener('click', () => {
     if (currentPage > 1) {
         currentPage--;
@@ -274,89 +274,41 @@ document.getElementById('next-btn').addEventListener('click', () => {
     }
 });
 
+// function to render a specific page
+function renderTablePage(page) {
+    const start = (page - 1) * itemsPerPage;
+    const end = start + itemsPerPage;
+    const currentTickets = ticketGenratedCollection.slice(start, end);
+    renderTickets(currentTickets);
+
+    // disable pagination buttons appropriately
+    document.getElementById('prev-btn').disabled = currentPage === 1;
+    document.getElementById('next-btn').disabled = currentPage === totalPages;
+}
+
 // Initial render
 renderTablePage(currentPage);
 
-    
-const ticketConfirmBtns = document.querySelectorAll('[data-ticket-confirm]');
-const ticketRejectBtns = document.querySelectorAll('[data-ticket-reject]');
-
-ticketConfirmBtns.forEach((confirmBtn) => {
-    const userClickedBtn = confirmBtn.getAttribute('data-ticket-confirm');
-
-    confirmBtn.addEventListener('click', async () => {
-        const confirmedTicketReq = await getSingleFirestoreDocument('ticketCode', userClickedBtn, 'TicketGeneratedCollection');
-        await addDataToFirestore('TicketConfirmedCollection', confirmedTicketReq);
-        await deleteSingleFirestoreDocument('ticketCode', userClickedBtn, 'TicketGeneratedCollection');
-        showSuccessAlert('Ticket confirmed successfully');
-    })
-});
-
-ticketRejectBtns.forEach( (rejectBtn) => {
-    const userClickedBtn = rejectBtn.getAttribute('data-ticket-reject');
-
-    rejectBtn.addEventListener('click', async () => {
-        await deleteSingleFirestoreDocument('ticketCode', userClickedBtn, 'TicketGeneratedCollection');
-        showSuccessAlert('Ticket rejected successfully');
-    })
-})
-
+// handle search functionality
 document.getElementById('search-ticket').addEventListener('input', async () => {
     const searchTicket = document.getElementById('search-ticket').value;
 
-    // If the input is empty, show all tickets
     if (!searchTicket) {
-        const ticketGenratedCollection = await getFirestoreData('TicketGeneratedCollection');
-        let ticketTrHTML = '';
-
-        for (let ticketGeneratedDoc of ticketGenratedCollection) {
-            ticketTrHTML += `
-                <tr class="border-2 border-b-black">
-                    <td class="border py-2 text-center">${ticketGeneratedDoc.uid}</td>
-                    <td class="border py-2 text-center">${ticketGeneratedDoc.ticketCode}</td>
-                    <td class="border py-2 text-center">${ticketGeneratedDoc.from} - ${ticketGeneratedDoc.to}</td>
-                    <td class="border py-2 text-center">${ticketGeneratedDoc.discount}</td>
-                    <td class="border py-2 text-center">₱${ticketGeneratedDoc.price}</td>
-                    <td class="border py-2 text-center">${ticketGeneratedDoc.createdAt}</td>
-                    <td class="border py-2 text-center">
-                        <button class="border py-2 px-3 bg-green-500 hover:bg-green-600" data-ticket-confirm="${ticketGeneratedDoc.ticketCode}">Confirm</button> 
-                        <button class="border p-2 bg-red-500 hover:bg-red-600 text-white" data-ticket-reject="${ticketGeneratedDoc.ticketCode}">Reject</button>
-                    </td>
-                </tr>
-            `;
-        }
-
-        document.getElementById('ticket-inventory-table').innerHTML = ticketTrHTML;
+        renderTablePage(currentPage);
         return;
     }
 
-    // Perform the search query for tickets matching the search input
     const ticketFound = await getSearchTerm('ticketCode', searchTicket, 'TicketGeneratedCollection');
-    let searchResultsHTML = '';
 
     if (ticketFound && ticketFound.length > 0) {
-        // Loop through the results and create HTML table rows
-        ticketFound.forEach(ticket => {
-            searchResultsHTML += `
-                <tr class="border-2 border-b-black">
-                    <td class="border py-2 text-center">${ticket.uid}</td>
-                    <td class="border py-2 text-center">${ticket.ticketCode}</td>
-                    <td class="border py-2 text-center">${ticket.from} - ${ticket.to}</td>
-                    <td class="border py-2 text-center">${ticket.discount}</td>
-                    <td class="border py-2 text-center">₱${ticket.price}</td>
-                    <td class="border py-2 text-center">${ticket.createdAt}</td>
-                    <td class="border py-2 text-center">
-                        <button class="border py-2 px-3 bg-green-500 hover:bg-green-600" data-ticket-confirm="${ticket.ticketCode}">Confirm</button> 
-                        <button class="border p-2 bg-red-500 hover:bg-red-600 text-white" data-ticket-reject="${ticket.ticketCode}">Reject</button>
-                    </td>
-                </tr>
-            `;
-        });
-        document.getElementById('ticket-inventory-table').innerHTML = searchResultsHTML;
+        const limitedResults = ticketFound.slice(0, 10);
+        renderTickets(limitedResults);
     } else {
         document.getElementById('ticket-inventory-table').innerHTML = '<tr><td colspan="7" class="text-center py-2">No tickets found</td></tr>';
     }
 });
+
+
 
 // bus operations admin
 const busScheduleTab = document.getElementById('bus-schedule-tab');
