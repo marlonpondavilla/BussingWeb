@@ -63,75 +63,76 @@ const chart2 = new Chart(document.getElementById("chart2"), {
 // all payment records chart
 const payments = await getFirestoreData('BussingPaymentsCollection');
 
-let todayTotal = 0;
-let thisWeekTotal = 0;
 let thisMonthTotal = 0;
+let previousMonthsTotal = 0;
 
 const now = new Date();
-const today = now.toDateString(); 
-const currentWeek = getWeekNumber(now);
-const currentMonth = now.getMonth();
-const currentYear = now.getFullYear();
+const thisMonth = now.getMonth();
+const thisYear = now.getFullYear();
 
 for (let payment of payments) {
     const amount = Number(payment.amountPaid || 0);
 
-    // Parse the dateTime
-    const [time, date] = payment.dateTime.split(" ");
-    const [hours, minutes] = time.split(":");
-    const day = parseInt(date.slice(0, 2));
-    const monthStr = date.slice(2, 5);
-    const yearSuffix = date.slice(5);
+    const parts = payment.dateTime?.split(' ');
+    if (parts && parts.length === 2) {
+        const [, dateStr] = parts;
 
-    const monthMap = {
-        Jan: 0, Feb: 1, Mar: 2, Apr: 3, May: 4, Jun: 5,
-        Jul: 6, Aug: 7, Sep: 8, Oct: 9, Nov: 10, Dec: 11
-    };
+        const parsedDate = new Date(Date.parse(dateStr.replace(/(\d{2})(\w{3})(\d{2})/, '20$3-$2-$1')));
 
-    const paymentDate = new Date(
-        2000 + parseInt(yearSuffix),
-        monthMap[monthStr],
-        day,
-        parseInt(hours),
-        parseInt(minutes)
-    );
+        if (!isNaN(parsedDate)) {
+            const year = parsedDate.getFullYear();
+            const month = parsedDate.getMonth();
 
-    if (paymentDate.toDateString() === today) {
-        todayTotal += amount;
-    }
-
-    if (getWeekNumber(paymentDate) === currentWeek && paymentDate.getFullYear() === currentYear) {
-        thisWeekTotal += amount;
-    }
-
-    if (paymentDate.getMonth() === currentMonth && paymentDate.getFullYear() === currentYear) {
-        thisMonthTotal += amount;
+            if (year === thisYear && month === thisMonth) {
+                thisMonthTotal += amount;
+            } else {
+                previousMonthsTotal += amount;
+            }
+        } else {
+            previousMonthsTotal += amount;
+        }
+    } else {
+        previousMonthsTotal += amount;
     }
 }
 
-// Update total earnings in stats card
-const totalEarnings = todayTotal + thisWeekTotal + thisMonthTotal;
+const totalEarnings = thisMonthTotal + previousMonthsTotal;
 document.getElementById('total-earnings-value').innerHTML = `₱${totalEarnings.toLocaleString()}`;
 
-// Render chart
 const chart3 = new Chart(document.getElementById("chart3"), {
     type: "doughnut",
     data: {
-        labels: ["Today", "This Week", "This Month"],
+        labels: ["This Month", "Previous Months"],
         datasets: [{
-            data: [todayTotal, thisWeekTotal, thisMonthTotal],
-            backgroundColor: ["#3498db", "#2ecc71", "#f1c40f"],
-            hoverBackgroundColor: ["#2980b9", "#27ae60", "#f39c12"]
+            data: [thisMonthTotal, previousMonthsTotal],
+            backgroundColor: ["#FE5D26", "#ecf0f1"],
+            hoverBackgroundColor: ["#D5451B", "#bdc3c7"]
         }]
     },
     options: {
         responsive: true,
         plugins: {
-            legend: { position: 'bottom' },
+            legend: {
+                position: 'bottom',
+                labels: {
+                    // Show actual legends with colors
+                    generateLabels: (chart) => {
+                        const data = chart.data;
+                        return data.labels.map((label, i) => ({
+                            text: `${label}: ₱${chart.data.datasets[0].data[i].toLocaleString()}`,
+                            fillStyle: chart.data.datasets[0].backgroundColor[i],
+                            strokeStyle: chart.data.datasets[0].backgroundColor[i],
+                            lineWidth: 1,
+                            hidden: false,
+                            index: i
+                        }));
+                    }
+                }
+            },
             tooltip: {
                 callbacks: {
-                    label: function(context) {
-                        return `₱${context.parsed.toLocaleString()}`;
+                    label: (context) => {
+                        return `${context.label}: ₱${context.parsed.toLocaleString()}`;
                     }
                 }
             }
