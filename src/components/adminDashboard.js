@@ -5,6 +5,7 @@ import { getAuth } from 'https://www.gstatic.com/firebasejs/9.22.2/firebase-auth
 import { firebaseConfig } from '../services/firebaseConfig.js';
 import { toggleBusOperations } from "../utils/pagination.js";
 import { showSuccessAlert, handleDeleteInformation } from "../utils/alert.js";
+import { getWeekNumber } from "../utils/date.js";
 import { addDataToFirestore, getFirestoreData, getSingleFirestoreData, getSingleFirestoreDocument, updateSingleFirestoreData, checkBusNumberExists, deleteSingleFirestoreDocument, getSearchTerm, getCollectionSize, getAllFirestoreDocumentById } from "../firebase/db.js";
 
 const app = initializeApp(firebaseConfig);
@@ -17,7 +18,6 @@ logoutAdmin(logoutButton, auth);
 const ticketSoldSize = await getCollectionSize('TicketConfirmedCollection');
 const activeBuses = await getAllFirestoreDocumentById('status', 'Active', 'ScheduleDocumentsCollection');
 const inactiveBuses = await getAllFirestoreDocumentById('status', 'Inactive', 'ScheduleDocumentsCollection');
-const totalRoutes = await getAllFirestoreDocumentById('from', '')
 
 document.getElementById('total-ticket-sold').textContent = ticketSoldSize;
 document.getElementById('active-buses').textContent = activeBuses.length;
@@ -60,21 +60,81 @@ const chart2 = new Chart(document.getElementById("chart2"), {
     }
 });
 
-// Active vs Inactive routes chart
+// all payment records chart
+const payments = await getFirestoreData('BussingPaymentsCollection');
+
+let todayTotal = 0;
+let thisWeekTotal = 0;
+let thisMonthTotal = 0;
+
+const now = new Date();
+const today = now.toDateString(); 
+const currentWeek = getWeekNumber(now);
+const currentMonth = now.getMonth();
+const currentYear = now.getFullYear();
+
+for (let payment of payments) {
+    const amount = Number(payment.amountPaid || 0);
+
+    // Parse the dateTime
+    const [time, date] = payment.dateTime.split(" ");
+    const [hours, minutes] = time.split(":");
+    const day = parseInt(date.slice(0, 2));
+    const monthStr = date.slice(2, 5);
+    const yearSuffix = date.slice(5);
+
+    const monthMap = {
+        Jan: 0, Feb: 1, Mar: 2, Apr: 3, May: 4, Jun: 5,
+        Jul: 6, Aug: 7, Sep: 8, Oct: 9, Nov: 10, Dec: 11
+    };
+
+    const paymentDate = new Date(
+        2000 + parseInt(yearSuffix),
+        monthMap[monthStr],
+        day,
+        parseInt(hours),
+        parseInt(minutes)
+    );
+
+    if (paymentDate.toDateString() === today) {
+        todayTotal += amount;
+    }
+
+    if (getWeekNumber(paymentDate) === currentWeek && paymentDate.getFullYear() === currentYear) {
+        thisWeekTotal += amount;
+    }
+
+    if (paymentDate.getMonth() === currentMonth && paymentDate.getFullYear() === currentYear) {
+        thisMonthTotal += amount;
+    }
+}
+
+// Update total earnings in stats card
+const totalEarnings = todayTotal + thisWeekTotal + thisMonthTotal;
+document.getElementById('total-earnings-value').innerHTML = `₱${totalEarnings.toLocaleString()}`;
+
+// Render chart
 const chart3 = new Chart(document.getElementById("chart3"), {
     type: "doughnut",
     data: {
-        labels: ["Active Routes", "Inactive Routes"],
+        labels: ["Today", "This Week", "This Month"],
         datasets: [{
-            data: [40, 5],
-            backgroundColor: ["#e67e22", "#ecf0f1"],
-            hoverBackgroundColor: ["#d35400", "#bdc3c7"]
+            data: [todayTotal, thisWeekTotal, thisMonthTotal],
+            backgroundColor: ["#3498db", "#2ecc71", "#f1c40f"],
+            hoverBackgroundColor: ["#2980b9", "#27ae60", "#f39c12"]
         }]
     },
     options: {
         responsive: true,
         plugins: {
-            legend: { position: 'bottom' }
+            legend: { position: 'bottom' },
+            tooltip: {
+                callbacks: {
+                    label: function(context) {
+                        return `₱${context.parsed.toLocaleString()}`;
+                    }
+                }
+            }
         }
     }
 });
