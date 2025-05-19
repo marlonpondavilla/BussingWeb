@@ -5,7 +5,6 @@ import { getAuth } from 'https://www.gstatic.com/firebasejs/9.22.2/firebase-auth
 import { firebaseConfig } from '../services/firebaseConfig.js';
 import { toggleBusOperations } from "../utils/pagination.js";
 import { showSuccessAlert, handleDeleteInformation } from "../utils/alert.js";
-import { getWeekNumber } from "../utils/date.js";
 import { addDataToFirestore, getFirestoreData, getSingleFirestoreData, getSingleFirestoreDocument, updateSingleFirestoreData, checkBusNumberExists, deleteSingleFirestoreDocument, getSearchTerm, getCollectionSize, getAllFirestoreDocumentById } from "../firebase/db.js";
 
 const app = initializeApp(firebaseConfig);
@@ -14,21 +13,22 @@ const auth = getAuth(app);
 const logoutButton = document.getElementById('logout-btn');
 logoutAdmin(logoutButton, auth);
 
-// Get the data for admin pie charts
-const ticketSoldSize = await getCollectionSize('TicketConfirmedCollection');
-const activeBuses = await getAllFirestoreDocumentById('status', 'Active', 'ScheduleDocumentsCollection');
-const inactiveBuses = await getAllFirestoreDocumentById('status', 'Inactive', 'ScheduleDocumentsCollection');
+// Get the sizes of both collections
+const ticketSoldSize = await getCollectionSize('VerifiedTicketsCollection');
+const ticketGeneratedSize = await getCollectionSize('TicketGeneratedCollection');
 
+const ticketUnsoldSize = ticketGeneratedSize - ticketSoldSize;
+
+// Update total sold display
 document.getElementById('total-ticket-sold').textContent = ticketSoldSize;
-document.getElementById('active-buses').textContent = activeBuses.length;
 
-// Tickets sold and unsold chart
+// Create the chart
 const chart1 = new Chart(document.getElementById("chart1"), {
     type: "doughnut",
     data: {
-        labels: ["Tickets Sold", "Unsold Tickets"],
+        labels: ["Tickets Sold", "Unconfirmed Tickets"],
         datasets: [{
-            data: [100, 50],
+            data: [ticketSoldSize, ticketUnsoldSize],
             backgroundColor: ["#3498db", "#ecf0f1"],
             hoverBackgroundColor: ["#2980b9", "#bdc3c7"]
         }]
@@ -36,12 +36,39 @@ const chart1 = new Chart(document.getElementById("chart1"), {
     options: {
         responsive: true,
         plugins: {
-            legend: { position: 'bottom' }
+            legend: {
+                position: 'bottom',
+                labels: {
+                    generateLabels: function(chart) {
+                        const data = chart.data.datasets[0].data;
+                        return chart.data.labels.map((label, i) => ({
+                            text: `${label}: ${data[i].toLocaleString()}`,
+                            fillStyle: chart.data.datasets[0].backgroundColor[i],
+                            strokeStyle: chart.data.datasets[0].backgroundColor[i],
+                            lineWidth: 1,
+                            hidden: false,
+                            index: i
+                        }));
+                    }
+                }
+            },
+            tooltip: {
+                callbacks: {
+                    label: function(context) {
+                        return `${context.label}: ${context.parsed.toLocaleString()}`;
+                    }
+                }
+            }
         }
     }
 });
 
+
 // Operational vs Inactive buses chart
+const activeBuses = await getAllFirestoreDocumentById('status', 'Active', 'ScheduleDocumentsCollection');
+const inactiveBuses = await getAllFirestoreDocumentById('status', 'Inactive', 'ScheduleDocumentsCollection');
+document.getElementById('active-buses').textContent = activeBuses.length;
+
 const chart2 = new Chart(document.getElementById("chart2"), {
     type: "doughnut",
     data: {
