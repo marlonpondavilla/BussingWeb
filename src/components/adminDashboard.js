@@ -113,42 +113,81 @@ toggleAdminNav(dashboardButton, ticketInventoryButton, busOperationsButton, cust
 
 // bus ticket inventory admin
 const ticketGenratedCollection = await getFirestoreData('TicketGeneratedCollection');
-let ticketTrHTML = '';
 
-for (let ticketGeneratedDoc of ticketGenratedCollection) {
-    let formattedDate = 'N/A';
+//latest first
+ticketGenratedCollection.sort((a, b) => {
+    const aTime = a.createdAt?.toDate?.().getTime?.() || 0;
+    const bTime = b.createdAt?.toDate?.().getTime?.() || 0;
+    return bTime - aTime; 
+});
 
-    if (ticketGeneratedDoc.createdAt && typeof ticketGeneratedDoc.createdAt.toDate === 'function') {
-        const dateObj = ticketGeneratedDoc.createdAt.toDate();
-        formattedDate = dateObj.toLocaleString('en-PH', {
-            timeZone: 'Asia/Manila',
-            year: 'numeric',
-            month: 'short',
-            day: 'numeric',
-            hour: '2-digit',
-            minute: '2-digit',
-            second: '2-digit',
-            hour12: true,
-        });
+let currentPage = 1;
+const itemsPerPage = 10;
+const totalPages = Math.ceil(ticketGenratedCollection.length / itemsPerPage);
+
+function renderTablePage(page) {
+    let ticketTrHTML = '';
+    const start = (page - 1) * itemsPerPage;
+    const end = start + itemsPerPage;
+    const currentTickets = ticketGenratedCollection.slice(start, end);
+
+    for (let ticketGeneratedDoc of currentTickets) {
+        let formattedDate = 'N/A';
+
+        if (ticketGeneratedDoc.createdAt && typeof ticketGeneratedDoc.createdAt.toDate === 'function') {
+            const dateObj = ticketGeneratedDoc.createdAt.toDate();
+            formattedDate = dateObj.toLocaleString('en-PH', {
+                timeZone: 'Asia/Manila',
+                year: 'numeric',
+                month: 'short',
+                day: 'numeric',
+                hour: '2-digit',
+                minute: '2-digit',
+                second: '2-digit',
+                hour12: true,
+            });
+        }
+
+        ticketTrHTML += `
+            <tr class="border-2 border-b-black">
+                <td class="border py-2 text-center">${ticketGeneratedDoc.uid}</td>
+                <td class="border py-2 text-center">${ticketGeneratedDoc.ticketCode}</td>
+                <td class="border py-2 text-center">${ticketGeneratedDoc.from} - ${ticketGeneratedDoc.to}</td>
+                <td class="border py-2 text-center">${ticketGeneratedDoc.discount}</td>
+                <td class="border py-2 text-center">₱${ticketGeneratedDoc.price}</td>
+                <td class="border py-2 text-center">${formattedDate}</td>
+                <td class="border py-2 text-center">
+                    <button class="border py-2 px-3 bg-green-500 hover:bg-green-600" data-ticket-confirm="${ticketGeneratedDoc.ticketCode}">Confirm</button> 
+                    <button class="border p-2 bg-red-500 hover:bg-red-600 text-white" data-ticket-reject="${ticketGeneratedDoc.ticketCode}">Reject</button>
+                </td>
+            </tr>
+        `;
     }
 
-    ticketTrHTML += `
-        <tr class="border-2 border-b-black">
-            <td class="border py-2 text-center">${ticketGeneratedDoc.uid}</td>
-            <td class="border py-2 text-center">${ticketGeneratedDoc.ticketCode}</td>
-            <td class="border py-2 text-center">${ticketGeneratedDoc.from} - ${ticketGeneratedDoc.to}</td>
-            <td class="border py-2 text-center">${ticketGeneratedDoc.discount}</td>
-            <td class="border py-2 text-center">₱${ticketGeneratedDoc.price}</td>
-            <td class="border py-2 text-center">${formattedDate}</td>
-            <td class="border py-2 text-center">
-                <button class="border py-2 px-3 bg-green-500 hover:bg-green-600" data-ticket-confirm="${ticketGeneratedDoc.ticketCode}">Confirm</button> 
-                <button class="border p-2 bg-red-500 hover:bg-red-600 text-white" data-ticket-reject="${ticketGeneratedDoc.ticketCode}">Reject</button>
-            </td>
-        </tr>
-    `;
+    document.getElementById('ticket-inventory-table').innerHTML = ticketTrHTML;
+
+    // Disable pagination buttons appropriately
+    document.getElementById('prev-btn').disabled = currentPage === 1;
+    document.getElementById('next-btn').disabled = currentPage === totalPages;
 }
 
-document.getElementById('ticket-inventory-table').innerHTML = ticketTrHTML;
+// Event listeners for pagination
+document.getElementById('prev-btn').addEventListener('click', () => {
+    if (currentPage > 1) {
+        currentPage--;
+        renderTablePage(currentPage);
+    }
+});
+
+document.getElementById('next-btn').addEventListener('click', () => {
+    if (currentPage < totalPages) {
+        currentPage++;
+        renderTablePage(currentPage);
+    }
+});
+
+// Initial render
+renderTablePage(currentPage);
 
     
 const ticketConfirmBtns = document.querySelectorAll('[data-ticket-confirm]');
