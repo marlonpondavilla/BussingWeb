@@ -20,7 +20,7 @@ export function logoutAdmin(button, auth){
             localStorage.removeItem('adminEmail');
             localStorage.removeItem('adminPhoto');
             alert("You will be redirected to the login page");
-            window.location.href = '../index.html';
+            window.location.href = '../pages/adminLogin.html';
         }).catch((error) => {
             console.log(error.message);
         });

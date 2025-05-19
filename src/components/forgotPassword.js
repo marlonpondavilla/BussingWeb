@@ -12,10 +12,8 @@ const resetPassErrMessage = document.getElementById('reset-pass-error-message');
 
 async function sendPasswordReset(email) {
     try {
-        // Ensure email is trimmed and lowercase to avoid formatting issues
         const formattedEmail = email.trim().toLowerCase();
 
-        // Send the password reset email using Firebase
         await sendPasswordResetEmail(auth, formattedEmail);
         
         // Show success alert if the email was sent successfully
