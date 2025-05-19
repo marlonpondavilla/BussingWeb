@@ -34,7 +34,7 @@ export function showSuccessAlert(message){
         alertContainer.classList.add('hidden');
         document.body.removeChild(alertContainer);
         window.location.reload();
-    }, 3000);
+    }, 1000);
 }
 
 export function handleDeleteInformation(busNo, collectionName){
