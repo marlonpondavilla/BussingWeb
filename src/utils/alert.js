@@ -115,6 +115,12 @@ function hideAlert(modal){
 }
 
 async function deleteBusInfoData(busNo, collectionName){
-    await deleteSingleFirestoreData(busNo, collectionName);
-    showSuccessAlert('Bus Information deleted successfully');
+    if(collectionName === "HomeDocumentsCollection"){
+      await deleteSingleFirestoreData(busNo, "ScheduleDocumentsCollection");
+      await deleteSingleFirestoreData(busNo, "HomeDocumentsCollection");
+      showSuccessAlert('Bus Information and Schedule deleted successfully');
+    } else{
+      await deleteSingleFirestoreData(busNo, collectionName);
+      showSuccessAlert('Bus Schedule deleted successfully');
+    }
 }
