@@ -286,7 +286,6 @@ function renderTablePage(page) {
     document.getElementById('next-btn').disabled = currentPage === totalPages;
 }
 
-// Initial render
 renderTablePage(currentPage);
 
 // handle search functionality
@@ -308,8 +307,6 @@ document.getElementById('search-ticket').addEventListener('input', async () => {
     }
 });
 
-
-
 // bus operations admin
 const busScheduleTab = document.getElementById('bus-schedule-tab');
 const busInfoTab = document.getElementById('bus-info-tab');
@@ -317,26 +314,54 @@ const busScheduleSection = document.getElementById('bus-schedule-section');
 const busInfoSection = document.getElementById('bus-info-section');
 toggleBusOperations(busScheduleTab, busInfoTab, busScheduleSection, busInfoSection);
 
-
 const scheduleModal = document.getElementById('schedule-modal');
 scheduleModal.style.display = 'none';
 
-document.getElementById('add-schedule-btn').addEventListener('click', function() {
+// Populate bus number dropdown from Firestore
+async function populateBusNumberDropdown() {
+    try {
+        const busDropdown = document.getElementById('bus-number');
+        const homeDocs = await getFirestoreData('HomeDocumentsCollection');
+
+        // Clear existing options and set default
+        busDropdown.innerHTML = `<option value="" disabled selected>Select a bus</option>`;
+
+        // Populate with busNo values
+        homeDocs.forEach(doc => {
+            if (doc.busNo) {
+                const option = document.createElement('option');
+                option.value = doc.busNo;
+                option.textContent = doc.busNo;
+                busDropdown.appendChild(option);
+            }
+        });
+    } catch (error) {
+        console.error('Failed to load bus numbers:', error);
+    }
+}
+
+// Open modal and populate dropdown
+document.getElementById('add-schedule-btn').addEventListener('click', function () {
     scheduleModal.style.display = 'flex';
-  });
+    populateBusNumberDropdown(); // Refresh bus list when modal opens
+});
 
-  // Close the modal
-  document.getElementById('modal-cancel-btn').addEventListener('click', () => {
+// Close the modal
+document.getElementById('modal-cancel-btn').addEventListener('click', () => {
     scheduleModal.style.display = 'none';
-  })
+})
 
-    //   Get the schedules from Firestore
-    const scheduleData = await getFirestoreData('ScheduleDocumentsCollection');
-    let newRowHTML = "";
+// Get the schedules from Firestore
+let scheduleData = await getFirestoreData('ScheduleDocumentsCollection');
 
-    for(let scheduleDoc of scheduleData){
-        // Update the schedule table dynamically
-        newRowHTML += `
+// Sort by busNo in ascending numeric order
+scheduleData.sort((a, b) => {
+    return parseInt(a.busNo) - parseInt(b.busNo);
+});
+
+let newRowHTML = "";
+for (let scheduleDoc of scheduleData) {
+    newRowHTML += `
         <tr>
             <td class="px-4 py-2 border-b">Bus 0${scheduleDoc.busNo}</td>
             <td class="px-4 py-2 border-b">${scheduleDoc.departureTime}</td>
@@ -350,98 +375,95 @@ document.getElementById('add-schedule-btn').addEventListener('click', function()
                 <span class="text-red-500 cursor-pointer" data-row-delete="${scheduleDoc.busNo}" id="row-delete-${scheduleDoc.busNo}">Delete</span>
             </td>
         </tr>
-
     `;
-    }
-    // Update the table with the new row
-    document.getElementById('schedule-table').innerHTML = newRowHTML;
+}
+document.getElementById('schedule-table').innerHTML = newRowHTML;
 
-    // Add event listener to the edit buttons
-    const editButtons = document.querySelectorAll('[data-row-edit]');
-    const deleteButtons = document.querySelectorAll('[data-row-delete]');
-    const editModal = document.getElementById('edit-schedule-modal');
-    
+
+// Add event listener to the edit buttons
+const editButtons = document.querySelectorAll('[data-row-edit]');
+const deleteButtons = document.querySelectorAll('[data-row-delete]');
+const editModal = document.getElementById('edit-schedule-modal');
+
+editModal.style.display = 'none';
+
+document.getElementById('cancel-edit-btn').addEventListener('click', () => {
     editModal.style.display = 'none';
-    
-    document.getElementById('cancel-edit-btn').addEventListener('click', () => {
-        editModal.style.display = 'none';
-    })
+})
 
-    editButtons.forEach((rowData) => {
-        rowData.addEventListener('click', async() => {
-            // Show the modal to edit the schedule
-            editModal.style.display = 'flex';
+editButtons.forEach((rowData) => {
+    rowData.addEventListener('click', async () => {
+        // Show the modal to edit the schedule
+        editModal.style.display = 'flex';
 
-            // Get the bus number from the clicked row's data attribute
-            const busNo = rowData.getAttribute('data-row-edit');
-            const singleSchedData = await getSingleFirestoreData(busNo, 'ScheduleDocumentsCollection');
+        // Get the bus number from the clicked row's data attribute
+        const busNo = rowData.getAttribute('data-row-edit');
+        const singleSchedData = await getSingleFirestoreData(busNo, 'ScheduleDocumentsCollection');
 
-            if (singleSchedData) {
-                // Populate the modal with the current data
-                document.getElementById('editBusNo').value = singleSchedData.busNo;
-                document.getElementById('editDepartureTime').value = singleSchedData.departureTime;
-                document.getElementById('editFrom').value = singleSchedData.from;
-                document.getElementById('editTo').value = singleSchedData.to;
-                document.getElementById('editPrice').value = singleSchedData.price;
-                document.getElementById('editAvailableSeats').value = singleSchedData.availableSeats;
-                document.getElementById('editStatus').value = singleSchedData.status;
-            }
-        });
-    });
-
-    deleteButtons.forEach((rowData) => {
-        const deleteBusNo = rowData.getAttribute('data-row-delete');
-
-        rowData.addEventListener('click', async() => {
-            handleDeleteInformation(deleteBusNo, 'ScheduleDocumentsCollection');
-        })
-    })
-
-    // Attach the form submit listener just once, outside the click handler.
-    document.getElementById('edit-schedule-modal').addEventListener('submit', async (event) => {
-        event.preventDefault();
-
-        // Gather the updated schedule data from the modal
-        const updatedSingleScheduleData = {
-            busNo: document.getElementById('editBusNo').value,
-            departureTime: document.getElementById('editDepartureTime').value,
-            from: document.getElementById('editFrom').value,
-            to: document.getElementById('editTo').value,
-            price: document.getElementById('editPrice').value,
-            availableSeats: document.getElementById('editAvailableSeats').value,
-            status: document.getElementById('editStatus').value
-        };
-
-        // Update the document in Firestore with the new data
-        await updateSingleFirestoreData(updatedSingleScheduleData.busNo, 'ScheduleDocumentsCollection', updatedSingleScheduleData);
-        showSuccessAlert('Schedule updated successfully');
-    });
-
-
-    // Handle form submission for adding/editing bus schedule
-    const busNumErr = document.getElementById('bus-num-err-msg');
-    const saveBtn = document.getElementById('modal-save-btn');
-
-    document.getElementById('bus-number').addEventListener('input', async () => {
-        try{
-            if(await checkBusNumberExists(document.getElementById('bus-number').value, 'ScheduleDocumentsCollection')){
-                busNumErr.classList.remove('hidden');
-                saveBtn.classList.add('cursor-not-allowed');
-                saveBtn.disabled = true
-            } else{
-                busNumErr.classList.add('hidden');
-                saveBtn.classList.remove('cursor-not-allowed');
-                saveBtn.disabled = false;
-            }
-        } catch(e){
-            console.error('Error checking bus number: ', e);
+        if (singleSchedData) {
+            // Populate the modal with the current data
+            document.getElementById('editBusNo').value = singleSchedData.busNo;
+            document.getElementById('editDepartureTime').value = singleSchedData.departureTime;
+            document.getElementById('editFrom').value = singleSchedData.from;
+            document.getElementById('editTo').value = singleSchedData.to;
+            document.getElementById('editPrice').value = singleSchedData.price;
+            document.getElementById('editAvailableSeats').value = singleSchedData.availableSeats;
+            document.getElementById('editStatus').value = singleSchedData.status;
         }
-    })
+    });
+});
 
-  
-  document.getElementById('schedule-form').addEventListener('submit', async (event) => {
+deleteButtons.forEach((rowData) => {
+    const deleteBusNo = rowData.getAttribute('data-row-delete');
+
+    rowData.addEventListener('click', async () => {
+        handleDeleteInformation(deleteBusNo, 'ScheduleDocumentsCollection');
+    });
+})
+
+// Attach the form submit listener just once, outside the click handler
+document.getElementById('edit-schedule-modal').addEventListener('submit', async (event) => {
     event.preventDefault();
-    
+
+    // Gather the updated schedule data from the modal
+    const updatedSingleScheduleData = {
+        busNo: document.getElementById('editBusNo').value,
+        departureTime: document.getElementById('editDepartureTime').value,
+        from: document.getElementById('editFrom').value,
+        to: document.getElementById('editTo').value,
+        price: document.getElementById('editPrice').value,
+        availableSeats: document.getElementById('editAvailableSeats').value,
+        status: document.getElementById('editStatus').value
+    };
+
+    // Update the document in Firestore with the new data
+    await updateSingleFirestoreData(updatedSingleScheduleData.busNo, 'ScheduleDocumentsCollection', updatedSingleScheduleData);
+    showSuccessAlert('Schedule updated successfully');
+});
+
+// Handle form submission for adding/editing bus schedule
+const busNumErr = document.getElementById('bus-num-err-msg');
+const saveBtn = document.getElementById('modal-save-btn');
+
+document.getElementById('bus-number').addEventListener('input', async () => {
+    try {
+        if (await checkBusNumberExists(document.getElementById('bus-number').value, 'ScheduleDocumentsCollection')) {
+            busNumErr.classList.remove('hidden');
+            saveBtn.classList.add('cursor-not-allowed');
+            saveBtn.disabled = true;
+        } else {
+            busNumErr.classList.add('hidden');
+            saveBtn.classList.remove('cursor-not-allowed');
+            saveBtn.disabled = false;
+        }
+    } catch (e) {
+        console.error('Error checking bus number: ', e);
+    }
+});
+
+document.getElementById('schedule-form').addEventListener('submit', async (event) => {
+    event.preventDefault();
+
     const busNumber = document.getElementById('bus-number').value;
     const departureTime = document.getElementById('departure-time').value;
     const from = document.getElementById('from').value;
@@ -460,29 +482,31 @@ document.getElementById('add-schedule-btn').addEventListener('click', function()
         availableSeats: availableSeats,
         status: status,
         timeCreated: new Date().toLocaleString()
-    }
+    };
 
     await addDataToFirestore('ScheduleDocumentsCollection', scheduleDataObject);
     showSuccessAlert('Schedule added successfully');
-  });
+});
+
 
 //  Bus Information
-const busInfoDataFirestore = await getFirestoreData('HomeDocumentsCollection');
+let busInfoDataFirestore = await getFirestoreData('HomeDocumentsCollection');
+
+busInfoDataFirestore.sort((a, b) => {
+    return parseInt(a.busNo) - parseInt(b.busNo);
+});
+
 let busInfoTr = "";
 
 for(let busInfoDoc of busInfoDataFirestore){
     busInfoTr += `
         <tr>
             <td class="px-4 py-2 border-b">0${busInfoDoc.busNo}</td>
-            <td class="px-4 py-2 border-b">${busInfoDoc.startingPoint}</td>
-            <td class="px-4 py-2 border-b">${busInfoDoc.arrivalPoint}</td>
-            <td class="px-4 py-2 border-b">${busInfoDoc.departureTime}</td>
             <td class="px-4 py-2 border-b">${busInfoDoc.plateNo}</td>
             <td class="px-4 py-2 border-b">${busInfoDoc.busModel}</td>
             <td class="px-4 py-2 border-b">${busInfoDoc.busCapacity}</td>
             <td class="px-4 py-2 border-b">${busInfoDoc.busConductor}</td>
             <td class="px-4 py-2 border-b">${busInfoDoc.busDriver}</td>
-            <td class="px-4 py-2 border-b ${busInfoDoc.status === 'Active' ? 'text-green-500' : 'text-red-500'}">${busInfoDoc.status}</td>
             <td class=" flex flex-wrap gap-2 justify-start px-4 py-2 border-b cursor-pointer">
                 <span class="edit-btn mr-4 text-blue-600" data-bus-info-edt-btn="${busInfoDoc.busNo}" id="bus-info-edit-btn">Edit</span>
                 <span class=" text-red-600" data-bus-info-del-btn="${busInfoDoc.busNo}" id="bus-info-delete-btn">Delete</span>
@@ -542,15 +566,11 @@ busInfoAddForm.addEventListener('submit', async(e) => {
 
     const newBusInfoDataObj = {
         busNo: document.getElementById('busNo-add').value,
-        startingPoint: document.getElementById('startingPoint-add').value,
-        arrivalPoint: document.getElementById('arrivalPoint-add').value,
-        departureTime: document.getElementById('departureTime-add').value,
         plateNo: document.getElementById('plateNo-add').value,
         busModel: document.getElementById('busModel-add').value,
         busCapacity: document.getElementById('busCapacity-add').value,
         busConductor: document.getElementById('busConductor-add').value,
         busDriver: document.getElementById('busDriver-add').value,
-        status: document.getElementById('status-add').value,
         timeCreated: new Date().toLocaleString()
     }
     
@@ -571,15 +591,11 @@ busInfoEdtBtnAll.forEach( (edtBtn) => {
 
         if(singleBusInfo){
             document.getElementById('busNo').value = singleBusInfo.busNo;
-            document.getElementById('startingPoint').value = singleBusInfo.startingPoint;
-            document.getElementById('arrivalPoint').value = singleBusInfo.arrivalPoint;
-            document.getElementById('departureTime').value = singleBusInfo.departureTime;
             document.getElementById('plateNo').value = singleBusInfo.plateNo;
             document.getElementById('busModel').value = singleBusInfo.busModel;
             document.getElementById('busCapacity').value = singleBusInfo.busCapacity;
             document.getElementById('busConductor').value = singleBusInfo.busConductor;
             document.getElementById('busDriver').value = singleBusInfo.busDriver;
-            document.getElementById('statusInfo').value = singleBusInfo.status;
         }
     })
 })
@@ -589,15 +605,11 @@ busInfoEdtForm.addEventListener('submit', async(e) => {
 
     const updatedBusInfoData = {
         busNo: document.getElementById('busNo').value,
-        startingPoint: document.getElementById('startingPoint').value,
-        arrivalPoint: document.getElementById('arrivalPoint').value,
-        departureTime: document.getElementById('departureTime').value,
         plateNo: document.getElementById('plateNo').value,
         busModel: document.getElementById('busModel').value,
         busCapacity: document.getElementById('busCapacity').value,
         busConductor: document.getElementById('busConductor').value,
         busDriver: document.getElementById('busDriver').value,
-        status: document.getElementById('statusInfo').value
     }
 
     await updateSingleFirestoreData(updatedBusInfoData.busNo, 'HomeDocumentsCollection', updatedBusInfoData);
