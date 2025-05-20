@@ -42,8 +42,6 @@ googleBtn.addEventListener('click', async () => {
     }
 });
 
-
-
 // Login (username and password)
 const username = document.getElementById('username');
 const password = document.getElementById('password');

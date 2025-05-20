@@ -343,7 +343,7 @@ async function populateBusNumberDropdown() {
 // Open modal and populate dropdown
 document.getElementById('add-schedule-btn').addEventListener('click', function () {
     scheduleModal.style.display = 'flex';
-    populateBusNumberDropdown(); // Refresh bus list when modal opens
+    populateBusNumberDropdown(); 
 });
 
 // Close the modal
