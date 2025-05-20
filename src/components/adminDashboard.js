@@ -363,7 +363,7 @@ let newRowHTML = "";
 for (let scheduleDoc of scheduleData) {
     newRowHTML += `
         <tr>
-            <td class="px-4 py-2 border-b">Bus 0${scheduleDoc.busNo}</td>
+            <td class="px-4 py-2 border-b">Bus ${scheduleDoc.busNo}</td>
             <td class="px-4 py-2 border-b">${scheduleDoc.departureTime}</td>
             <td class="px-4 py-2 border-b">${scheduleDoc.from}</td>
             <td class="px-4 py-2 border-b">${scheduleDoc.to}</td>
@@ -501,7 +501,7 @@ let busInfoTr = "";
 for(let busInfoDoc of busInfoDataFirestore){
     busInfoTr += `
         <tr>
-            <td class="px-4 py-2 border-b">0${busInfoDoc.busNo}</td>
+            <td class="px-4 py-2 border-b">${busInfoDoc.busNo}</td>
             <td class="px-4 py-2 border-b">${busInfoDoc.plateNo}</td>
             <td class="px-4 py-2 border-b">${busInfoDoc.busModel}</td>
             <td class="px-4 py-2 border-b">${busInfoDoc.busCapacity}</td>
