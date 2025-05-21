@@ -396,9 +396,33 @@ editButtons.forEach((rowData) => {
         // Show the modal to edit the schedule
         editModal.style.display = 'flex';
 
+        
         // Get the bus number from the clicked row's data attribute
         const busNo = rowData.getAttribute('data-row-edit');
         const singleSchedData = await getSingleFirestoreData(busNo, 'ScheduleDocumentsCollection');
+        const singleBusInfoData = await getSingleFirestoreData(busNo, 'HomeDocumentsCollection');
+
+        document.getElementById('editAvailableSeats').addEventListener('input', (e) => {
+            const currentValue = parseInt(e.target.value);
+            const maxSeats = parseInt(singleBusInfoData.busCapacity);
+            const errMsg = document.getElementById('availableSeatsErrMsg');
+            const updateBtn = document.getElementById('update-edit-btn');
+
+            if (currentValue > maxSeats) {
+                errMsg.style.display = 'block';
+                updateBtn.classList.add('cursor-not-allowed');
+                updateBtn.disabled = true;
+            } else if(currentValue < 1){
+                alert("invalid value");
+                updateBtn.classList.add('cursor-not-allowed');
+                updateBtn.disabled = true;
+            }else{
+                errMsg.style.display = 'none';
+                updateBtn.disabled = false;
+                updateBtn.classList.remove('cursor-not-allowed');
+            }
+        });
+
 
         if (singleSchedData) {
             // Populate the modal with the current data
@@ -439,15 +463,17 @@ document.getElementById('edit-schedule-modal').addEventListener('submit', async 
     // Update the document in Firestore with the new data
     await updateSingleFirestoreData(updatedSingleScheduleData.busNo, 'ScheduleDocumentsCollection', updatedSingleScheduleData);
     showSuccessAlert('Schedule updated successfully');
-});
+});  
 
 // Handle form submission for adding/editing bus schedule
 const busNumErr = document.getElementById('bus-num-err-msg');
 const saveBtn = document.getElementById('modal-save-btn');
+const busNo = document.getElementById('bus-number');
 
 document.getElementById('bus-number').addEventListener('input', async () => {
+
     try {
-        if (await checkBusNumberExists(document.getElementById('bus-number').value, 'ScheduleDocumentsCollection')) {
+        if (await checkBusNumberExists(busNo.value, 'ScheduleDocumentsCollection')) {
             busNumErr.classList.remove('hidden');
             saveBtn.classList.add('cursor-not-allowed');
             saveBtn.disabled = true;
@@ -460,6 +486,27 @@ document.getElementById('bus-number').addEventListener('input', async () => {
         console.error('Error checking bus number: ', e);
     }
 });
+
+document.getElementById('available-seats').addEventListener('input', async (e) => {
+    const singleBusInfoData = await getSingleFirestoreData(busNo.value, 'HomeDocumentsCollection');
+    const availableSeatsExceed = document.getElementById('available-seats-err-msg');
+    const seatValue = parseInt(e.target.value);
+    const seatLimit = parseInt(singleBusInfoData.busCapacity);
+
+    if( seatValue > seatLimit){
+        availableSeatsExceed.classList.remove('hidden');
+        saveBtn.classList.add('cursor-not-allowed');
+        saveBtn.disabled = true;
+    } else if(seatValue < 1){
+        alert("invalid value")
+        saveBtn.classList.add('cursor-not-allowed');
+        saveBtn.disabled = true;
+    } else{
+        availableSeatsExceed.classList.add('hidden');
+        saveBtn.classList.remove('cursor-not-allowed');
+        saveBtn.disabled = false;
+    }
+})
 
 document.getElementById('schedule-form').addEventListener('submit', async (event) => {
     event.preventDefault();
