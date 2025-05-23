@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="shortcut icon" href="./src/assets/img/bussing_logo.png" type="image/x-icon">
   <title>Bussing - Your Ticketing & Schedule App</title>
-  <!-- Latest Tailwind CSS CDN from official source -->
   <script src="https://cdn.tailwindcss.com"></script>
   <style>
     @keyframes pulse-fade {
@@ -96,30 +96,33 @@
 
   // Schedule data rendering
   async function renderSchedules() {
-    const scheduleData = await getFirestoreData('ScheduleDocumentsCollection');
-    const scheduleSectionHTML = document.getElementById('scheduleTable');
-    let scheduleHTML = "";
+  const scheduleData = await getFirestoreData('ScheduleDocumentsCollection');
+  const scheduleSectionHTML = document.getElementById('scheduleTable');
+  let scheduleHTML = "";
 
-    if (!scheduleData || scheduleData.length === 0) {
-      scheduleHTML = `<tr><td colspan="6" class="text-center text-gray-700 py-4">No schedules available</td></tr>`;
-    } else {
-      scheduleData.forEach(scheduleDoc => {
-        scheduleHTML += `
-          <tr class="hover:bg-indigo-50 transition">
-            <td class="py-4 px-6 text-gray-700 font-medium">Bus 0${scheduleDoc.busNo}</td>
-            <td class="py-4 px-6 text-gray-600">${scheduleDoc.from}</td>
-            <td class="py-4 px-6 text-gray-600">${scheduleDoc.to}</td>
-            <td class="py-4 px-6 ${scheduleDoc.status === 'Active' ? 'text-green-600' : 'text-red-600'} font-semibold">
-                ${scheduleDoc.status === 'Active' ? 'Active' : 'Inactive'}
-            </td>
-            <td class="py-4 px-6 text-gray-600">${scheduleDoc.availableSeats}</td>
-            <td class="py-4 px-6 text-gray-800 font-semibold">₱${scheduleDoc.price}</td>
-          </tr>`;
-      });
-    }
+  if (!scheduleData || scheduleData.length === 0) {
+    scheduleHTML = `<tr><td colspan="6" class="text-center text-gray-700 py-4">No schedules available</td></tr>`;
+  } else {
+    scheduleData.sort((a, b) => a.busNo - b.busNo);
 
-    scheduleSectionHTML.innerHTML = scheduleHTML;
+    scheduleData.forEach(scheduleDoc => {
+      scheduleHTML += `
+        <tr class="hover:bg-indigo-50 transition">
+          <td class="py-4 px-6 text-gray-700 font-medium">Bus 0${scheduleDoc.busNo}</td>
+          <td class="py-4 px-6 text-gray-600">${scheduleDoc.from}</td>
+          <td class="py-4 px-6 text-gray-600">${scheduleDoc.to}</td>
+          <td class="py-4 px-6 ${scheduleDoc.status === 'Active' ? 'text-green-600' : 'text-red-600'} font-semibold">
+              ${scheduleDoc.status === 'Active' ? 'Active' : 'Inactive'}
+          </td>
+          <td class="py-4 px-6 text-gray-600">${scheduleDoc.availableSeats}</td>
+          <td class="py-4 px-6 text-gray-800 font-semibold">₱${scheduleDoc.price}</td>
+        </tr>`;
+    });
   }
+
+  scheduleSectionHTML.innerHTML = scheduleHTML;
+}
+
 
   // Check authentication status
   onAuthStateChanged(auth, (user) => {

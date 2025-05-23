@@ -93,30 +93,49 @@ let thisMonthTotal = 0;
 let previousMonthsTotal = 0;
 
 const now = new Date();
-const thisMonth = now.getMonth();
-const thisYear = now.getFullYear();
+const currentMonth = now.getMonth();
+const currentYear = now.getFullYear();
+
+const monthNames = {
+    January: 0, February: 1, March: 2, April: 3, May: 4, June: 5,
+    July: 6, August: 7, September: 8, October: 9, November: 10, December: 11
+};
 
 for (let payment of payments) {
     const amount = Number(payment.amountPaid || 0);
-
     const parts = payment.dateTime?.split(' ');
+
     if (parts && parts.length === 2) {
-        const [, dateStr] = parts;
+        const [, rawDate] = parts;
 
-        const parsedDate = new Date(Date.parse(dateStr.replace(/(\d{2})(\w{3})(\d{2})/, '20$3-$2-$1')));
+        // Extract day, month name, and year
+        const match = rawDate.match(/^(\d{2})([A-Za-z]+)(\d{2})$/); 
+        if (match) {
+            const [, dayStr, monthStr, yearStr] = match;
+            const day = parseInt(dayStr);
+            const monthName = monthStr;
+            const year = 2000 + parseInt(yearStr);
+            const month = monthNames[monthName];
+            if (month !== undefined) {
+                const paymentDate = new Date(year, month, day);
 
-        if (!isNaN(parsedDate)) {
-            const year = parsedDate.getFullYear();
-            const month = parsedDate.getMonth();
+                if (year === currentYear && month === currentMonth) {
+                    thisMonthTotal += amount;
+                } else if (
+                    year < currentYear || 
+                    (year === currentYear && month < currentMonth)
+                ) {
+                    previousMonthsTotal += amount;
+                } else {
+                    console.warn('Skipping future-dated payment:', payment);
+                }
 
-            if (year === thisYear && month === thisMonth) {
-                thisMonthTotal += amount;
-            } else {
-                previousMonthsTotal += amount;
+                continue;
             }
-        } else {
-            previousMonthsTotal += amount;
         }
+
+        console.warn('Unrecognized date format in:', payment.dateTime);
+        previousMonthsTotal += amount;
     } else {
         previousMonthsTotal += amount;
     }
@@ -125,6 +144,7 @@ for (let payment of payments) {
 const totalEarnings = thisMonthTotal + previousMonthsTotal;
 document.getElementById('total-earnings-value').innerHTML = `₱${totalEarnings.toLocaleString()}`;
 
+// Chart
 const chart3 = new Chart(document.getElementById("chart3"), {
     type: "doughnut",
     data: {
@@ -141,7 +161,6 @@ const chart3 = new Chart(document.getElementById("chart3"), {
             legend: {
                 position: 'bottom',
                 labels: {
-                    // Show actual legends with colors
                     generateLabels: (chart) => {
                         const data = chart.data;
                         return data.labels.map((label, i) => ({
@@ -157,14 +176,13 @@ const chart3 = new Chart(document.getElementById("chart3"), {
             },
             tooltip: {
                 callbacks: {
-                    label: (context) => {
-                        return `${context.label}: ₱${context.parsed.toLocaleString()}`;
-                    }
+                    label: (context) => `${context.label}: ₱${context.parsed.toLocaleString()}`
                 }
             }
         }
     }
 });
+
 
 // Users chart
 const users = await getCollectionSizeRDB("Users");

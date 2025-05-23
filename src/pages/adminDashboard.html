@@ -4,6 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="shortcut icon" href="../assets/img/bussing_logo.png" type="image/x-icon">
     <script src="https://cdn.tailwindcss.com"></script>
     <title>Admin Dashboard</title>
 </head>
@@ -458,26 +459,25 @@
             <!-- users table -->
             <section class="customer-support-section hidden" id="customer-support-section">
                 <h2 class="text-3xl font-bold mb-4 text-gray-700">Users</h2>
-                <div class="container py-6">
-                    <!-- Table -->
-                    <div class="overflow-x-auto">
-                        <table class="min-w-full bg-white table-auto border-collapse shadow-md rounded-lg">
-                            <thead>
-                                <tr class="bg-gray-200">
-                                    <th class="px-4 py-2 text-center bg-gray-100 border-b">Id</th>
-                                    <th class="px-4 py-2 text-center bg-gray-100 border-b">User Type</th>
-                                    <th class="px-4 py-2 text-center bg-gray-100 border-b">Email</th>
-                                    <th class="px-4 py-2 text-center bg-gray-100 border-b">Date Created</th>
-                                </tr>
-                            </thead>
-                            <tbody class="bus-info-table" id="users-table">
-                                <!-- These rows will be populated dynamically -->
-                            </tbody>
-                        </table>
-                    </div>
+                <div class="container mx-auto py-6 px-4">
+                <!-- Table -->
+                <div class="overflow-x-auto bg-white rounded-lg shadow-md">
+                    <table class="min-w-full table-auto border-collapse">
+                    <thead class="bg-blue-600 text-white text-sm uppercase tracking-wider">
+                        <tr>
+                        <th class="px-6 py-3 text-center">ID</th>
+                        <th class="px-6 py-3 text-center">User Type</th>
+                        <th class="px-6 py-3 text-center">Email</th>
+                        <th class="px-6 py-3 text-center">Date Created</th>
+                        </tr>
+                    </thead>
+                    <tbody id="users-table" class="text-gray-700 text-sm divide-y divide-gray-200">
+                        <!-- These rows will be populated dynamically -->
+                    </tbody>
+                    </table>
+                </div>
                 </div>
             </section>
-
         </main>
     </div>
 
