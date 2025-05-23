@@ -19,8 +19,8 @@ loginButton.addEventListener('click', async (e) => {
     if (enteredAdminName === '' || enteredPassword === '') {
         alert('Please fill in all fields');
         return;
-    } else{
-        // implement error message
+    } else {
+        console.error('error checking fields')
     }
 
     try {
@@ -46,20 +46,20 @@ loginButton.addEventListener('click', async (e) => {
         await addDataToFirestore('AdminLoggedInCollection', adminDataObject);
 
         // check if is admin
-        if(admin.email.includes('@bussing.com')){
+        if (admin.email.includes('@admin.com')) {
             window.location.href = '../pages/adminDashboard.html';
-        } else{
+        } else {
             alert('only admin can login, try logging in to user dashboard');
         }
 
     } catch (error) {
         // Handle Firebase authentication errors
-        if(error.code === 'auth/invalid-email') {
+        if (error.code === 'auth/invalid-email') {
             alert('Invalid email address');
-        } else if(error.code === 'auth/invalid-login-credentials'){
+        } else if (error.code === 'auth/invalid-login-credentials') {
             alert('Invalid adminname or password');
-        } else 
-        console.error(error)
+        } else
+            console.error(error)
     }
 });
 
