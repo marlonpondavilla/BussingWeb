@@ -5,10 +5,10 @@ import { getAuth } from 'https://www.gstatic.com/firebasejs/9.22.2/firebase-auth
 import { firebaseConfig } from '../services/firebaseConfig.js';
 import { toggleBusOperations } from "../utils/pagination.js";
 import { showSuccessAlert, handleDeleteInformation } from "../utils/alert.js";
-import { addDataToFirestore, getFirestoreData, getSingleFirestoreData, getSingleFirestoreDocument, updateSingleFirestoreData, checkBusNumberExists, deleteSingleFirestoreDocument, getSearchTerm, getCollectionSize, getAllFirestoreDocumentById } from "../firebase/db.js";
+import { addDataToFirestore, getFirestoreData, getSingleFirestoreData, getSingleFirestoreDocument, updateSingleFirestoreData, checkBusNumberExists, deleteSingleFirestoreDocument, getSearchTerm, getCollectionSize, getAllFirestoreDocumentById, getCollectionSizeRDB, getRDBUsers } from "../firebase/db.js";
 
 const app = initializeApp(firebaseConfig);
-const auth = getAuth(app); 
+const auth = getAuth(app);
 
 const logoutButton = document.getElementById('logout-btn');
 logoutAdmin(logoutButton, auth);
@@ -38,7 +38,7 @@ const chart1 = new Chart(document.getElementById("chart1"), {
             legend: {
                 position: 'bottom',
                 labels: {
-                    generateLabels: function(chart) {
+                    generateLabels: function (chart) {
                         const data = chart.data.datasets[0].data;
                         return chart.data.labels.map((label, i) => ({
                             text: `${label}: ${data[i].toLocaleString()}`,
@@ -53,7 +53,7 @@ const chart1 = new Chart(document.getElementById("chart1"), {
             },
             tooltip: {
                 callbacks: {
-                    label: function(context) {
+                    label: function (context) {
                         return `${context.label}: ${context.parsed.toLocaleString()}`;
                     }
                 }
@@ -131,8 +131,8 @@ const chart3 = new Chart(document.getElementById("chart3"), {
         labels: ["This Month", "Previous Months"],
         datasets: [{
             data: [thisMonthTotal, previousMonthsTotal],
-            backgroundColor: ["#FE5D26", "#ecf0f1"],
-            hoverBackgroundColor: ["#D5451B", "#bdc3c7"]
+            backgroundColor: ["#FF90BB", "#ecf0f1"],
+            hoverBackgroundColor: ["#FF90BB", "#bdc3c7"]
         }]
     },
     options: {
@@ -166,15 +166,23 @@ const chart3 = new Chart(document.getElementById("chart3"), {
     }
 });
 
-// Resolved vs Pending complaints chart
+// Users chart
+const users = await getCollectionSizeRDB("Users");
+const drivers = await getCollectionSizeRDB("DUsers");
+const admins = await getCollectionSizeRDB("Admins");
+
+const userDataTb = await getRDBUsers("Users");
+const driverDataTb = await getRDBUsers("DUsers");
+const adminDataTb = await getRDBUsers("Admins");
+
 const chart4 = new Chart(document.getElementById("chart4"), {
     type: "doughnut",
     data: {
-        labels: ["Resolved Complaints", "Pending Complaints"],
+        labels: ["Users", "Drivers", "Admins",],
         datasets: [{
-            data: [30, 5],
-            backgroundColor: ["#9b59b6", "#ecf0f1"],
-            hoverBackgroundColor: ["#8e44ad", "#bdc3c7"]
+            data: [users, drivers, admins],
+            backgroundColor: ["#4E71FF", "#D50B8B", "#7F55B1"],
+            hoverBackgroundColor: ["#4E71FF", "#D50B8B", "#7F55B1"]
         }]
     },
     options: {
@@ -184,6 +192,51 @@ const chart4 = new Chart(document.getElementById("chart4"), {
         }
     }
 });
+
+let userTbHTML = '';
+let driverTbHTML = '';
+let adminTbHTML = '';
+
+userDataTb.forEach((user) => {
+
+    userTbHTML += `
+        <tr class="border-2 border-b-black">
+            <td class="border py-2 text-center">${user.id}</td>
+            <td class="border py-2 text-center">User</td>
+            <td class="border py-2 text-center">${user.email}</td>
+            <td class="border py-2 text-center">${user.createdAt}</td>
+        </tr>
+    `;
+});
+
+driverDataTb.forEach((driver) => {
+    driverTbHTML += `
+        <tr class="border-2 border-b-black">
+            <td class="border py-2 text-center">${driver.id}</td>
+            <td class="border py-2 text-center">
+            ${driver.email.includes('@bussing.com') ? 'Driver' : 'User'}
+            </td>
+            <td class="border py-2 text-center">${driver.email}</td>
+            <td class="border py-2 text-center">${driver.createdAt}</td>
+        </tr>
+    `;
+})
+
+adminDataTb.forEach((admin) => {
+    adminTbHTML += `
+        <tr class="border-2 border-b-black">
+            <td class="border py-2 text-center">${admin.id}</td>
+            <td class="border py-2 text-center">
+            ${admin.email.includes('@admin.com') ? 'Admin' : 'User'}
+            </td>
+            <td class="border py-2 text-center">${admin.email}</td>
+            <td class="border py-2 text-center">${admin.createdAt}</td>
+        </tr>
+    `;
+})
+
+document.getElementById("total-users").innerHTML = users + drivers + admins;
+document.getElementById("users-table").innerHTML = userTbHTML + driverTbHTML + adminTbHTML;
 
 // Toggle the admin navigation bar
 const dashboardButton = document.getElementById('dashboard-btn');
@@ -343,7 +396,7 @@ async function populateBusNumberDropdown() {
 // Open modal and populate dropdown
 document.getElementById('add-schedule-btn').addEventListener('click', function () {
     scheduleModal.style.display = 'flex';
-    populateBusNumberDropdown(); 
+    populateBusNumberDropdown();
 });
 
 // Close the modal
@@ -396,7 +449,7 @@ editButtons.forEach((rowData) => {
         // Show the modal to edit the schedule
         editModal.style.display = 'flex';
 
-        
+
         // Get the bus number from the clicked row's data attribute
         const busNo = rowData.getAttribute('data-row-edit');
         const singleSchedData = await getSingleFirestoreData(busNo, 'ScheduleDocumentsCollection');
@@ -412,11 +465,11 @@ editButtons.forEach((rowData) => {
                 errMsg.style.display = 'block';
                 updateBtn.classList.add('cursor-not-allowed');
                 updateBtn.disabled = true;
-            } else if(currentValue < 1){
+            } else if (currentValue < 1) {
                 alert("invalid value");
                 updateBtn.classList.add('cursor-not-allowed');
                 updateBtn.disabled = true;
-            }else{
+            } else {
                 errMsg.style.display = 'none';
                 updateBtn.disabled = false;
                 updateBtn.classList.remove('cursor-not-allowed');
@@ -463,7 +516,7 @@ document.getElementById('edit-schedule-modal').addEventListener('submit', async 
     // Update the document in Firestore with the new data
     await updateSingleFirestoreData(updatedSingleScheduleData.busNo, 'ScheduleDocumentsCollection', updatedSingleScheduleData);
     showSuccessAlert('Schedule updated successfully');
-});  
+});
 
 // Handle form submission for adding/editing bus schedule
 const busNumErr = document.getElementById('bus-num-err-msg');
@@ -493,15 +546,15 @@ document.getElementById('available-seats').addEventListener('input', async (e) =
     const seatValue = parseInt(e.target.value);
     const seatLimit = parseInt(singleBusInfoData.busCapacity);
 
-    if( seatValue > seatLimit){
+    if (seatValue > seatLimit) {
         availableSeatsExceed.classList.remove('hidden');
         saveBtn.classList.add('cursor-not-allowed');
         saveBtn.disabled = true;
-    } else if(seatValue < 1){
+    } else if (seatValue < 1) {
         alert("invalid value")
         saveBtn.classList.add('cursor-not-allowed');
         saveBtn.disabled = true;
-    } else{
+    } else {
         availableSeatsExceed.classList.add('hidden');
         saveBtn.classList.remove('cursor-not-allowed');
         saveBtn.disabled = false;
@@ -545,7 +598,7 @@ busInfoDataFirestore.sort((a, b) => {
 
 let busInfoTr = "";
 
-for(let busInfoDoc of busInfoDataFirestore){
+for (let busInfoDoc of busInfoDataFirestore) {
     busInfoTr += `
         <tr>
             <td class="px-4 py-2 border-b">${busInfoDoc.busNo}</td>
@@ -608,7 +661,7 @@ busInfoAddBtn.addEventListener('click', () => {
     closeBusInfoModal(busInfoAddCancelBtn, busInfoAddModal);
 
 })
-busInfoAddForm.addEventListener('submit', async(e) => {
+busInfoAddForm.addEventListener('submit', async (e) => {
     e.preventDefault();
 
     const newBusInfoDataObj = {
@@ -620,23 +673,23 @@ busInfoAddForm.addEventListener('submit', async(e) => {
         busDriver: document.getElementById('busDriver-add').value,
         timeCreated: new Date().toLocaleString()
     }
-    
+
     await addDataToFirestore('HomeDocumentsCollection', newBusInfoDataObj);
     showSuccessAlert('Bus Information added successfully');
-}) 
+})
 
 
 
 // will show the modal and the hidden buttons for editing
-busInfoEdtBtnAll.forEach( (edtBtn) => {
-    edtBtn.addEventListener('click', async() => {
+busInfoEdtBtnAll.forEach((edtBtn) => {
+    edtBtn.addEventListener('click', async () => {
         showBusInfoModal(busInfoEdtModal);
         closeBusInfoModal(busInfoEdtCancelBtn, busInfoEdtModal);
 
         const busNoEdt = edtBtn.getAttribute('data-bus-info-edt-btn');
         const singleBusInfo = await getSingleFirestoreData(busNoEdt, 'HomeDocumentsCollection');
 
-        if(singleBusInfo){
+        if (singleBusInfo) {
             document.getElementById('busNo').value = singleBusInfo.busNo;
             document.getElementById('plateNo').value = singleBusInfo.plateNo;
             document.getElementById('busModel').value = singleBusInfo.busModel;
@@ -647,7 +700,7 @@ busInfoEdtBtnAll.forEach( (edtBtn) => {
     })
 })
 
-busInfoEdtForm.addEventListener('submit', async(e) => {
+busInfoEdtForm.addEventListener('submit', async (e) => {
     e.preventDefault();
 
     const updatedBusInfoData = {
@@ -664,20 +717,20 @@ busInfoEdtForm.addEventListener('submit', async(e) => {
 });
 
 // delete bus information
-busInfoDelBtnAll.forEach( (delBtn) => {
+busInfoDelBtnAll.forEach((delBtn) => {
     const busNoDelete = delBtn.getAttribute('data-bus-info-del-btn');
 
     delBtn.addEventListener('click', () => {
         handleDeleteInformation(busNoDelete, 'HomeDocumentsCollection');
     })
 })
- 
-function showBusInfoModal(modal){
+
+function showBusInfoModal(modal) {
     // loops through the divs and shows the div that was clicked
     [busInfoAddModal, busInfoEdtModal].forEach(m => {
-        if(m !== modal){
+        if (m !== modal) {
             m.classList.add('hidden');
-        } else{
+        } else {
             m.classList.remove('hidden');
         }
     })
@@ -685,7 +738,7 @@ function showBusInfoModal(modal){
     modal.classList.add('flex');
 }
 
-function closeBusInfoModal(closeBtn, modal){
+function closeBusInfoModal(closeBtn, modal) {
     closeBtn.addEventListener('click', () => {
         modal.classList.remove('flex');
         modal.classList.add('hidden');
