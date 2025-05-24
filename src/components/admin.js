@@ -8,6 +8,10 @@ const auth = getAuth();
 const adminname = document.getElementById('username');
 const password = document.getElementById('password');
 const loginButton = document.getElementById('login-btn');
+const errorPopUp = document.getElementById('error-popup');
+const errorPopUpClose = document.getElementById('error-popup-close');
+const errorPopUpHeader = document.getElementById('error-popup-header');
+const errorPopUpMessage = document.getElementById('error-popup-message');
 
 loginButton.addEventListener('click', async (e) => {
     e.preventDefault();
@@ -17,7 +21,10 @@ loginButton.addEventListener('click', async (e) => {
 
     // Validate input fields
     if (enteredAdminName === '' || enteredPassword === '') {
-        alert('Please fill in all fields');
+        errorPopUp.classList.add('flex')
+        errorPopUp.classList.remove('hidden');
+        errorPopUpHeader.innerHTML = "All fields are required.";
+        errorPopUpMessage.innerHTML = "Please fill out all the necessary information";
         return;
     } else {
         console.error('error checking fields')
@@ -55,12 +62,20 @@ loginButton.addEventListener('click', async (e) => {
     } catch (error) {
         // Handle Firebase authentication errors
         if (error.code === 'auth/invalid-email') {
-            alert('Invalid email address');
+            errorPopUp.classList.add('flex')
+            errorPopUp.classList.remove('hidden');
+            errorPopUpHeader.classList.add('hidden');
+            errorPopUpMessage.innerHTML = "Invalid email type, please check your email and try again";
         } else if (error.code === 'auth/invalid-login-credentials') {
-            alert('Invalid adminname or password');
+            errorPopUp.classList.add('flex')
+            errorPopUp.classList.remove('hidden');
         } else
             console.error(error)
     }
 });
+
+errorPopUpClose.addEventListener('click', () => {
+    errorPopUp.classList.add('hidden');
+})
 
 
